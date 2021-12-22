@@ -1,32 +1,47 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <component :is="layout"></component>
 </template>
 
+<script>
+import LoginLayout from "./layouts/Login";
+import PrincipalLayout from "./layouts/Principal";
+import {mapState} from 'vuex'
+
+export default {
+  components: { LoginLayout, PrincipalLayout },
+  computed: mapState(['layout'])
+  
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@font-face {
+  font-family: "Gilroy";
+  src: local("Gilroy"),
+      url('./fonts/Gilroy-FREE/Gilroy-Light.otf');
+  font-weight: normal;
+  font-style: normal;
+ 
 }
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
+@font-face {
+  font-family: "Gilroy";
+  src: local("Gilroy"),
+      url('./fonts/Gilroy-FREE/Gilroy-ExtraBold.otf');
   font-weight: bold;
-  color: #2c3e50;
+  font-style: normal;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+@font-face {
+  font-family: "Rubik";
+  src: local("Rubik"),
+  url('./fonts/Rubik/Rubik-VariableFont_wght.ttf');
+  font-weight: normal;
+  font-style: normal;
 }
+
+body{
+  font-family: "Gilroy";
+}
+
 </style>
