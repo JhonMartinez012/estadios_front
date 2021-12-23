@@ -5,15 +5,15 @@
 
       <div class="container ml-0">
         <label class="parrafo font-weight-bold ml-0">Crear Estadio </label>
-        <a type="button" class="btn btn-crear pr-2">Guardar</a>
+        <a type="button" class="btn btn-guardar pr-2">Guardar</a>
       </div>
 
-      <div class="container-fluid mt-4">
-        <div class="row contenido">
+      <div class="container-fluid mt-4 ml-0">
+        <div class="row">
           <div class="col-7 inner">
             <label class="titulo">Informacion general</label>
-            <div class="form-row mt-4">
-              <div class="form-group col-md-7 inner">
+            <div class="form-row mt-2 contenido">
+              <div class="form-group col-md-6 col-sm-12 inner">
                 <p for="inputEmail4" class="p-titulo">Nombre del estadio</p>
                 <input
                   type="text"
@@ -49,8 +49,54 @@
           </div>
 
           <div class="col-5 inner">
-            <label class="titulo">Imagenes</label>
-            <button class="btn btn-success">+</button>
+            <div class="agregar-imagen">
+              <label class="titulo w-100">Imagenes</label>              
+              <!-- <slim-cropper ref="slim-cropper" :options="slimOptions" style="width:120px;height:150px">
+               
+             </slim-cropper> -->
+              
+                <slim-cropper :options="slimOptions" >
+                  <input type="file"  name="slim" />
+                </slim-cropper>
+              
+            </div>
+            <div class="container mt-4 inner">
+              <div class="row">
+                <div
+                  class="col-md-6 col-lg-4 mt-0 styles_img_pre"
+                  v-for="(estadio, index) in estadios"
+                  :key="index"
+                >
+                  <img
+                    :src="require('../assets/' + estadio.img_estadio)"
+                    alt=""
+                    class="mt-4 w-100"
+                    width="cover"
+                    height="100px"
+                  />
+                  <div class="boton_accion">
+                    <button class="btn_accion_eliminar">
+                      <img
+                        src="../assets/1. Estadios/Iconos/icon - Eliminar.svg"
+                        width="cover"
+                        height="20px"
+                        alt=""
+                        srcset=""
+                      />
+                    </button>
+                    <button class="btn_accion_editar">
+                      <img
+                        src="../assets/1. Estadios/Iconos/icon - editar.svg"
+                        width="cover"
+                        height="20px"
+                        alt=""
+                        srcset=""
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -61,6 +107,42 @@
 export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
+  },
+  data() {
+    return {
+      estadios: [
+        {
+          nombre: "Wembley Stadium",
+          img_estadio:
+            "1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg",
+          terreno: "1. Estadios/Terrenos de juego/1. gramilla.jpg",
+          capacidad: 90000,
+        },
+        {
+          nombre: "Madison Square Garden",
+          img_estadio:
+            "1. Estadios/Imágenes de estadios/2.1 Madison-Square-Garden.jpg",
+          terreno: "1. Estadios/Terrenos de juego/4. madera.jpg",
+          capacidad: 20789,
+        },
+        {
+          nombre: "Rogers center",
+          img_estadio:
+            "1. Estadios/Imágenes de estadios/1.4 wembley-stadium.jpg",
+          terreno: "1. Estadios/Terrenos de juego/5. Cemento.jpg",
+          capacidad: 53506,
+        },
+        {
+          nombre: "Rogers center",
+          img_estadio: "1. Estadios/Imágenes de estadios/5.1 Rogers Centre.jpg",
+          terreno: "1. Estadios/Terrenos de juego/5. Cemento.jpg",
+          capacidad: 53506,
+        },
+      ],
+      slimOptions: {
+        label: "Subir imagen",
+      },
+    };
   },
   components: {},
 };
@@ -99,7 +181,7 @@ h1 {
   color: #000000;
   margin-right: 880px;
 }
-.btn-crear {
+.btn-guardar {
   width: 180px;
   height: 40px;
   font-weight: normal;
@@ -112,7 +194,7 @@ h1 {
   align-items: flex-end;
 }
 
-.btn-crear:hover {
+.btn-guardar:hover {
   box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
     0 10px 30px 0 rgba(134, 111, 247, 0.19);
   color: #fff;
@@ -121,14 +203,33 @@ h1 {
 
 /* ESTILOS PARA LOS FORMULARIOS */
 .titulo {
-  width: cover;
   height: 35px;
-
   text-align: left;
   font-weight: bold;
   font-size: 30px;
   letter-spacing: 0px;
   color: #000000;
+}
+
+.agregar-imagen {
+  position: relative;
+}
+
+.posicion {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background-color: #755bfa;
+  border-radius: 13px;
+
+  z-index: 2;
+  right: 50%;
+  bottom: 0px;
+}
+.icon-anadir {
+  width: 16px;
+  height: 16px;
 }
 /* estilo de la caja del nombre del estadio */
 .p-titulo {
@@ -143,12 +244,13 @@ h1 {
   color: #637381;
 }
 .acercaEstadio {
-  width: 360px;
+  width: 345px;
   height: 171px;
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid #dfe4e8;
-  border-radius: 8px;  
+  border-radius: 8px;
 
+  padding: 1px 10px;
   font-size: 15px;
   font-family: "Rubik";
   text-align: left;
@@ -156,7 +258,7 @@ h1 {
   color: #000000;
 }
 
-.acercaEstadio::placeholder{
+.acercaEstadio::placeholder {
   font-size: 15px;
   font-family: "Rubik";
   text-align: left;
@@ -165,14 +267,14 @@ h1 {
 }
 
 .texto-nombre {
-  width: 360px;
+  width: 345px;
   height: 40px;
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid #dfe4e8;
   border-radius: 8px;
   opacity: 1;
 }
-.texto-nombre::placeholder{
+.texto-nombre::placeholder {
   font-size: 15px;
   font-family: "Rubik";
   text-align: left;
@@ -189,7 +291,6 @@ h1 {
   opacity: 1;
 }
 
-
 .contenido {
   width: 100%;
   display: flex;
@@ -198,8 +299,36 @@ h1 {
 .inner {
   margin: 5px;
   flex: 1;
-  min-width: 350px;
-  background: #ddd;
-  padding: 20px;
+  min-width: 360px;
+  padding: 15px;
+}
+
+.styles_img_pre {
+  position: relative;
+}
+
+.btn_accion_eliminar {
+  width: 36px;
+  height: 36px;
+  background-color: black;
+  border-radius: 40px;
+  opacity: 0.6;
+  margin-right: 10px;
+}
+
+.btn_accion_editar {
+  width: 36px;
+  height: 36px;
+  background-color: black;
+  border-radius: 40px;
+  opacity: 0.4;
+  padding: 0;
+}
+.boton_accion {
+  position: absolute;
+  z-index: 2;
+  padding: 0px;
+  bottom: 10px;
+  right: 86px;
 }
 </style>

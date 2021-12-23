@@ -30,12 +30,12 @@
           <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent"><!-- ajustar el menú de los estadios,admins y config a la derecha -->
             <ul class="navbar-iconos navbar-nav">
               <li class="nav-item active efecto">
-                <a class="nav-link " href="#1"
+                <a class="nav-link " href="/estadios"
                   ><img class="iconos-estilos" src='../assets/iconos/icon-estadio.svg' title="Estadios"/></a
                 >
               </li>
               <li class="nav-item efecto">
-                <a class="nav-link" href="#2"><img class="iconos-estilos" src='../assets/iconos/icon-user.svg' title="Administradores" /></a>
+                <a class="nav-link" href="/administradores"><img class="iconos-estilos" src='../assets/iconos/icon-user.svg' title="Administradores" /></a>
               </li>
               <li class="nav-item efecto">
                 <a

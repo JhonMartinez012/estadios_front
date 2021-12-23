@@ -1,36 +1,46 @@
 <template>
   <div class="container-fluid">
     <div class="about mt-3" id="about">
-      <p><a href="/estadios" id="mini_title">Estadios </a> ></p>
-
+      <p><a href="/administradores" id="mini_title">Administradores </a> ></p>
+      
       <div class="container ml-0">
-        <label class="parrafo font-weight-bold ml-0">Estadios CX</label>
+        <label class="parrafo font-weight-bold ml-0">Administradores CX</label>
         <!-- <router-link :to="{name:'EstadiosCrear'}" class="btn btn-crear pr-2"> Crear estadio </router-link> -->
-        <button class="btn btn-crear pr-2" @click="crearEstadio">Crear estadio</button>        
+        <button class="btn btn-crear pr-2" @click="crearAdministrador">
+          Crear administrador
+        </button>
+        <button class="btn btn-crear pr-2" @click="verAdministrador">
+          ver administrador
+        </button>
+        
       </div>
 
-      <estadios></estadios>
+      <administradores></administradores>
     </div>
   </div>
 </template>
 <script>
-import Estadios from "../components/EstadiosCom.vue";
+import Administradores from "../components/AdministradoresCom.vue";
 export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
   },
   components: {
-    estadios: Estadios,
+    administradores: Administradores,
   },
-  methods:{
-    crearEstadio(){
-      this.$router.push({name:'EstadiosCrear'});
-    }
-  }
+  methods: {
+    crearAdministrador() {
+      this.$router.push({ name: "AdministradoresCrear" });
+    },
+    verAdministrador(){
+      this.$router.push({name:"AdministradorVer"})
+    },
+  },
 };
 </script>
 <style>
 body {
+  height: 100%;
   font-family: "Gilroy";
   background-color: #f6f9fb;
 }
@@ -47,7 +57,7 @@ h1 {
   left: 109px;
   width: 80px;
   height: 30px;
-  
+
   font-weight: normal;
   font-size: 20px;
   text-align: left;
@@ -62,7 +72,7 @@ h1 {
   font-weight: bold;
   font-size: 35px;
   color: #000000;
-  margin-right: 900px;
+  margin-right: 792px;
 }
 .btn-crear {
   width: 180px;
@@ -77,8 +87,9 @@ h1 {
   align-items: flex-end;
 }
 
-.btn-crear:hover{
-  box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4), 0 10px 30px 0 rgba(134, 111, 247, 0.19);
+.btn-crear:hover {
+  box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
+    0 10px 30px 0 rgba(134, 111, 247, 0.19);
   color: #fff;
   text-decoration-line: none;
 }

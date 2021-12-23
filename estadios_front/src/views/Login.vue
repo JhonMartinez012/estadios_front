@@ -41,8 +41,9 @@
               id="password"
             />
           </div>
-          <div class="d-grid justify-content-center">            
-            <router-link :to="{name:'Estadios'}" class="btn btn">Ingresar</router-link>
+          <div class="d-grid justify-content-center">           
+            
+            <router-link :to="{name:'Estadios'}" class="btn boton">Ingresar</router-link>
           </div>
         </form>
         <div class="text-center pt-4">
@@ -86,7 +87,7 @@ h2 {
 .sombra{
   box-shadow: 2px 16px 20px gray;
 }
-.btn {  
+.boton {  
   width: 280px;
   height: 40px;
   background: transparent
