@@ -15,6 +15,42 @@ export default {
 </script>
 
 <style>
+body {
+  height: 100%;
+  font-family: "Gilroy";
+  background-color: #F6F9FB !important;
+}
+body .tooltip-inner {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
+
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+} 
+ body .tooltip .arrow::before {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+}
+
+#app{
+  background-color: transparent !important;
+  font-family: "Gilroy";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: left;
+  color: #000000;
+}
+
 @font-face {
   font-family: "Gilroy";
   src: local("Gilroy"),
@@ -38,10 +74,6 @@ export default {
   url('./fonts/Rubik/Rubik-VariableFont_wght.ttf');
   font-weight: normal;
   font-style: normal;
-}
-
-body{
-  font-family: "Gilroy";
 }
 
 </style>

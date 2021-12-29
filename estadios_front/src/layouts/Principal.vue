@@ -1,75 +1,99 @@
 <template>
   <div id="app">
-    <div class="container-fluid m-0 p-0 bg-white">
-      <div class="container-fluid">
-        <!-- <router-link to="/">Home</router-link> |
+    <div class="container-fluid m-0 p-0 mb-0 bg-white fixed-top">
+      <!-- <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link><br> -->
 
-        <nav class="navbar navbar_cabecera navbar-expand-lg navbar-white bg-white pl-0 pr-0">
-          <a class="navbar-brand mb-0" href="#">
-            <img
-              src="../assets/1. Estadios/Logo/logo-CX stadium 2.svg"
-              alt=""
-              srcset=""
-              width="200"
-              height="45"
-            />
-          </a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon" id="icon-menu"></span>
-          </button>
+      <nav
+        class="navbar navbar_cabecera navbar-expand-lg navbar-white bg-white pl-0 pr-0"
+      >
+        <router-link :to="{ name: 'Estadios' }" class="navbar-brand mb-0">
+          <img
+            src="../assets/1. Estadios/Logo/logo-CX stadium 2.svg"
+            alt=""
+            srcset=""
+            width="200"
+            height="45"
+          />
+        </router-link>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon" id="icon-menu"></span>
+        </button>
 
-          <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent"><!-- ajustar el menú de los estadios,admins y config a la derecha -->
-            <ul class="navbar-iconos navbar-nav">
-              <li class="nav-item active efecto">
-                <a class="nav-link " href="/estadios"
-                  ><img class="iconos-estilos" src='../assets/iconos/icon-estadio.svg' title="Estadios"/></a
-                >
-              </li>
-              <li class="nav-item efecto">
-                <a class="nav-link" href="/administradores"><img class="iconos-estilos" src='../assets/iconos/icon-user.svg' title="Administradores" /></a>
-              </li>
-              <li class="nav-item efecto">
-                <a
-                  class="nav-link"
-                  href="#3"
-                  id="navbarDropdown"
-                  role="button"                  
-                >
-                <img class="iconos-estilos" src='../assets/iconos/cog-solid.svg' title="Configuración"/>                
-                </a>
-                
-              </li>
-              
-            </ul>
-            <ul class="navbar-nav">
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                <img class="img_redondeada" src="../assets/black.jpg" alt="">
-                  
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Cerrar sesión</a>
-                  
-                </div>
-              </li>
-            </ul>
-            <!-- <form class="form-inline my-2 my-lg-0">
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarSupportedContent"
+        >
+          <!-- ajustar el menú de los estadios,admins y config a la derecha -->
+          <ul class="navbar-iconos navbar-nav">
+            <li
+              class="nav-item active efecto"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              title="Estadios"
+            >
+              <router-link class="nav-link" :to="{ name: 'Estadios' }">
+                <img
+                  class="iconos-estilos"
+                  src="../assets/iconos/icon-estadio.svg"
+                />
+              </router-link>
+            </li>
+            <li
+              class="nav-item efecto"
+              data-toggle="tooltip"
+              title="Administradores"
+              data-placement="bottom"
+            >
+              <router-link class="nav-link" :to="{ name: 'Administradores' }">
+                <img
+                  class="iconos-estilos"
+                  src="../assets/iconos/icon-user.svg"
+                  title=""
+                />
+              </router-link>
+            </li>
+            <li
+              class="nav-item efecto"
+              data-toggle="tooltip"
+              title="Configuración"
+              data-placement="bottom"
+            >
+              <router-link class="nav-link" :to="{ name: 'Configuraciones' }">
+                <img
+                  class="iconos-estilos"
+                  src="../assets/iconos/cog-solid.svg"
+                  title=""
+                />
+              </router-link>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img class="img_redondeada" src="../assets/black.jpg" alt="" />
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Cerrar sesión</a>
+              </div>
+            </li>
+          </ul>
+          <!-- <form class="form-inline my-2 my-lg-0">
               <input
                 class="form-control mr-sm-2"
                 type="search"
@@ -83,18 +107,19 @@
                 Search
               </button>
             </form> -->
-          </div>
-          <img
-            src="../assets/1. Estadios/Logo/logo-coex-redondo.svg"
-            alt=""
-            srcset=""
-          />
-        </nav>
-      </div>
+        </div>
+        <img
+          src="../assets/1. Estadios/Logo/logo-coex-redondo.svg"
+          alt=""
+          srcset=""
+        />
+      </nav>
     </div>
 
     <!-- Aca se muestran las paginas -->
-    <router-view />
+    <div class="about" id="about">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -116,67 +141,68 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: "Gilroy";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: left;
-  color: #000000;
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+  console.log("Si se ejecuta");
+});
+</script>
+
+<style scoped>
+.about {
+  margin-left: 100px;
+  margin-top: 100px;
 }
-.navbar_cabecera{ /* ajustar el margen a la izquierda del navbar  */
+.navbar_cabecera {
+  /* ajustar el margen a la izquierda del navbar  */
   margin-left: 100px;
 }
 
 /* Margen de los iconos a la imagen de perfil */
-.navbar-iconos{
+.navbar-iconos {
   margin-right: 155px;
 }
 
 ul {
-border-radius: 12px;
-background-color: transparent;
+  border-radius: 12px;
+  background-color: transparent;
 }
 
-.efecto,a,img{
+.efecto,
+a,
+img {
   border-radius: 12px;
 }
 
-.efecto :hover{
-  background-color: rgba(115, 88, 250, 0.2);
-  border-radius: 12px;
-
-}
-
-.efecto :active{
+.efecto :hover {
   background-color: rgba(115, 88, 250, 0.2);
   border-radius: 12px;
 }
 
-.efecto a :hover{
-  background-color: transparent;
-  border-radius: 12px;
-}
-.efecto a img :hover{
-  background-color: transparent;
+.efecto :active {
+  background-color: rgba(115, 88, 250, 0.2);
   border-radius: 12px;
 }
 
-
-
+.efecto a :hover {
+  background-color: transparent;
+  border-radius: 12px;
+}
+.efecto a img :hover {
+  background-color: transparent;
+  border-radius: 12px;
+}
 
 /* Atributos en la etiqueta <a></a> de el campo de los iconos */
-.icon-config{
+.icon-config {
   background-size: 40px 40px;
   background-repeat: no-repeat;
-  background-position: center center;  
+  background-position: center center;
 }
-.iconos-estilos{
+.iconos-estilos {
   font-size: 22px;
-  color: #7358FA;
-
+  color: #7358fa;
 }
-
 
 #nav {
   padding: 30px;
@@ -193,14 +219,14 @@ background-color: transparent;
 
 /* Estilo para que muestre el menu hamburguesa cuando la pantalla es pequeña */
 #icon-menu {
-  background-image: url('../assets/img_login/bars-solid.svg');
+  background-image: url("../assets/img_login/bars-solid.svg");
   background-size: 15px 15px;
   background-repeat: no-repeat;
   background-position: 8px center;
 }
 
 /* Estilo que permite mostrar la imagen redondeada de la persona logueada */
-.img_redondeada{
+.img_redondeada {
   width: 36px;
   height: 36px;
   border-radius: 10px;
@@ -208,6 +234,5 @@ background-color: transparent;
   background-size: 36px 36px;
   background-repeat: no-repeat;
   background-position: center;
-  
 }
 </style>

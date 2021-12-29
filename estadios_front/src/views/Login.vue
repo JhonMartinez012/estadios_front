@@ -4,14 +4,16 @@
   >
     <div class="row borde_redondo1 borde_redondo2 sombra align-items-stretch">
       <div
-        class="col bg borde_redondo1 d-none d-lg-block col-md-6 col-lg-6 col-xl-6"
-      ></div>
+        class="col bg borde_redondo1 d-none d-md-block d-lg-block col-lg-6 col-xl-6"
+      >
+      </div>
 
-      <div class="col borde_redondo2 bg-white p-5 align-items-center">
+      <div class="col borde_redondo2 bg-white p-5 align-items-center col-lg-6 col-sm-12">
         <div class="text-center">
           <img
             class="img-responsive"
-            src="../assets/1. Estadios/Logo/logo-CX stadium 1.svg"
+            width="100%"
+            src="/assets/1. Estadios/Logo/logo-CX stadium 1.svg"
             alt=""
             srcset=""
           />
@@ -48,7 +50,7 @@
         </form>
         <div class="text-center pt-4">
           <img
-            src="../assets/1. Estadios/Logo/logo-coex.svg"
+            src="/assets/1. Estadios/Logo/logo-coex.svg"
             alt=""
             srcset=""
             id="logo_inferior"
@@ -67,28 +69,24 @@ export default {
 };
 </script>
 
-<style>
-body {
-  background-image: url("../assets/1. Estadios/Background/gb-login.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+<style scoped>
+
 h2 {
   text-align: center;
-  font: normal normal bold 35px/43px Gilroy ☞;
+  font: normal normal bold 30px "Gilroy";
   letter-spacing: 0px;
   color: #637381;
 }
 
 .bg {
-  background-image: url("../assets/1. Estadios/Imágenes de estadios/Estadio login.jpg");
+  background-image: url("/assets/1. Estadios/Imágenes de estadios/Estadio login.jpg");
   background-position: center center;
 }
 .sombra{
   box-shadow: 2px 16px 20px gray;
 }
 .boton {  
-  width: 280px;
+  width: 100%;
   height: 40px;
   background: transparent
     linear-gradient(90deg, var(--principal-estadio) 0%, #866ff7 100%) 0% 0%
@@ -99,7 +97,7 @@ h2 {
 
   color: #ffffff;
   text-align: center;
-  font: normal normal medium 18px/21px Gilroy;
+  font: normal normal medium 18px/21px "Gilroy";
   letter-spacing: 0px;
   color: #ffffff;
 
@@ -115,7 +113,7 @@ h2 {
 
 #user, #password{
   top: 415px;  
-  width: 280px;
+  width: 100%;
   height: 40px;
 
   padding: 0.25em 0.6em;
@@ -128,19 +126,20 @@ h2 {
   /* estilos de las letras de los input */
   color: #637381;
   text-align: center ;
-  font-family: normal normal normal 14px/17px Rubik;
+  font-family: normal "Rubik";
+  font-size: 17px;
   letter-spacing: 0px;
   color: hsl(208, 13%, 45%);  
   opacity: 1;
 }
 #user{
-  background-image: url('../assets/img_login/user-circle-regular.svg');
+  background-image: url('/assets/img_login/user-circle-regular.svg');
   background-size: 15px 15px;
   background-repeat: no-repeat;
   background-position: 8px center;
 }
 #password{
-  background-image: url('../assets/img_login/unlock-solid.svg');
+  background-image: url('/assets/img_login/unlock-solid.svg');
   background-size: 15px 15px;
   background-repeat: no-repeat;
   background-position: 8px center;
@@ -155,5 +154,8 @@ h2 {
   width: 100px;
   height: 40px;
   opacity: 1;
+}
+.img-responsive{
+  max-width: 200px;
 }
 </style>
