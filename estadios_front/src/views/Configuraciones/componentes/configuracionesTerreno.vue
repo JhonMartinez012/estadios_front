@@ -3,7 +3,7 @@
     <div class="container-fluid estilos-container">
       <label class="parrafo font-weight-bold ml-0">Tipos de terrono</label>
       <button
-        class="btn btn-crear pr-2"
+        class="btn btn-crear-t pr-2"
         data-toggle="modal"
         data-target="#exampleModal"
       >
@@ -68,25 +68,25 @@
         v-for="(terreno, index) in terrenos"
         :key="index"
       >
-        <div class="card-sl">
+        <div class="card-sl-terreno">
           <a href="">
-            <div class="card-image">
+            <div class="card-image-terreno">
               <img
                 class="hover-image w-100"
                 :src="terreno.img_terreno"
                 width="cover"
                 height="150px"
               />
-              <div class="card-action">
+              <div class="card-action-terreno ">
                 <label for="">{{ terreno.cant_estadios }} </label>
               </div>
             </div>
           </a>
-          <div class="card-heading">
+          <div class="card-heading-terreno">
             <p class="tres_puntos">{{ terreno.nombre }}</p>
           </div>
 
-          <div class="card-text text-center">
+          <div class="card-text-terreno btns-accion text-center">
             <button class="btn btn-accion">
               <img
                 src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
@@ -169,7 +169,7 @@ export default {
   color: #000000;
   margin-right: 80px;
 }
-.btn-crear {
+.btn-crear-t {
   width: 120px;
   height: 40px;
   font-weight: normal;
@@ -181,16 +181,27 @@ export default {
   align-content: flex-end;
   align-items: flex-end;
 }
+.btns-accion {
+  margin: 0px;
+  width: auto;
+  margin-top: 0px;
+  display: flex;
+  justify-content: center;
+}
 .btn-accion {
   width: 40px;
   height: 40px;
+  margin-left: 0px;
   background: #755bfa 0% 0% no-repeat padding-box;
-  border-radius: 15px;
-  opacity: 1;
-  
+  background-position: center center;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-crear:hover {
+.btn-crear-t:hover {
   box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
     0 10px 30px 0 rgba(134, 111, 247, 0.19);
   color: #fff;
@@ -269,11 +280,11 @@ export default {
 
 /* tarjetaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa */
 /* Card Styles */
-.fondo-card {
+.fondo-card-terreno {
   background-color: none;
 }
 
-.card-sl {
+.card-sl-terreno {
   border-radius: 8px;
   /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
   background-color: rgba(255, 255, 255, 0.1);
@@ -294,10 +305,10 @@ export default {
   white-space: nowrap;
   overflow: hidden;
 }
-.card-image {
+.card-image-terreno {
   position: relative;
 }
-.card-image img {
+.card-image-terreno img {
   max-height: 100%;
   max-width: 100%;
   border-radius: 45px;
@@ -305,7 +316,7 @@ export default {
 }
 
 /* Modificar imagen pequeña */
-.card-action {
+.card-action-terreno {
   position: absolute;
 
   /* margin-top: -25px;
@@ -318,14 +329,20 @@ export default {
   height: 50px;
   right: -20px;
   bottom: 120px;
+  display: flex;  
+  justify-content: center;
+  align-items: center;
+  background-position: center center
 }
 
-.card-action label {
+.card-action-terreno label {
+  margin: 0px;
   border-radius: 15px;
   color: black;
+  display: flex;
 }
 
-.card-heading {
+.card-heading-terreno {
   font-size: 20px;
   text-align: center;
   font-family: "Gilroy";
@@ -335,7 +352,7 @@ export default {
   color: #000000;
 }
 
-.card-text {
+.card-text-terreno {
   padding: 10px 15px;
   background-color: transparent;
   font-size: 14px;

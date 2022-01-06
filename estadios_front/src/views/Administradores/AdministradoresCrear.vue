@@ -1,118 +1,150 @@
 <template>
-  <div class="container-fluid admins m-0 mt-5">   
-      <p>
-        <router-link :to="{name:'Administradores'}" id="mini_title">
-          Administradores
-        </router-link> > Crear
-      </p>
-      <div class="container-fluid titulo_formulario">
-        <label class="parrafo font-weight-bold ml-0">Crear Administrador</label>
-        <!-- <router-link :to="{name:'EstadiosCrear'}" class="btn btn-crear pr-2"> Crear estadio </router-link> -->
-        <button class="btn btn-guardar pr-2" @click="VerAdministrador">Guardar</button>
-      </div>
-      <div class="container contenido_formulario mt-4">
-        <form>
-          <div class="row">
-            <div class="form-group col-sm-12 col-md-4 col-lg-2 anadir_img d-flex">
-              <slim-cropper :options="slimOptions" id="estilo_subir_img">
-                <input type="file" name="slim" id="estilo_subir_img" />
-              </slim-cropper>
-            </div>
-            <div class="form-group col-sm-12 col-md-4">
-              <label for="inputState" class="titulo_form">Nombres</label>
-              <input type="text" v-model="nombres" placeholder="Nombres" class="cuadros_input" />
-              <br />
+  <div class="container-fluid admins m-0 mt-5">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link :to="{ name: 'Administradores' }" id="mini_title">
+            Administradores</router-link
+          >
+        </li>
+        <li class="breadcrumb-item active estilo_page" aria-current="page">
+          Crear Administrador
+        </li>
+      </ol>
+    </nav>
 
-              <label for="inputState" class="titulo_form">Apellidos</label>
-              <input
-                type="text"
-                v-model="apellidos"
-                placeholder="Apellidos"
-                class="cuadros_input"
-              />
-              <br />
-
-              <label for="inputState" class="titulo_form"
-                >Correo electrónico</label
-              >
-              <input
-                type="email"
-                v-model="email"
-                placeholder="Correo electrónico"
-                class="cuadros_input"
-              />
-
-              <label for="inputState" class="titulo_form">Contraseña</label>
-              <input
-                type="password"
-                v-model="password"
-                placeholder="contraseña"
-                class="cuadros_input"
-              />
-            </div>
-
-            <div class="form-group col-sm-12 col-md-4">
-              <label for="inputState" class="titulo_form"
-                >Acerca del administrador</label
-              >
-              <textarea
-                cols="30"
-                rows="10"
-                placeholder="Acerca"
-                class="cuadros_txtArea"
-                v-model="acerca"
-              ></textarea>
-
-              <label for="inputState" class="titulo_form"
-                >Teléfono celular</label
-              >
-              <input
-                type="text"
-                v-model="phone"
-                placeholder="Teléfono celular"
-                class="cuadros_input"
-              />
-              <br />
-
-              <label for="inputState" class="titulo_form"
-                >Repetir contraseña</label
-              >
-              <input
-                type="password"
-                v-model="repassword"
-                placeholder="Repetir contraseña"
-                class="cuadros_input"
-              />
-            </div>
-          </div>
-        </form>
-      </div>
+    <div class="container-fluid titulo_formulario">
+      <label class="parrafo font-weight-bold ml-0">Crear Administrador</label>
+      <!-- <router-link :to="{name:'EstadiosCrear'}" class="btn btn-crear pr-2"> Crear estadio </router-link> -->
+      <button class="btn btn-guardar pr-2" @click="register">
+        Guardar
+      </button>
     </div>
-  
+    <div class="container contenido_formulario mt-4">
+      <form>
+        <div class="row">
+          <div class="form-group col-sm-12 col-md-4 col-lg-2 anadir_img d-flex">
+            <slim-cropper :options="slimOptions" id="estilo_subir_img">
+              <input type="file" name="slim" id="estilo_subir_img" />
+            </slim-cropper>
+          </div>
+          <div class="form-group col-sm-12 col-md-4">
+            <label for="inputState" class="titulo_form">Nombres</label>
+            <input
+              type="text"
+              v-model="name"
+              placeholder="Nombres"
+              class="cuadros_input"
+            />
+            <br />
+
+            <label for="inputState" class="titulo_form">Apellidos</label>
+            <input
+              type="text"
+              v-model="last_name"
+              placeholder="last_name"
+              class="cuadros_input"
+            />
+            <br />
+
+            <label for="inputState" class="titulo_form"
+              >Correo electrónico</label
+            >
+            <input
+              type="email"
+              v-model="email"
+              placeholder="Correo electrónico"
+              class="cuadros_input"
+            />
+
+            <label for="inputState" class="titulo_form">Contraseña</label>
+            <input
+              type="password"
+              v-model="password"
+              placeholder="contraseña"
+              class="cuadros_input"
+            />
+          </div>
+
+          <div class="form-group col-sm-12 col-md-4">
+            <label for="inputState" class="titulo_form"
+              >Acerca del administrador</label
+            >
+            <textarea
+              cols="30"
+              rows="10"
+              placeholder="Acerca"
+              class="cuadros_txtArea"
+              v-model="acerca"
+            ></textarea>
+
+            <label for="inputState" class="titulo_form">Teléfono celular</label>
+            <input
+              type="text"
+              v-model="phone"
+              placeholder="Teléfono celular"
+              class="cuadros_input"
+            />
+            <br />
+
+            <label for="inputState" class="titulo_form"
+              >Repetir contraseña</label
+            >
+            <input
+              type="password"
+              v-model="repassword"
+              placeholder="Repetir contraseña"
+              class="cuadros_input"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script>
+import auth from '@/store/auth';
 export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
   },
-  data() {
+  data: () => ({
+    name: "",
+    last_name: "",
+    phone: "",
+    acerca: "",
+    email: "",
+    password: "",
+    repassword: "",
+    img: "",
+
+    slimOptions: {
+      label: "Añadir imagen",
+    },
+  }),
+  /* data() {
     return {
-      slimOptions: {
-        label: "Añadir imagen",
-      },
-    };
+      
+    }; */
+
+  methods: {
+    async register() {
+      try {
+        await auth.register(this.name, this.last_name, this.phone, this.acerca, this.email,  this.password,this.img);
+        this.$router.push({name:'Administradores'});
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    VerAdministrador() {
+      this.$router.push({ name: "AdministradorVer" });
+    },
   },
-  methods:{
-    VerAdministrador(){
-      this.$router.push({name:'AdministradorVer'});
-    }
-  }
 };
 </script>
 
 <style scoped>
-
 .admins {
   margin-top: 150px;
 }
@@ -128,14 +160,12 @@ export default {
   text-decoration: none;
   letter-spacing: 0px;
   color: #7358fa;
-
-  
 }
 .titulo_formulario {
   margin-left: 0px;
 }
 .contenido_formulario {
- margin-left: 0px;
+  margin-left: 0px;
   max-width: 1382px;
   min-width: 500px;
 }
@@ -177,7 +207,6 @@ export default {
   border-radius: 45px;
   width: 120px;
   height: 120px;
-  
 }
 
 .titulo_form {

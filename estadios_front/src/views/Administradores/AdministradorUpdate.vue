@@ -1,8 +1,18 @@
 <template>
   <div class="container-fluid admins m-0 mt-3 ml-0">
-    <p>
-      <router-link id="mini_title" :to="{name:'Administradores'}"> Administradores </router-link> > Editar
-    </p>
+   <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link :to="{ name: 'Administradores' }" id="mini_title">
+            Administradores</router-link
+          >
+        </li>
+        <li class="breadcrumb-item active estilo_page" aria-current="page">
+          Editar Administrador
+        </li>
+      </ol>
+    </nav>
+    
     <div class="container-fluid titulo_formulario">
       <label class="parrafo font-weight-bold ml-0">Editar administrador</label>
       <!-- <router-link :to="{name:'EstadiosCrear'}" class="btn btn-crear pr-2"> Crear estadio </router-link> -->
@@ -20,13 +30,13 @@
           <input
             type="text"
             placeholder="Nombres"
-            v-model="nombres"
+            v-model="name"
             class="cuadros_input"
           />
           <br />
 
           <label for="inputState" class="titulo_form">Apellidos</label>
-          <input type="text" v-model="apellidos" class="cuadros_input" /> <br />
+          <input type="text" v-model="last_name" class="cuadros_input" /> <br />
 
           <label for="inputState" class="titulo_form">Correo electrónico</label>
           <input type="email" v-model="email" class="cuadros_input" />

@@ -1,6 +1,14 @@
 <template>
   <div class="container-fluid">
-    <p><a href="/administradores" id="mini_title">Administradores </a> ></p>
+     <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link :to="{ name: 'Administradores'}" id="mini_title">
+            Administradores</router-link
+          >
+        </li>
+      </ol>
+    </nav>
 
     <div class="container-fluid ml-0">
       <label class="parrafo font-weight-bold ml-0">Administradores CX</label>

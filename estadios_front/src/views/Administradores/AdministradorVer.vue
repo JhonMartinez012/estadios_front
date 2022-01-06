@@ -1,9 +1,17 @@
 <template>
   <div class="container m-0 mt-3">
-    <p>
-      <a href="/administradores" id="mini_title">Administradores </a> > Nombre
-      adminss
-    </p>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link :to="{ name: 'Administradores' }" id="mini_title">
+            Administradores</router-link
+          >
+        </li>
+        <li class="breadcrumb-item active estilo_page" aria-current="page">
+          Nombre Administrador
+        </li>
+      </ol>
+    </nav>
     <div class="container titulo_formulario">
       <label class="parrafo font-weight-bold ml-0"
         >Nombre Administrador
@@ -246,6 +254,8 @@ body .tooltip .arrow::before {
   margin: 0px;
   width: 200px;
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 .boton-accion {
   width: 40px;
@@ -254,5 +264,9 @@ body .tooltip .arrow::before {
   background: #755bfa 0% 0% no-repeat padding-box;
   background-position: center center;
   border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 </style>

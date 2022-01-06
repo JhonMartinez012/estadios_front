@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="23.5" height="21.178" viewBox="0 0 23.5 21.178">
-  <g id="icon_espectadores" data-name="icon / espectadores" fill="#ffff" transform="translate(-0.611 -2.25)">
+<svg xmlns="http://www.w3.org/2000/svg" width="23.5" fill="#ffff" height="21.178" viewBox="0 0 23.5 21.178">
+  <g id="icon_espectadores" data-name="icon / espectadores" transform="translate(-0.611 -2.25)">
     <path id="Trazado_21070" data-name="Trazado 21070" d="M14.734,22.75H9.265a2.75,2.75,0,0,1-2.729-3.091l.641-5.124A3.756,3.756,0,0,1,10.9,11.25h2.2a3.756,3.756,0,0,1,3.722,3.285l.64,5.124a2.75,2.75,0,0,1-2.729,3.091Zm-3.837-10a2.254,2.254,0,0,0-2.232,1.971l-.641,5.124a1.25,1.25,0,0,0,1.24,1.4v0h5.469a1.25,1.25,0,0,0,1.241-1.405l-.64-5.124A2.253,2.253,0,0,0,13.1,12.75Z" transform="translate(0.361 0.678)"/>
     <path id="Elipse_2472" data-name="Elipse 2472" d="M3-.75A3.75,3.75,0,1,1-.75,3,3.754,3.754,0,0,1,3-.75Zm0,6A2.25,2.25,0,1,0,.75,3,2.253,2.253,0,0,0,3,5.25Z" transform="translate(9.361 3)"/>
     <path id="Elipse_2473" data-name="Elipse 2473" d="M2-.75A2.75,2.75,0,1,1-.75,2,2.753,2.753,0,0,1,2-.75Zm0,4A1.25,1.25,0,1,0,.75,2,1.251,1.251,0,0,0,2,3.25Z" transform="translate(2 8.212)"/>

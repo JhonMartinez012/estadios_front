@@ -101,6 +101,7 @@ export default {
   background-color: black;
   padding: 5px;
   margin-right: 8px;
+  border-radius: 12px;
 }
 
 .espectadores_cant {

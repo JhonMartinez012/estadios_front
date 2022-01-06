@@ -18,33 +18,95 @@
 
     <div class="form-row mt-5">
       <div class="form-group col-lg-3 col-md-6 col-sm-12">
-        <input type="text" class="form-control inputt" placeholder="concierto"/>
+        <input
+          type="text"
+          class="form-control inputt"
+          placeholder="concierto"
+        />
       </div>
-      <div class="form-group col-lg-3 col-md-6">
-        <button class="btn btn-accion"><img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" title="Eliminar" alt=""></button>
-        <button class="btn btn-accion"><img src="/assets/1. Estadios/Iconos/icon - Editar.svg" title="Editar" alt=""></button>
-        <button class="btn btn-contador">1</button>
+      <div class="form-group col-lg-3 col-md-6 botones-inactividad">
+        <button class="btn btn-accion-inactividad">
+          <img
+            src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
+            title="Eliminar"
+            alt=""
+          />
+        </button>
+        <button class="btn btn-accion-inactividad">
+          <img
+            src="/assets/1. Estadios/Iconos/icon - Editar.svg"
+            title="Editar"
+            alt=""
+          />
+        </button>
+        <button class="btn btn-contador-inactividad">1</button>
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group col-lg-3 col-md-6 col-sm-12">
-        <input type="text" class="form-control inputt" placeholder="cambio de terreno"/>
+        <input
+          type="text"
+          class="form-control inputt"
+          placeholder="cambio de terreno"
+        />
       </div>
-      <div class="form-group col-lg-3 col-md-6">
-        <button class="btn btn-success">crear</button>
+      <div class="form-group col-lg-3 col-md-6 botones-inactividad">
+        <button class="btn btn-crear-inactividad">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="25"
+            
+            fill="#FFF"
+            viewBox="0 0 22 22"
+          >
+            <g
+              id="Icon_check-simple"
+              data-name="Icon / check-simple"
+              transform="translate(-1 -1)"
+            >
+              <path
+                id="Trazado_8"
+                data-name="Trazado 8"
+                d="M9.56,16.79a.748.748,0,0,1-.53-.219l-4.41-4.4A.75.75,0,0,1,5.68,11.109L9.6,15.016l8.763-7.621a.75.75,0,0,1,.984,1.132l-9.29,8.08A.748.748,0,0,1,9.56,16.79Z"
+              />
+              <path
+                id="Elipse_2471"
+                data-name="Elipse 2471"
+                d="M11,1.5A9.5,9.5,0,1,0,20.5,11,9.511,9.511,0,0,0,11,1.5M11,0A11,11,0,1,1,0,11,11,11,0,0,1,11,0Z"
+                transform="translate(1 1)"
+              />
+            </g>
+          </svg>
+        </button>
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group col-lg-3 col-md-6 col-sm-12">
-        
-        <input type="text" class="form-control inputt" placeholder="Mantenimiento" />
+        <input
+          type="text"
+          class="form-control inputt"
+          placeholder="Mantenimiento"
+        />
       </div>
-      <div class="form-group col-lg-3 col-md-6">
-        <button class="btn btn-accion"><img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" title="Eliminar" alt=""></button>
-        <button class="btn btn-accion"><img src="/assets/1. Estadios/Iconos/icon - Editar.svg" title="Editar" alt=""></button>
-        <button class="btn btn-contador">1</button>
+      <div class="form-group col-lg-3 col-md-6 botones-inactividad">
+        <button class="btn btn-accion-inactividad">
+          <img
+            src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
+            title="Eliminar"
+            alt=""
+          />
+        </button>
+        <button class="btn btn-accion-inactividad">
+          <img
+            src="/assets/1. Estadios/Iconos/icon - Editar.svg"
+            title="Editar"
+            alt=""
+          />
+        </button>
+        <button class="btn btn-contador-inactividad">1</button>
       </div>
     </div>
   </div>
@@ -97,19 +159,46 @@ export default {};
   border-radius: 8px;
 }
 
-.btn-accion {
-  width: 40px;
-  height: 40px;
-  background: #755bfa 0% 0% no-repeat padding-box;
-  border-radius: 15px;
-  opacity: 1;
-  
+.botones-inactividad {
+  margin: 0px;
+  width: auto;
+  margin-top: 0px;
+  display: flex;
+  justify-content: start;
+  margin-bottom: 10px;
 }
 
-.btn-contador{
+.btn-accion-inactividad,
+.btn-contador-inactividad,
+.btn-crear-inactividad {
   width: 40px;
   height: 40px;
-  background: #DFE4E8 0% 0% no-repeat padding-box;
+}
+
+.btn-accion-inactividad {
+  margin-left: 0px;
+  background: #755bfa 0% 0% no-repeat padding-box;
+  background-position: center center;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-crear-inactividad {
+  margin: 0px;
+  background: #29D884 0% 0% no-repeat padding-box;
+  background-position: center center;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-contador-inactividad {
+  background: #dfe4e8 0% 0% no-repeat padding-box;
   border-radius: 15px;
 }
 </style>

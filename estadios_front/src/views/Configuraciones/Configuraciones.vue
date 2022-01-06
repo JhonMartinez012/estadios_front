@@ -1,11 +1,14 @@
 <template>
   <div class="container-fluid">
-    <p>
-      <router-link :to="{ name: 'Configuraciones' }" id="mini_title">
-        Configuraciones
-      </router-link>
-      >
-    </p>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link :to="{ name: 'Configuraciones' }" id="mini_title">
+            Configuraciones</router-link
+          >
+        </li>
+      </ol>
+    </nav>
 
     <div class="container ml-0">
       <ul class="nav nav-tabs">

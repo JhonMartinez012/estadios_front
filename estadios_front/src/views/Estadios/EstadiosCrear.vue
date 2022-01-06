@@ -1,15 +1,69 @@
 <template>
   <div class="container-fluid cont-principal">
-    <p>
-      <router-link :to="{ name: 'Estadios' }" id="mini_title">
-        Estadios</router-link
-      >
-      > Crear estadio
-    </p>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Seleccione una imagen
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- <slim-cropper ref="slim-cropper" :options="slimOptions" style="width:120px;height:150px">
+               
+             </slim-cropper> -->
+            <slim-cropper :options="slimOptions">
+              <input type="file" name="slim" />
+            </slim-cropper>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button type="button" class="btn boton-agregar-img-estadio">
+              Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  FIN DEL MODAL PARA AGREGAR IMAGENES DE ESTADIO -->
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link :to="{ name: 'Estadios' }" id="mini_title">
+            Estadios</router-link
+          >
+        </li>
+        <li class="breadcrumb-item active estilo_page" aria-current="page">
+          Crear Estadio
+        </li>
+      </ol>
+    </nav>
 
     <div class="container-fluid ml-0">
       <label class="parrafo font-weight-bold ml-0">Crear Estadio </label>
-      <a type="button" class="btn btn-guardar pr-2">Guardar</a>
+      <a type="button" class="btn btn-crear-estadio pr-2">Guardar</a>
     </div>
 
     <div class="container-fluid mt-4 ml-0">
@@ -21,14 +75,14 @@
               <p for="inputEmail4" class="p-titulo">Nombre del estadio</p>
               <input
                 type="text"
-                v-model="estadio_name"
+                v-model="nombre_estadio"
                 class="form-control texto-nombre"
                 id=""
                 placeholder="Nombre"
               />
               <p for="inputEmail4" class="p-titulo">Acerca del estadio</p>
               <textarea
-                v-model="estadio_info"
+                v-model="acerca_estadio"
                 cols="30"
                 rows="10"
                 placeholder="Acerca"
@@ -37,31 +91,58 @@
             </div>
             <div class="form-group col-md-6 inner">
               <p for="inputPassword4" class="p-titulo">pais</p>
-              <select v-model="estadio_pais" class="texto-select">
+              <select v-model="pais_id" class="texto-select">
                 <option value="">seleccionar</option>
               </select>
               <p for="" class="p-titulo">ciudad</p>
-              <select v-model="estadio_ciudad" class="texto-select">
+              <select v-model="ciudad_id" class="texto-select">
                 <option value="">seleccionar</option>
               </select>
               <p for="" class="p-titulo">Tipo de terreno</p>
-              <select v-model="estadio_terreno" class="texto-select">
+              <select v-model="terreno_id" class="texto-select">
                 <option value="">seleccionar</option>
               </select>
             </div>
           </div>
         </div>
 
-        <div class="col-5 inner">
+        <div class="col-5 inner mr-5">
           <div class="agregar-imagen">
-            <label class="titulo w-100">Imagenes</label>
-            <!-- <slim-cropper ref="slim-cropper" :options="slimOptions" style="width:120px;height:150px">
-               
-             </slim-cropper> -->
-
-            <slim-cropper :options="slimOptions">
-              <input type="file" name="slim" />
-            </slim-cropper>
+            <label class="titulo w-100"
+              >Imagenes
+              <button
+                class="btn bton-agregar-img mx-5"
+                data-toggle="modal"
+                data-target="#exampleModal"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17.5"
+                  height="17.5"
+                  fill="#FFFF"
+                  viewBox="0 0 17.5 17.5"
+                >
+                  <g
+                    id="icon_añadir"
+                    data-name="icon / añadir"
+                    transform="translate(-138.25 -648.25)"
+                  >
+                    <path
+                      id="Línea_5"
+                      data-name="Línea 5"
+                      d="M16,.75H0A.75.75,0,0,1-.75,0,.75.75,0,0,1,0-.75H16a.75.75,0,0,1,.75.75A.75.75,0,0,1,16,.75Z"
+                      transform="translate(139 657)"
+                    />
+                    <path
+                      id="Línea_6"
+                      data-name="Línea 6"
+                      d="M0,16.75A.75.75,0,0,1-.75,16V0A.75.75,0,0,1,0-.75.75.75,0,0,1,.75,0V16A.75.75,0,0,1,0,16.75Z"
+                      transform="translate(147 649)"
+                    />
+                  </g>
+                </svg>
+              </button>
+            </label>
           </div>
           <div class="container mt-4 inner">
             <div class="row">
@@ -142,8 +223,7 @@ export default {
   components: {},
 };
 </script>
-<style >
-
+<style>
 .cont-principal {
   margin-top: 90px;
 }
@@ -177,7 +257,7 @@ h1 {
   color: #000000;
   margin-right: 880px;
 }
-.btn-guardar {
+.btn-crear-estadio {
   width: 180px;
   height: 40px;
   font-weight: normal;
@@ -190,11 +270,42 @@ h1 {
   align-items: flex-end;
 }
 
-.btn-guardar:hover {
+.btn-crear-estadio:hover {
   box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
     0 10px 30px 0 rgba(134, 111, 247, 0.19);
   color: #fff;
   text-decoration-line: none;
+}
+.boton-agregar-img-estadio {
+  height: 40px;
+  font-weight: normal;
+  font-size: 16px;
+  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  border-radius: 10px;
+  color: #ffff;
+  align-content: flex-end;
+  align-items: flex-end;
+}
+.boton-agregar-img-estadio:hover {
+  box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
+    0 10px 30px 0 rgba(134, 111, 247, 0.19);
+  color: #fff;
+  text-decoration-line: none;
+}
+
+.bton-agregar-img {
+  width: 40px;
+  height: 40px;
+  font-weight: normal;
+  font-size: 16px;
+  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  border-radius: 15px;
+  color: #ffff;
+  display: flex;
+  align-content: center;
+  align-items: center;
 }
 
 /* ESTILOS PARA LOS FORMULARIOS */
@@ -205,6 +316,8 @@ h1 {
   font-size: 30px;
   letter-spacing: 0px;
   color: #000000;
+  display: flex;
+  justify-content: space-between;
 }
 
 .agregar-imagen {
@@ -301,6 +414,10 @@ h1 {
 
 .styles_img_pre {
   position: relative;
+}
+
+.styles_img_pre img {
+  border-radius: 20px;
 }
 
 .btn_accion_eliminar {

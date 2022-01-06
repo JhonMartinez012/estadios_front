@@ -1,11 +1,16 @@
 <template>
   <div class="container-fluid cont-principal">
-    <p>
-      <router-link :to="{ name: 'Estadios' }" id="mini_title">
-        Estadios</router-link
-      >
-      >Editar estadio
-    </p>
+     <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link :to="{ name: 'Estadios' }" id="mini_title">
+            Estadios</router-link
+          >
+        </li>
+        <li class="breadcrumb-item active estilo_page" aria-current="page">Editar estadio</li>
+      </ol>
+    </nav>
+    
 
     <div class="container-fluid ml-0">
       <label class="parrafo font-weight-bold ml-0">Editar Estadio </label>
