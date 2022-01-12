@@ -38,7 +38,11 @@
             <div class="container">
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
-                  <slim-cropper :options="slimOptions" class="estilo-slim">
+                  <slim-cropper
+                    :options="slimOptions"
+                    ref="img_terreno"
+                    class="estilo-slim"
+                  >
                     <input type="file" name="slim" />
                   </slim-cropper>
                 </div>
@@ -47,7 +51,12 @@
               <div class="form-row">
                 <div class="form-group col-md-12 text-center">
                   <p for="" class="p-terreno">Nombre terreno</p>
-                  <input placeholder="Nombre" type="text" class="inputt" />
+                  <input
+                    placeholder="Nombre"
+                    type="text"
+                    class="inputt"
+                    v-model="nombre_terreno"
+                  />
                 </div>
               </div>
             </div>
@@ -56,7 +65,13 @@
             <button type="button" class="btn btn-cerrar" data-dismiss="modal">
               Cerrar
             </button>
-            <button type="button" class="btn btn-guardar">añadir</button>
+            <button
+              type="button"
+              class="btn btn-guardar"
+              @click="crear_terreno"
+            >
+              añadir
+            </button>
           </div>
         </div>
       </div>
@@ -77,7 +92,13 @@
                 width="cover"
                 height="150px"
               />
-              <div class="card-action-terreno ">
+              <div
+                class="card-action-terreno"
+                title="Estadios con este terreno"
+                alt=""
+                data-toggle="tooltip"
+                data-placement="bottom"
+              >
                 <label for="">{{ terreno.cant_estadios }} </label>
               </div>
             </div>
@@ -87,19 +108,23 @@
           </div>
 
           <div class="card-text-terreno btns-accion text-center">
-            <button class="btn btn-accion">
-              <img
-                src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
-                title="Eliminar"
-                alt=""
-              />
+            <button
+              class="btn btn-accion"
+              title="Eliminar"
+              alt=""
+              data-toggle="tooltip"
+              data-placement="bottom"
+            >
+              <img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" />
             </button>
-            <button class="btn btn-accion">
-              <img
-                src="/assets/1. Estadios/Iconos/icon - Editar.svg"
-                title="Editar"
-                alt=""
-              />
+            <button
+              class="btn btn-accion"
+              title="Editar"
+              alt=""
+              data-toggle="tooltip"
+              data-placement="bottom"
+            >
+              <img src="/assets/1. Estadios/Iconos/icon - Editar.svg" />
             </button>
           </div>
         </div>
@@ -109,57 +134,109 @@
 </template>
 
 <script>
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/terreno/";
 export default {
-  data() {
-    return {
-      terrenos: [
-        {
-          nombre: "Gramilla",
-          img_terreno: "/assets/1. Estadios/Terrenos de juego/1. gramilla.jpg",
-          cant_estadios: 0,
-        },
-        {
-          nombre: "Gramilla sintética",
-          img_terreno:
-            "/assets/1. Estadios/Terrenos de juego/3. gramilla sintetica.jpg",
-          cant_estadios: 0,
-        },
-        {
-          nombre: "Polvo de ladrillo",
-          img_terreno:
-            "/assets/1. Estadios/Terrenos de juego/2. polvo de ladrillo.jpg",
-          cant_estadios: 0,
-        },
-        {
-          nombre: "Madera",
-          img_terreno: "/assets/1. Estadios/Terrenos de juego/4. madera.jpg",
-          cant_estadios: 0,
-        },
-        {
-          nombre: "Cemento",
-          img_terreno: "/assets/1. Estadios/Terrenos de juego/5. Cemento.jpg",
-          cant_estadios: 0,
-        },
-        {
-          nombre: "Cemento",
-          img_terreno: "/assets/1. Estadios/Terrenos de juego/5. Cemento.jpg",
-          cant_estadios: 0,
-        },
-      ],
-      slimOptions: {
-        label: "Añadir imagen del terreno",
+  data: () => ({
+    nombre_terreno: "",
+    img: "",
+
+    terrenos: [
+      {
+        nombre: "Gramilla",
+        img_terreno: "/assets/1. Estadios/Terrenos de juego/1. gramilla.jpg",
+        cant_estadios: 0,
       },
-    };
+      {
+        nombre: "Gramilla sintética",
+        img_terreno:
+          "/assets/1. Estadios/Terrenos de juego/3. gramilla sintetica.jpg",
+        cant_estadios: 0,
+      },
+      {
+        nombre: "Polvo de ladrillo",
+        img_terreno:
+          "/assets/1. Estadios/Terrenos de juego/2. polvo de ladrillo.jpg",
+        cant_estadios: 0,
+      },
+      {
+        nombre: "Madera",
+        img_terreno: "/assets/1. Estadios/Terrenos de juego/4. madera.jpg",
+        cant_estadios: 0,
+      },
+      {
+        nombre: "Cemento",
+        img_terreno: "/assets/1. Estadios/Terrenos de juego/5. Cemento.jpg",
+        cant_estadios: 0,
+      },
+      {
+        nombre: "Cemento",
+        img_terreno: "/assets/1. Estadios/Terrenos de juego/5. Cemento.jpg",
+        cant_estadios: 0,
+      },
+    ],
+    slimOptions: {
+      label: "Añadir imagen del terreno",
+    },
+  }),
+  methods: {
+    async crear_terreno() {
+      let payload = {
+        nombre_terreno: this.nombre_terreno,
+        img: this.$refs.img_terreno.instanciaCrop.dataBase64.output.image,
+      };
+      console.log(payload.img);
+      try {
+        await axios
+          .post(ENDPOINT_PATH + "crear_terreno", payload, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + localStorage.getItem("access_token"),
+            },
+          })
+          .then((response) => {
+            this.data = response.data.data;
+            this.$router.push({ name: "Configuraciones" });
+          });
+      } catch (error) {
+        console.log(" pailas mi sooo");
+      }
+    },
+  },
+  computed: {
+    imagen() {
+      return this.imagenMini;
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .estilos-container {
   font-family: "Gilroy";
   font-size: bold;
 }
+body .tooltip-inner {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
 
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+}
+body .tooltip .arrow::before {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+}
 .parrafo {
   margin-top: 30px;
   text-align: left;
@@ -329,10 +406,10 @@ export default {
   height: 50px;
   right: -20px;
   bottom: 120px;
-  display: flex;  
+  display: flex;
   justify-content: center;
   align-items: center;
-  background-position: center center
+  background-position: center center;
 }
 
 .card-action-terreno label {

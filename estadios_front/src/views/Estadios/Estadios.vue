@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid cont-principal">
-     <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <router-link :to="{ name: 'Estadios' }" id="mini_title">
@@ -19,8 +19,10 @@
     </div>
 
     <estadios></estadios>
+    
   </div>
 </template>
+
 <script>
 import Estadios from "./componentes/EstadiosCom.vue";
 export default {
@@ -37,13 +39,32 @@ export default {
   },
 };
 </script>
-<style scped>
 
+<style scped>
 .cont-principal {
   margin-top: 90px;
 }
+body .tooltip-inner {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
 
-
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+}
+body .tooltip .arrow::before {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+}
 h1 {
   font-size: 35px;
   margin-top: 25px;

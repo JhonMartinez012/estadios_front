@@ -2,16 +2,33 @@
   <component :is="layout"></component>
 </template>
 
-
 <script>
+
+
+
 import LoginLayout from "./layouts/Login";
 import PrincipalLayout from "./layouts/Principal";
 import { mapState } from "vuex";
 
-
 export default {
   components: { LoginLayout, PrincipalLayout },
   computed: mapState(["layout"]),
+  updated(){
+       $('[data-toggle="tooltip"]').tooltip() 
+  },
+  watch: {
+    $route(){
+      $('[data-toggle="tooltip"]').tooltip()
+    }
+  }
+  /* methods: {
+    ...mapActions([
+      'fetchAccessToken'
+    ]),
+  },
+  created() {
+    this.fetchAccessToken();
+  } */
 };
 </script>
 

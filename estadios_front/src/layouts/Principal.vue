@@ -80,7 +80,7 @@
             <li class="nav-item dropdown">
               <a
                 class="nav-link dropdown-toggle"
-                href="#"
+                href="#prueba"
                 id="navbarDropdown"
                 role="button"
                 data-toggle="dropdown"
@@ -88,8 +88,9 @@
               >
                 <img class="img_redondeada" src="../assets/black.jpg" alt="" />
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Cerrar sesión</a>
+              <div class="dropdown-menu" id="prueba">
+                <router-link class="dropdown-item" :to="{name:'Logout'}">Cerrar sesión</router-link>
+                <!-- <a class="dropdown-item" href="#">Cerrar sesión</a> -->
               </div>
             </li>
           </ul>
@@ -137,18 +138,17 @@ export default {
       title: "Principal Layout",
     };
   },
-  name: "App",
+  updated(){
+       $('[data-toggle="tooltip"]').tooltip() 
+  },
+  name: "Principal",
 };
 </script>
 
-<script>
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip();
-  console.log("Si se ejecuta");
-});
-</script>
+
 
 <style scoped>
+
 .about {
   margin-left: 100px;
   margin-top: 100px;
@@ -166,6 +166,10 @@ $(function () {
 ul {
   border-radius: 12px;
   background-color: transparent;
+}
+
+#prueba:target{
+  display:block ;
 }
 
 .efecto,

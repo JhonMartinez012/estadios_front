@@ -2,17 +2,63 @@ import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/auth/";
 
 export default {
-  register(name, last_name, phone, acerca, email,  password,img) {
+  /*  ************MANERA 1 DE HACER******************************* */
+
+  /* register(name, last_name, phone, acerca, email,  password,img) {
     const user = { name, last_name, phone, acerca, email,  password,img };
     return axios.post(ENDPOINT_PATH + "register", user);
-  },
+  }, */
 
   login(email, password) {
     const user = { email, password };
     return axios.post(ENDPOINT_PATH + "login", user);
     
-  }
-  
+  } 
+  /* ************* FIN DE LA MANERA 1 *********************/
+
+  /* ****************************** MANERA DE HACER 2 ************************/
+  /* state: {
+    access_token: null,
+    loggingIn: false,
+    loginError: null,
+  },
+  mutations: {
+    loginStart: (state) => (state.loggingIn = true),
+    loginStop: (state, errorMessage) => {
+      state.loggingIn = false;
+      state.loginError = errorMessage;
+    },
+    updateAccessToken: (state, access_token) => {
+      state.accessToken = access_token;
+    },
+  },
+  actions: {
+    doLogin({ commit }, loginData) {
+      commit("loginStart");
+
+      axios
+        .post(ENDPOINT_PATH + "login", {
+          ...loginData,
+        })
+        .then((response) => {
+          localStorage.setItem("access_token", response.data.token);
+          commit("loginStop", null);
+          commit("updateAccessToken", response.data.token);
+          
+        })
+        .catch((error) => {
+          commit("loginStop", error.response.data.error);
+          commit("updateAccessToken", null);
+          console.log("no entro ome ")
+        });
+    },
+    fetchAccessToken({ commit }) {
+      commit("updateAccessToken", localStorage.getItem("access_token"));
+    },
+  }, */
+
+  /* * *****************************FIN DE MANERA 2 ********************** */
+
   /* namespaced: true,
 
 

@@ -25,21 +25,33 @@
         />
       </div>
       <div class="form-group col-lg-3 col-md-6 botones-inactividad">
-        <button class="btn btn-accion-inactividad">
-          <img
-            src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
-            title="Eliminar"
-            alt=""
-          />
+        <button
+          class="btn btn-accion-inactividad"
+          title="Eliminar"
+          alt=""
+          data-toggle="tooltip"
+          data-placement="bottom"
+        >
+          <img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" />
         </button>
-        <button class="btn btn-accion-inactividad">
-          <img
-            src="/assets/1. Estadios/Iconos/icon - Editar.svg"
-            title="Editar"
-            alt=""
-          />
+        <button
+          class="btn btn-accion-inactividad"
+          title="Editar"
+          alt=""
+          data-toggle="tooltip"
+          data-placement="bottom"
+        >
+          <img src="/assets/1. Estadios/Iconos/icon - Editar.svg" />
         </button>
-        <button class="btn btn-contador-inactividad">1</button>
+        <button
+          class="btn btn-contador-inactividad"
+          title="Veces que se usó este motivo"
+          alt=""
+          data-toggle="tooltip"
+          data-placement="bottom"
+        >
+          1
+        </button>
       </div>
     </div>
 
@@ -57,7 +69,6 @@
             xmlns="http://www.w3.org/2000/svg"
             width="25"
             height="25"
-            
             fill="#FFF"
             viewBox="0 0 22 22"
           >
@@ -92,21 +103,33 @@
         />
       </div>
       <div class="form-group col-lg-3 col-md-6 botones-inactividad">
-        <button class="btn btn-accion-inactividad">
-          <img
-            src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
-            title="Eliminar"
-            alt=""
-          />
+        <button
+          class="btn btn-accion-inactividad"
+          title="Eliminar"
+          alt=""
+          data-toggle="tooltip"
+          data-placement="bottom"
+        >
+          <img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" />
         </button>
-        <button class="btn btn-accion-inactividad">
-          <img
-            src="/assets/1. Estadios/Iconos/icon - Editar.svg"
-            title="Editar"
-            alt=""
-          />
+        <button
+          class="btn btn-accion-inactividad"
+          title="Editar"
+          alt=""
+          data-toggle="tooltip"
+          data-placement="bottom"
+        >
+          <img src="/assets/1. Estadios/Iconos/icon - Editar.svg" />
         </button>
-        <button class="btn btn-contador-inactividad">1</button>
+        <button
+          class="btn btn-contador-inactividad"
+          title="Veces que se usó este motivo"
+          alt=""
+          data-toggle="tooltip"
+          data-placement="bottom"
+        >
+          1
+        </button>
       </div>
     </div>
   </div>
@@ -188,7 +211,7 @@ export default {};
 
 .btn-crear-inactividad {
   margin: 0px;
-  background: #29D884 0% 0% no-repeat padding-box;
+  background: #29d884 0% 0% no-repeat padding-box;
   background-position: center center;
   border-radius: 12px;
   display: flex;

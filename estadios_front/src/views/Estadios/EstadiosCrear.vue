@@ -91,8 +91,11 @@
             </div>
             <div class="form-group col-md-6 inner">
               <p for="inputPassword4" class="p-titulo">pais</p>
-              <select v-model="pais_id" class="texto-select">
+              <select v-model="pais_id" @change="listarCiudades" class="texto-select">
                 <option value="">seleccionar</option>
+                <option v-for="pais in paises" :key="pais.id" v-bind:value="pais.id">
+                  {{ pais.nombre }}
+                </option>
               </select>
               <p for="" class="p-titulo">ciudad</p>
               <select v-model="ciudad_id" class="texto-select">
@@ -121,6 +124,10 @@
                   height="17.5"
                   fill="#FFFF"
                   viewBox="0 0 17.5 17.5"
+                  title="Añadir imagen"
+                  alt=""
+                  data-toggle="tooltip"
+                  data-placement="bottom"
                 >
                   <g
                     id="icon_añadir"
@@ -187,12 +194,23 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
   },
+  mounted(){
+    this.listarPaises()
+  },
   data() {
     return {
+      nombre_estadio: "",
+      acerca_estadio: "",
+      pais_id: "",
+      ciudad_id: "",
+      terreno_id: "",
+
       estadios: [
         {
           nombre: "Wembley Stadium",
@@ -218,7 +236,18 @@ export default {
       slimOptions: {
         label: "Subir imagen",
       },
+      paises: [],
+      ciudades:[],
     };
+  },
+  methods: {
+    async listarPaises() {
+      const res = await axios.get(ENDPOINT_PATH + "paises");
+      this.paises = res.data.paises;
+    },
+    async listarCiudades(){
+
+    }
   },
   components: {},
 };

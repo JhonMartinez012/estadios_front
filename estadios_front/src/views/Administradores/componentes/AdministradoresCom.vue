@@ -7,18 +7,16 @@
         :key="index"
       >
         <div class="form-group admin-info">
-          <router-link
-            :to="{ name: '' }"
-            data-toggle="tooltip"
-            :title="administrador.acerca"
-            data-placement="bottom"
-          >
+          <router-link :to="{ name: '' }">
             <img
               width="120px"
               height="120px"
               :src="administrador.foto_perfil"
               alt=""
               srcset=""
+              data-toggle="tooltip"
+              :title="administrador.acerca"
+              data-placement="bottom"
             />
 
             <div class="form-group mt-2">
@@ -128,7 +126,7 @@ export default {
 
 .admins {
   width: 400px;
-  height: 270px;
+  /* height: 270px; */
 }
 .admin-info {
   width: 125px;
@@ -136,12 +134,12 @@ export default {
   margin-left: 60px;
   margin-top: 20px;
   border-radius: 35px;
-  background-color: #F6F9FB;
+  background-color: #f6f9fb;
 }
 
 .admin-info img:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4), 0 10px 35px 0 rgba(0, 0, 0, 0.19);
-  color: #F6F9FB;
+  color: #f6f9fb;
   border-radius: 35px;
   text-decoration-line: none;
   width: 120px;

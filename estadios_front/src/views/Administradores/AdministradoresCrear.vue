@@ -16,9 +16,7 @@
     <div class="container-fluid titulo_formulario">
       <label class="parrafo font-weight-bold ml-0">Crear Administrador</label>
       <!-- <router-link :to="{name:'EstadiosCrear'}" class="btn btn-crear pr-2"> Crear estadio </router-link> -->
-      <button class="btn btn-guardar pr-2" @click="register">
-        Guardar
-      </button>
+      <button class="btn btn-guardar pr-2" @click="register">Guardar</button>
     </div>
     <div class="container contenido_formulario mt-4">
       <form>
@@ -104,7 +102,9 @@
 </template>
 
 <script>
-import auth from '@/store/auth';
+//import auth from "@/store/auth";
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/auth/";
 export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
@@ -125,18 +125,53 @@ export default {
   }),
   /* data() {
     return {
-      
+
     }; */
 
   methods: {
     async register() {
+      let payload = {
+        name: this.name,
+        last_name: this.last_name,
+        phone: this.phone,
+        acerca: this.acerca,
+        email: this.email,
+        password: this.password,
+        img:this.img,
+      }
+      try{
+         await axios
+          .post(ENDPOINT_PATH + "register", payload, {
+          headers: {
+            'Content-Type': "application/json",
+             'Authorization': "Bearer " + localStorage.getItem("access_token"),
+          },
+        })
+        .then((response) => {
+          this.data = response.data.data;
+          this.$router.push({ name: "Administradores" });
+        })        
+      }catch(error){
+        console.log(" pailas mi sooo")
+      }
+        
+    },
+    /* async register() {
       try {
-        await auth.register(this.name, this.last_name, this.phone, this.acerca, this.email,  this.password,this.img);
-        this.$router.push({name:'Administradores'});
+        await auth.register(
+          this.name,
+          this.last_name,
+          this.phone,
+          this.acerca,
+          this.email,
+          this.password,
+          this.img
+        );
+        this.$router.push({ name: "Administradores" });
       } catch (error) {
         console.log(error);
       }
-    },
+    }, */
     VerAdministrador() {
       this.$router.push({ name: "AdministradorVer" });
     },
@@ -147,6 +182,27 @@ export default {
 <style scoped>
 .admins {
   margin-top: 150px;
+}
+body .tooltip-inner {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
+
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+}
+body .tooltip .arrow::before {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
 }
 #mini_title {
   top: 140px;
