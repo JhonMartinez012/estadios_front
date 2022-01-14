@@ -14,12 +14,17 @@ export default {
   components: { LoginLayout, PrincipalLayout },
   computed: mapState(["layout"]),
   updated(){
-       $('[data-toggle="tooltip"]').tooltip() 
+       $('[data-toggle="tooltip"]').tooltip({
+         trigger:'hover'
+       }) 
+
   },
   watch: {
     $route(){
-      $('[data-toggle="tooltip"]').tooltip()
-    }
+      $('[data-toggle="tooltip"]').tooltip({
+         trigger:'hover'
+       }) 
+    },
   }
   /* methods: {
     ...mapActions([

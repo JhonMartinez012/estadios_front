@@ -3,7 +3,7 @@
     <!-- Modal para añadir una tribuna -->
     <div
       class="modal fade"
-      id="exampleModal"
+      id="modalTribuna"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
@@ -73,7 +73,7 @@
       <button
         class="btn btn-crear-tri"
         data-toggle="modal"
-        data-target="#exampleModal"
+        data-target="#modalTribuna"
       >
         Añadir
       </button>
@@ -124,10 +124,54 @@
             src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
             alt=""
             srcset=""
+            data-toggle="modal"
+            data-target="#modalEliminarTribuna"
           />
         </button>
       </div>
     </div>
+    <!-- INICIO DE LA MODAL ELIMINAR -->
+    <div
+      class="modal fade"
+      id="modalEliminarTribuna"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Eliminar tribuna
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <p>¿Desea eliminar esta tribuna?</p>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button type="button" class="btn boton-eliminar-tribuna">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  FIN DEL MODAL PARA ELIMINAR TRIBUNA -->
   </div>
 </template>
 
@@ -174,7 +218,7 @@ export default {};
   letter-spacing: 0px;
   color: #3c2ea8;
 }
-.btn-guardar {
+.btn-guardar,.boton-eliminar-tribuna {
   width: 90px;
   height: 40px;
   background: transparent linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
@@ -187,7 +231,7 @@ export default {};
   color: #ffffff;
   opacity: 1;
 }
-.btn-guardar:hover {
+.btn-guardar:hover,.boton-eliminar-tribuna:hover {
   width: 90px;
   height: 40px;
   background: transparent linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%

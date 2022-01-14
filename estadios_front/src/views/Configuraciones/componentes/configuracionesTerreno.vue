@@ -1,11 +1,52 @@
 <template>
   <div class="container-fluid">
+    <!-- INICIO DE LA MODAL ELIMINAR -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar terreno</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <p>¿Desea eliminar este terreno?</p>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button type="button" class="btn boton-eliminar-terreno">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  FIN DEL MODAL PARA ELIMINAR TERRENO -->
+
     <div class="container-fluid estilos-container">
-      <label class="parrafo font-weight-bold ml-0">Tipos de terrono</label>
+      <label class="parrafo font-weight-bold ml-0">Tipos de terreno</label>
       <button
         class="btn btn-crear-t pr-2"
         data-toggle="modal"
-        data-target="#exampleModal"
+        data-target="#exampleModal1"
       >
         Crear
       </button>
@@ -14,7 +55,7 @@
     <!-- Modal para crear terreno -->
     <div
       class="modal fade"
-      id="exampleModal"
+      id="exampleModal1"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
@@ -80,15 +121,15 @@
     <div class="row">
       <div
         class="col-md-4 col-sm-6 col-lg-2 fondo-card mt-4"
-        v-for="(terreno, index) in terrenos"
-        :key="index"
+        v-for="terreno in terrenos"
+        :key="terreno.id"
       >
         <div class="card-sl-terreno">
           <a href="">
             <div class="card-image-terreno">
               <img
                 class="hover-image w-100"
-                :src="terreno.img_terreno"
+                :src="terreno.img"
                 width="cover"
                 height="150px"
               />
@@ -104,18 +145,22 @@
             </div>
           </a>
           <div class="card-heading-terreno">
-            <p class="tres_puntos">{{ terreno.nombre }}</p>
+            <p class="tres_puntos">{{ terreno.nombre_terreno }}</p>
           </div>
 
           <div class="card-text-terreno btns-accion text-center">
             <button
               class="btn btn-accion"
-              title="Eliminar"
-              alt=""
-              data-toggle="tooltip"
-              data-placement="bottom"
+              data-toggle="modal"
+              data-target="#exampleModal"
             >
-              <img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" />
+              <img
+                src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
+                title="Eliminar"
+                alt=""
+                data-toggle="tooltip"
+                data-placement="bottom"
+              />
             </button>
             <button
               class="btn btn-accion"
@@ -140,73 +185,57 @@ export default {
   data: () => ({
     nombre_terreno: "",
     img: "",
-
-    terrenos: [
-      {
-        nombre: "Gramilla",
-        img_terreno: "/assets/1. Estadios/Terrenos de juego/1. gramilla.jpg",
-        cant_estadios: 0,
-      },
-      {
-        nombre: "Gramilla sintética",
-        img_terreno:
-          "/assets/1. Estadios/Terrenos de juego/3. gramilla sintetica.jpg",
-        cant_estadios: 0,
-      },
-      {
-        nombre: "Polvo de ladrillo",
-        img_terreno:
-          "/assets/1. Estadios/Terrenos de juego/2. polvo de ladrillo.jpg",
-        cant_estadios: 0,
-      },
-      {
-        nombre: "Madera",
-        img_terreno: "/assets/1. Estadios/Terrenos de juego/4. madera.jpg",
-        cant_estadios: 0,
-      },
-      {
-        nombre: "Cemento",
-        img_terreno: "/assets/1. Estadios/Terrenos de juego/5. Cemento.jpg",
-        cant_estadios: 0,
-      },
-      {
-        nombre: "Cemento",
-        img_terreno: "/assets/1. Estadios/Terrenos de juego/5. Cemento.jpg",
-        cant_estadios: 0,
-      },
-    ],
+    modal:0,
+    show:true,
+    terrenos: [],
     slimOptions: {
       label: "Añadir imagen del terreno",
     },
   }),
   methods: {
+    async listarTerrenos() {
+      await axios.get(ENDPOINT_PATH + "terrenos").then(
+        function (response) {
+          this.terrenos = response.data;
+        }.bind(this)
+      );
+    },
     async crear_terreno() {
       let payload = {
         nombre_terreno: this.nombre_terreno,
         img: this.$refs.img_terreno.instanciaCrop.dataBase64.output.image,
       };
-      console.log(payload.img);
+      /* console.log(payload.img); */
       try {
         await axios
           .post(ENDPOINT_PATH + "crear_terreno", payload, {
             headers: {
               "Content-Type": "application/json",
-              "Authorization": "Bearer " + localStorage.getItem("access_token"),
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
           })
           .then((response) => {
             this.data = response.data.data;
-            this.$router.push({ name: "Configuraciones" });
+            /* this.$router.push({ name: "Configuraciones" }); */
+            console.log(this.data);
+            this.closeModal();
+            this.listarTerrenos();
           });
       } catch (error) {
         console.log(" pailas mi sooo");
       }
+      this.closeModal();
+      this.listarTerrenos();
+    },
+    openModal(){
+      this.modal = 1;
+    },
+    closeModal() {
+      this.modal = 0;
     },
   },
-  computed: {
-    imagen() {
-      return this.imagenMini;
-    },
+  created: function () {
+    this.listarTerrenos();
   },
 };
 </script>
@@ -434,5 +463,25 @@ body .tooltip .arrow::before {
   background-color: transparent;
   font-size: 14px;
   color: #636262;
+}
+
+.boton-eliminar-terreno {
+  width: 90px;
+  height: 40px;
+  font-weight: normal;
+  font-size: 16px;
+  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  border-radius: 12px;
+  color: #ffff;
+  align-content: flex-end;
+  align-items: flex-end;
+}
+
+.boton-eliminar-terreno:hover {
+  box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
+    0 10px 30px 0 rgba(134, 111, 247, 0.19);
+  color: #fff;
+  text-decoration-line: none;
 }
 </style>

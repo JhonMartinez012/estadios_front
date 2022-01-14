@@ -91,19 +91,33 @@
             </div>
             <div class="form-group col-md-6 inner">
               <p for="inputPassword4" class="p-titulo">pais</p>
-              <select v-model="pais_id" @change="listarCiudades" class="texto-select">
-                <option value="">seleccionar</option>
-                <option v-for="pais in paises" :key="pais.id" v-bind:value="pais.id">
-                  {{ pais.nombre }}
+              <select
+                v-model='pais'
+                @change='listarCiudades()'
+                class='texto-select'
+              >
+                <option value="0">seleccione pais</option>
+                <option v-for='data in paises' :key='data.id' :value='data.id'>
+                  {{ data.nombre }}
                 </option>
               </select>
               <p for="" class="p-titulo">ciudad</p>
-              <select v-model="ciudad_id" class="texto-select">
-                <option value="">seleccionar</option>
+              <select class="texto-select" v-model='ciudad'>
+                <option value="0">seleccione ciudad</option>
+                <option
+                  v-for='data in ciudades'
+                  :key='data.id'
+                  :value='data.id'
+                >
+                  {{ data.nombre }}
+                </option>
               </select>
               <p for="" class="p-titulo">Tipo de terreno</p>
               <select v-model="terreno_id" class="texto-select">
-                <option value="">seleccionar</option>
+                <option value="0">seleccionar</option>
+                <option v-for="terreno in terrenos" :key="terreno.id"
+                :value="terreno.id">{{terreno.nombre_terreno}}</option>
+
               </select>
             </div>
           </div>
@@ -196,20 +210,20 @@
 <script>
 import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
+const ENDPOINT_PATH1 = "http://127.0.0.1:8000/api/terreno/";
 export default {
-  created() {
+  /*  created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
-  },
-  mounted(){
+  }, */
+  /* mounted(){
     this.listarPaises()
-  },
+  }, */
+
   data() {
     return {
       nombre_estadio: "",
       acerca_estadio: "",
-      pais_id: "",
-      ciudad_id: "",
-      terreno_id: "",
+      terreno_id: 0,
 
       estadios: [
         {
@@ -236,18 +250,56 @@ export default {
       slimOptions: {
         label: "Subir imagen",
       },
+      pais: 0,
       paises: [],
-      ciudades:[],
+      ciudad: 0,
+      ciudades: [],
+      terrenos: [],
     };
   },
   methods: {
-    async listarPaises() {
+    /* async listarPaises() {
       const res = await axios.get(ENDPOINT_PATH + "paises");
       this.paises = res.data.paises;
     },
     async listarCiudades(){
 
+    } */
+
+    async listarPaises() {
+       axios.get(ENDPOINT_PATH + "paises").then(
+        function (response) {
+          this.paises = response.data;
+        }.bind(this)
+      );
+    },
+
+   async listarCiudades() {
+      axios
+        .get(ENDPOINT_PATH + "ciudades", {
+          params: {
+            pais_id: this.pais,
+          },
+        })
+        .then(
+          function (response) {
+            this.ciudades = response.data;
+          }.bind(this)
+        );
+    },
+    async listarTerrenos(){
+      axios
+        .get(ENDPOINT_PATH1+"terrenos").then(
+        function (response) {
+          this.terrenos = response.data;
+        }.bind(this)
+      );
     }
+  },
+  created: function () {
+    this.$store.commit("SET_LAYOUT", "principal-layout");
+    this.listarPaises();
+    this.listarTerrenos()
   },
   components: {},
 };

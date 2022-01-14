@@ -1,5 +1,47 @@
 <template>
   <div class="container m-0 mt-3">
+    <!-- INICIO DE LA MODAL ELIMINAR -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Eliminar administrador
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <p>¿Desea eliminar este administrador?</p>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button type="button" class="btn boton-eliminar-admin">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  FIN DEL MODAL PARA ELIMINAR -->
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -16,7 +58,7 @@
       <label class="parrafo font-weight-bold ml-0"
         >Nombre Administrador
         <hr id="hr_decorativo" />
-        </label>
+      </label>
     </div>
 
     <div class="container contenido_formulario mt-4">
@@ -39,6 +81,8 @@
                 src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
                 alt=""
                 srcset=""
+                data-toggle="modal"
+                data-target="#exampleModal"
               />
             </button>
             <button
@@ -117,7 +161,6 @@ export default {
 </script>
 
 <style scoped>
-
 .admins {
   margin-left: 105px;
 }
@@ -208,7 +251,6 @@ body .tooltip .arrow::before {
   margin-bottom: 50px;
   text-align: center;
   background-position: center center;
-
 }
 #estilo_subir_img {
   background: #dfe4e8 0% 0% no-repeat padding-box;
@@ -289,5 +331,25 @@ body .tooltip .arrow::before {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.boton-eliminar-admin {
+  width: 90px;
+  height: 40px;
+  font-weight: normal;
+  font-size: 16px;
+  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  border-radius: 12px;
+  color: #ffff;
+  align-content: flex-end;
+  align-items: flex-end;
+}
+
+.boton-eliminar-admin:hover {
+  box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
+    0 10px 30px 0 rgba(134, 111, 247, 0.19);
+  color: #fff;
+  text-decoration-line: none;
 }
 </style>

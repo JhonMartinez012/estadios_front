@@ -1,70 +1,88 @@
 <template>
   <div class="container-fluid">
+    <!-- INICIO DE LA MODAL ELIMINAR -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar motivo</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <p>¿Desea eliminar este motivo?</p>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button type="button" class="btn boton-eliminar-motivo">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  FIN DEL MODAL PARA ELIMINAR -->
     <div class="container-fluid estilos-container">
       <label class="parrafo font-weight-bold ml-0"
         >Motivos de Inactividad</label
       >
     </div>
 
-    <div class="form-row">
+    <div class="form-row mb-5">
       <div class="form-group col-lg-3 col-md-6 col-sm-12">
         <label for="inputMotivo">Motivo</label>
-        <input type="text" class="form-control inputt" placeholder="Motivo" />
+        <input
+          type="text"
+          v-model="nombre_motivo"
+          class="form-control inputt"
+          placeholder="Motivo"
+        />
       </div>
       <div class="form-group col-lg-3 col-md-6">
-        <button class="btn btn-create">crear</button>
+        <button class="btn btn-create" @click="crearMotivoInactividad">
+          crear
+        </button>
       </div>
     </div>
 
-    <div class="form-row mt-5">
+    <div class="form-row " v-for="motivo in motivos" :key="motivo.id">
       <div class="form-group col-lg-3 col-md-6 col-sm-12">
         <input
           type="text"
           class="form-control inputt"
           placeholder="concierto"
+          :value="motivo.nombre_motivo"
+          id="motivo"
+          disabled=""
         />
       </div>
       <div class="form-group col-lg-3 col-md-6 botones-inactividad">
         <button
-          class="btn btn-accion-inactividad"
-          title="Eliminar"
-          alt=""
+          class="btn btn-crear-inactividad"
+          v-if="mostrar"
+          @click="disabledInput"
+          title="editar"
           data-toggle="tooltip"
           data-placement="bottom"
         >
-          <img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" />
-        </button>
-        <button
-          class="btn btn-accion-inactividad"
-          title="Editar"
-          alt=""
-          data-toggle="tooltip"
-          data-placement="bottom"
-        >
-          <img src="/assets/1. Estadios/Iconos/icon - Editar.svg" />
-        </button>
-        <button
-          class="btn btn-contador-inactividad"
-          title="Veces que se usó este motivo"
-          alt=""
-          data-toggle="tooltip"
-          data-placement="bottom"
-        >
-          1
-        </button>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-lg-3 col-md-6 col-sm-12">
-        <input
-          type="text"
-          class="form-control inputt"
-          placeholder="cambio de terreno"
-        />
-      </div>
-      <div class="form-group col-lg-3 col-md-6 botones-inactividad">
-        <button class="btn btn-crear-inactividad">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
@@ -91,26 +109,19 @@
             </g>
           </svg>
         </button>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-lg-3 col-md-6 col-sm-12">
-        <input
-          type="text"
-          class="form-control inputt"
-          placeholder="Mantenimiento"
-        />
-      </div>
-      <div class="form-group col-lg-3 col-md-6 botones-inactividad">
         <button
           class="btn btn-accion-inactividad"
           title="Eliminar"
           alt=""
           data-toggle="tooltip"
           data-placement="bottom"
+          v-if="!mostrar"
         >
-          <img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" />
+          <img
+            src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
+            data-toggle="modal"
+            data-target="#exampleModal"
+          />
         </button>
         <button
           class="btn btn-accion-inactividad"
@@ -118,10 +129,13 @@
           alt=""
           data-toggle="tooltip"
           data-placement="bottom"
+          v-if="!mostrar"
+          @click="habilitarInput"
         >
           <img src="/assets/1. Estadios/Iconos/icon - Editar.svg" />
         </button>
-        <button
+
+        <p
           class="btn btn-contador-inactividad"
           title="Veces que se usó este motivo"
           alt=""
@@ -129,14 +143,67 @@
           data-placement="bottom"
         >
           1
-        </button>
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/motivo_inactividad/";
+export default {
+  data() {
+    return {
+      mostrar: false,
+      nombre_motivo: "",
+      motivos: [],
+    };
+  },
+
+  methods: {
+    async listarMotivosInactividad() {
+      await axios.get(ENDPOINT_PATH + "motivos_inactividad").then(
+        function (response) {
+          this.motivos = response.data;
+        }.bind(this)
+      );
+    },
+    async crearMotivoInactividad() {
+      let payload = {
+        nombre_motivo: this.nombre_motivo,
+      };
+      try {
+        await axios
+          .post(ENDPOINT_PATH + "crear_motivo", payload, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          })
+          .then((response) => {
+            this.data = response.data.data;
+            console.log(this.data);
+            //this.$router.push({ name: "Configuracion" });
+          });
+      } catch (error) {
+        console.log(" No se pudo crear el motivo");
+      }
+      this.listarMotivosInactividad();
+    },
+    habilitarInput() {
+      document.getElementById("motivo").disabled = false;
+      this.mostrar = !this.mostrar;
+    },
+    disabledInput() {
+      document.getElementById("motivo").disabled = true;
+      this.mostrar = !this.mostrar;
+    },
+  },
+  created: function () {
+    this.listarMotivosInactividad();
+  },
+};
 </script>
 
 <style scoped>
@@ -144,7 +211,31 @@ export default {};
   font-family: "Gilroy";
   font-size: bold;
 }
+body .tooltip-inner {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
 
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+}
+body .tooltip .arrow::before {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+}
+
+#motivo:disabled {
+  background-color: rgba(204, 204, 204, 0.527);
+}
 .parrafo {
   margin-top: 30px;
   text-align: left;
@@ -223,5 +314,25 @@ export default {};
 .btn-contador-inactividad {
   background: #dfe4e8 0% 0% no-repeat padding-box;
   border-radius: 15px;
+}
+
+.boton-eliminar-motivo {
+  width: 90px;
+  height: 40px;
+  font-weight: normal;
+  font-size: 16px;
+  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  border-radius: 12px;
+  color: #ffff;
+  align-content: flex-end;
+  align-items: flex-end;
+}
+
+.boton-eliminar-motivo:hover {
+  box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
+    0 10px 30px 0 rgba(134, 111, 247, 0.19);
+  color: #fff;
+  text-decoration-line: none;
 }
 </style>

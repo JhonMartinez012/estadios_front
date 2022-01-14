@@ -20,6 +20,14 @@ const routes = [
     },
   },
   {
+    path: "/loader",
+    name: "Loader",
+    component: () => import("../views/Loader.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: "/estadios",
     name: "Estadios",
 

@@ -139,7 +139,9 @@ export default {
     };
   },
   updated(){
-       $('[data-toggle="tooltip"]').tooltip() 
+       $('[data-toggle="tooltip"]').tooltip({
+         trigger:'hover'
+       }) 
   },
   name: "Principal",
 };

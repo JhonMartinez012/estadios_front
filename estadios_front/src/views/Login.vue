@@ -137,7 +137,7 @@ export default {
         let data = await auth.login(this.email, this.password);
         if (typeof Storage !== "undefined") {
           localStorage.setItem("access_token", data.data.access_token);
-          this.$router.push({ name: "Estadios" });
+          this.$router.push({ name: "Loader" });
         } else {
           console.log("No compatible");
         }
