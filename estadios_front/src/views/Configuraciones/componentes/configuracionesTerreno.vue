@@ -185,8 +185,8 @@ export default {
   data: () => ({
     nombre_terreno: "",
     img: "",
-    modal:0,
-    show:true,
+    modal: 0,
+    show: true,
     terrenos: [],
     slimOptions: {
       label: "Añadir imagen del terreno",
@@ -227,7 +227,7 @@ export default {
       this.closeModal();
       this.listarTerrenos();
     },
-    openModal(){
+    openModal() {
       this.modal = 1;
     },
     closeModal() {

@@ -22,7 +22,11 @@
       <form>
         <div class="row">
           <div class="form-group col-sm-12 col-md-4 col-lg-2 anadir_img d-flex">
-            <slim-cropper :options="slimOptions" id="estilo_subir_img">
+            <slim-cropper
+              :options="slimOptions"
+              id="estilo_subir_img"
+              ref="img_admin"
+            >
               <input type="file" name="slim" id="estilo_subir_img" />
             </slim-cropper>
           </div>
@@ -137,47 +141,38 @@ export default {
         acerca: this.acerca,
         email: this.email,
         password: this.password,
-        img:this.img,
-      }
-      try{
-         await axios
-          .post(ENDPOINT_PATH + "register", payload, {
-          headers: {
-            'Content-Type': "application/json",
-             'Authorization': "Bearer " + localStorage.getItem("access_token"),
-          },
-        })
-        .then((response) => {
-          this.data = response.data.data;
-          this.$router.push({ name: "Administradores" });
-        })        
-      }catch(error){
-        console.log(" pailas mi sooo")
-      }
-        
-    },
-    /* async register() {
+        img: this.$refs.img_admin.instanciaCrop.dataBase64.output.image,
+      };
       try {
-        await auth.register(
-          this.name,
-          this.last_name,
-          this.phone,
-          this.acerca,
-          this.email,
-          this.password,
-          this.img
-        );
-        this.$router.push({ name: "Administradores" });
+        if (this.password == this.repassword) {
+          await axios
+            .post(ENDPOINT_PATH + "register", payload, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + localStorage.getItem("access_token"),
+              },
+            })
+            .then((response) => {
+              this.data = response.data.data;
+              this.$router.push({ name: "Administradores" });
+            });
+        } else {
+          console.log("contraseñas no coinciden");
+        }
       } catch (error) {
-        console.log(error);
+        console.log("No se pudo realizar");
       }
-    }, */
+    },
+    
     VerAdministrador() {
       this.$router.push({ name: "AdministradorVer" });
     },
   },
 };
 </script>
+
+
+
 
 <style scoped>
 .admins {

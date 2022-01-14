@@ -3,15 +3,15 @@
     <div class="row">
       <div
         class="col-lg-2 col-md-4 d-flex justify-content-center align-items-center admins"
-        v-for="(administrador, index) in administradores"
-        :key="index"
+        v-for="administrador in administradores"
+        :key="administrador.id"
       >
         <div class="form-group admin-info">
           <router-link :to="{ name: '' }">
             <img
               width="120px"
               height="120px"
-              :src="administrador.foto_perfil"
+              :src="administrador.img"
               alt=""
               srcset=""
               data-toggle="tooltip"
@@ -21,7 +21,7 @@
 
             <div class="form-group mt-2">
               <label class="info_admin" for="">{{
-                administrador.nombre
+                administrador.name+administrador.last_name
               }}</label>
               <hr id="hr_decorativo" />
             </div>
@@ -45,61 +45,24 @@
 </template>
 
 <script>
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/administrador/";
 export default {
-  data() {
-    return {
-      administradores: [
-        {
-          nombre: "Leandro Garcia",
-          foto_perfil: "/assets/1. Estadios/Iconos/icon - espectadores.svg",
-          acerca:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit." +
-            "Molestias, unde quasi. Dolore, nihil excepturi? Laborum," +
-            "magni saepe! Fugiat soluta eius harum magnam1.",
-        },
-        {
-          nombre: "Juliana Garcia",
-          foto_perfil: "/assets/1. Estadios/Iconos/icon - usuario.svg",
-          acerca:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit." +
-            "Molestias, unde quasi. Dolore, nihil excepturi? Laborum," +
-            "magni saepe! Fugiat soluta eius harum magnam2.",
-        },
-        {
-          nombre: "Miguel Garcia",
-          foto_perfil: "/assets/1. Estadios/Iconos/icon - zapatillas.svg",
-          acerca:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit." +
-            "Molestias, unde quasi. Dolore, nihil excepturi? Laborum," +
-            "magni saepe! Fugiat soluta eius harum magnam3.",
-        },
-        {
-          nombre: "Daniela Garcia",
-          foto_perfil: "/assets/1. Estadios/Iconos/icon - espectadores.svg",
-          acerca:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit." +
-            "Molestias, unde quasi. Dolore, nihil excepturi? Laborum," +
-            "magni saepe! Fugiat soluta eius harum magnam4.",
-        },
-        {
-          nombre: "Sandra Garcia",
-          foto_perfil: "/assets/1. Estadios/Iconos/icon - termo.svg",
-          acerca:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit." +
-            "Molestias, unde quasi. Dolore, nihil excepturi? Laborum," +
-            "magni saepe! Fugiat soluta eius harum magnam5.",
-        },
-        {
-          nombre: "Maria Garcia",
-          foto_perfil: "/assets/1. Estadios/Iconos/icon - producto.svg",
-          acerca:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit." +
-            "Molestias, unde quasi. Dolore, nihil excepturi? Laborum," +
-            "magni saepe! Fugiat soluta eius harum magnam6.",
-        },
-      ],
-    };
+  data: () => ({
+    administradores: [],
+  }),
+  methods: {
+    async listarAdministradores() {
+      await axios.get(ENDPOINT_PATH + "administradores").then(
+        function (response) {
+          this.administradores = response.data;
+        }.bind(this)
+      );
+    },
   },
+  created(){
+    this.listarAdministradores();
+  }
 };
 </script>
 
