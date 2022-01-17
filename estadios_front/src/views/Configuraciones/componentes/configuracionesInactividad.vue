@@ -63,26 +63,28 @@
       </div>
     </div>
 
-    <div class="form-row " v-for="motivo in motivos" :key="motivo.id">
+    <div class="form-row" v-for="(motivo, key) in motivos" :key="motivo.id">
       <div class="form-group col-lg-3 col-md-6 col-sm-12">
         <input
           type="text"
           class="form-control inputt"
           placeholder="concierto"
-          :value="motivo.nombre_motivo"
+          v-model="motivo.nombre_motivo"
           id="motivo"
-          disabled=""
+          :disabled="motivo.disabled"
         />
       </div>
       <div class="form-group col-lg-3 col-md-6 botones-inactividad">
         <button
           class="btn btn-crear-inactividad"
-          v-if="mostrar"
-          @click="disabledInput"
-          title="editar"
+          v-if="motivo.disabled == false"
+          @click="editarMotivoInactividad(key)"
+          title="Guardar"
+          data-original-title="Guardar"
           data-toggle="tooltip"
           data-placement="bottom"
         >
+          <!-- Boton para actualizar el usuario -->
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
@@ -115,7 +117,7 @@
           alt=""
           data-toggle="tooltip"
           data-placement="bottom"
-          v-if="!mostrar"
+          v-if="motivo.disabled == true"
         >
           <img
             src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
@@ -129,8 +131,8 @@
           alt=""
           data-toggle="tooltip"
           data-placement="bottom"
-          v-if="!mostrar"
-          @click="habilitarInput"
+          v-if="motivo.disabled == true"
+          @click="habilitarInput(motivo)"
         >
           <img src="/assets/1. Estadios/Iconos/icon - Editar.svg" />
         </button>
@@ -153,55 +155,97 @@
 import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/motivo_inactividad/";
 export default {
+  created: function () {
+    this.listarMotivosInactividad();
+  },
+  updated() {
+    $('[data-toggle="tooltip"]').tooltip({
+      trigger: "hover",
+    });
+  },
   data() {
     return {
+      motivo: {
+        nombre_motivo: "",
+      },
       mostrar: false,
       nombre_motivo: "",
       motivos: [],
+      id: 0,
     };
   },
 
   methods: {
     async listarMotivosInactividad() {
-      await axios.get(ENDPOINT_PATH + "motivos_inactividad").then(
-        function (response) {
-          this.motivos = response.data;
-        }.bind(this)
-      );
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "motivos_inactividad");
+        this.motivos = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     async crearMotivoInactividad() {
       let payload = {
         nombre_motivo: this.nombre_motivo,
       };
       try {
-        await axios
-          .post(ENDPOINT_PATH + "crear_motivo", payload, {
+        const { data } = await axios.post(
+          ENDPOINT_PATH + "crear_motivo",
+          payload,
+          {
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
-          })
-          .then((response) => {
-            this.data = response.data.data;
-            console.log(this.data);
-            //this.$router.push({ name: "Configuracion" });
-          });
+          }
+        );
+        this.data = data;
+        this.nombre_motivo = "";
+        //this.$router.push({ name: "Configuracion" });
       } catch (error) {
         console.log(" No se pudo crear el motivo");
       }
       this.listarMotivosInactividad();
     },
-    habilitarInput() {
-      document.getElementById("motivo").disabled = false;
-      this.mostrar = !this.mostrar;
+
+    async editarMotivoInactividad(key) {
+      let motivo=this.motivos[key];    
+      
+      let payload = {
+        nombre_motivo: motivo.nombre_motivo,
+      };
+      
+      try {
+        const { data } = await axios.put(
+          ENDPOINT_PATH + "editar_motivo/" + motivo.id,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        );
+        this.data = data;
+        if (this.data) {
+          this.motivo.disabled = true;
+          this.listarMotivosInactividad();
+        }else{
+          console.log("No se pudo actualizar")
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
-    disabledInput() {
-      document.getElementById("motivo").disabled = true;
-      this.mostrar = !this.mostrar;
+    habilitarInput(motivo) {
+      try {
+        
+        motivo.disabled = false;
+        
+      } catch (error) {
+        console.log(error);
+      }
     },
-  },
-  created: function () {
-    this.listarMotivosInactividad();
   },
 };
 </script>

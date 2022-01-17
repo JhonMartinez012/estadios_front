@@ -10,8 +10,14 @@ export default {
   }, */
 
   login(email, password) {
-    const user = { email, password };
+    try{
+      const user = { email, password };
     return axios.post(ENDPOINT_PATH + "login", user);
+    }
+    catch(error){
+      console.log(error)
+    }
+    
     
   } 
   /* ************* FIN DE LA MANERA 1 *********************/

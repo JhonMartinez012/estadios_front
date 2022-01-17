@@ -23,7 +23,7 @@ export default {
     }),
 
     tiempoEspera(){
-      setTimeout(this.pasar, 3000);
+      setTimeout(this.pasar, 5000);
     },
 
     pasar(){

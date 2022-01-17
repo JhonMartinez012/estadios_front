@@ -11,9 +11,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              Eliminar Estadio
-            </h5>
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar Estadio</h5>
             <button
               type="button"
               class="close"
@@ -44,11 +42,15 @@
     <!--  FIN DEL MODAL PARA ELIMINAR -->
 
     <div class="container-fluid ml-0 mt-5 d-flex align-items-center">
-      <label class="titulo_estadio w-100"
-        >Wembley Stadium
-        <hr id="hr_decorativo" />
-        <hr id="hr_peque" />
-      </label>
+      <div class="container-fluid">
+        <label class="titulo_estadio w-100">Wembley Stadium </label> 
+        <div class="d-flex">
+        <div class="lineaT_1"></div>
+        <div class="lineaT_2"></div>
+        </div>  
+      </div>
+      
+     
 
       <div class="container-fluid d-flex" style="justify-content: center">
         <button
@@ -62,7 +64,6 @@
             src="/assets/1. Estadios/Iconos/icon - Editar.svg"
             alt=""
             srcset=""
-            
           />
         </button>
         <button
@@ -86,11 +87,11 @@
         <div class="col-md-6">1 of 2</div>
         <div class="col-md-6">
           <div class="container">
-            <label class="titulo_pais w-100"
-              >Londres, Inglaterra
-              <hr id="hr_pais" />
-              <hr id="hr_peque_pais" />
-            </label>
+            <label class="titulo_pais w-100">Londres, Inglaterra </label>
+            <div class="d-flex">
+              <div class="linea_1"></div>
+              <div class="linea_2"></div>
+            </div>
             <label class="titulo_acerca w-100">Acerca </label>
             <label class="descripcion_acerca w-100"
               >Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit
@@ -110,11 +111,11 @@
 
 <script>
 export default {
-  methods:{
-    editarEstadio(){
-      this.$router.push({name:'EstadiosEditar'});
-    }
-  }
+  methods: {
+    editarEstadio() {
+      this.$router.push({ name: "EstadiosEditar" });
+    },
+  },
 };
 </script>
 
@@ -139,48 +140,41 @@ cd .titulo_estadio,
 .descripcion_acerca {
   font-size: 18px;
 }
-#hr_pais {
+
+.lineaT_1 {
+  width: 200px;
   height: 5px;
-  width: 23%;
-  margin-top: 0px;
-  margin-left: 0px;
-  margin-right: 0;
-  border-radius: 5px;
-  background: #7358fa 0% 0% no-repeat padding-box;
-  opacity: 3;
+  background: #ffd53d;
+  border-radius: 100px;
+  margin-top: -20px;
+  margin-bottom: 10px;
 }
 
-#hr_peque_pais {
+.lineaT_2 {
+  width: 15px;
   height: 5px;
-  width: 3%;
-  margin-top: -23px;
-  margin-left: 170px;
-
-  border-radius: 5px;
-  background: #7358fa 0% 0% no-repeat padding-box;
-  opacity: 3;
+  margin-left: 5px;
+  background: #ffd53d;
+  border-radius: 100px;
+  margin-top: -20px;
+  margin-bottom: 10px;
 }
 
-#hr_decorativo {
+.linea_1 {
+  width: 200px;
   height: 5px;
-  width: 28%;
-  margin-top: 0px;
-  margin-left: 0px;
-  margin-right: 0;
-  border-radius: 5px;
-  background: #ffd849 0% 0% no-repeat padding-box;
-  opacity: 3;
+  background: #7358fa;
+  border-radius: 100px;
+  margin-bottom: 15px;
 }
 
-#hr_peque {
+.linea_2 {
+  width: 15px;
   height: 5px;
-  width: 5%;
-  margin-top: -23px;
-  margin-left: 230px;
-
-  border-radius: 5px;
-  background: #ffd849 0% 0% no-repeat padding-box;
-  opacity: 3;
+  margin-left: 5px;
+  background: #7358fa;
+  border-radius: 100px;  
+  margin-bottom: 15px;
 }
 
 .boton-accion {
@@ -195,7 +189,6 @@ cd .titulo_estadio,
   align-items: center;
   justify-content: center;
 }
-
 
 .boton-eliminar-estadio {
   width: 90px;
@@ -216,6 +209,4 @@ cd .titulo_estadio,
   color: #fff;
   text-decoration-line: none;
 }
-
-
 </style>

@@ -9,19 +9,20 @@
         <div class="form-group admin-info">
           <router-link :to="{ name: '' }">
             <img
+              class="img_admin"
               width="120px"
               height="120px"
               :src="administrador.img"
               alt=""
               srcset=""
               data-toggle="tooltip"
-              :title="administrador.acerca"
+              :title="administrador.acerca"              
               data-placement="bottom"
             />
 
             <div class="form-group mt-2">
-              <label class="info_admin" for="">{{
-                administrador.name+administrador.last_name
+              <label class="info_admin tres_puntos" for="">{{
+                administrador.name + administrador.last_name
               }}</label>
               <hr id="hr_decorativo" />
             </div>
@@ -48,21 +49,28 @@
 import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/administrador/";
 export default {
+  created() {
+    this.listarAdministradores();
+  },
+  updated(){
+       $('[data-toggle="tooltip"]').tooltip({
+         trigger:'hover'
+       }) 
+  },
   data: () => ({
     administradores: [],
   }),
   methods: {
     async listarAdministradores() {
-      await axios.get(ENDPOINT_PATH + "administradores").then(
-        function (response) {
-          this.administradores = response.data;
-        }.bind(this)
-      );
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "administradores");
+        this.administradores = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
-  created(){
-    this.listarAdministradores();
-  }
+  
 };
 </script>
 
@@ -86,12 +94,16 @@ export default {
 .administradores {
   max-width: 1500px;
 }
-
+.tres_puntos{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 .admins {
   width: 400px;
   /* height: 270px; */
 }
-.admin-info {
+.admin-info  {
   width: 125px;
   height: 120px;
   margin-left: 60px;
@@ -99,8 +111,11 @@ export default {
   border-radius: 35px;
   background-color: #f6f9fb;
 }
+.img_admin{
+  border-radius: 35px;
+}
 
-.admin-info img:hover {
+.admin-info .img_admin:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4), 0 10px 35px 0 rgba(0, 0, 0, 0.19);
   color: #f6f9fb;
   border-radius: 35px;

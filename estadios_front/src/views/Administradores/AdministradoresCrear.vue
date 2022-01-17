@@ -145,22 +145,20 @@ export default {
       };
       try {
         if (this.password == this.repassword) {
-          await axios
+          const {data}= await axios
             .post(ENDPOINT_PATH + "register", payload, {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + localStorage.getItem("access_token"),
               },
             })
-            .then((response) => {
-              this.data = response.data.data;
+              this.data = data;
               this.$router.push({ name: "Administradores" });
-            });
         } else {
           console.log("contraseñas no coinciden");
         }
       } catch (error) {
-        console.log("No se pudo realizar");
+        console.log(error);
       }
     },
     

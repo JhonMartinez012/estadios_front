@@ -92,22 +92,22 @@
             <div class="form-group col-md-6 inner">
               <p for="inputPassword4" class="p-titulo">pais</p>
               <select
-                v-model='pais'
-                @change='listarCiudades()'
-                class='texto-select'
+                v-model="pais"
+                @change="listarCiudades()"
+                class="texto-select"
               >
                 <option value="0">seleccione pais</option>
-                <option v-for='data in paises' :key='data.id' :value='data.id'>
+                <option v-for="data in paises" :key="data.id" :value="data.id">
                   {{ data.nombre }}
                 </option>
               </select>
               <p for="" class="p-titulo">ciudad</p>
-              <select class="texto-select" v-model='ciudad'>
+              <select class="texto-select" v-model="ciudad">
                 <option value="0">seleccione ciudad</option>
                 <option
-                  v-for='data in ciudades'
-                  :key='data.id'
-                  :value='data.id'
+                  v-for="data in ciudades"
+                  :key="data.id"
+                  :value="data.id"
                 >
                   {{ data.nombre }}
                 </option>
@@ -115,9 +115,13 @@
               <p for="" class="p-titulo">Tipo de terreno</p>
               <select v-model="terreno_id" class="texto-select">
                 <option value="0">seleccionar</option>
-                <option v-for="terreno in terrenos" :key="terreno.id"
-                :value="terreno.id">{{terreno.nombre_terreno}}</option>
-
+                <option
+                  v-for="terreno in terrenos"
+                  :key="terreno.id"
+                  :value="terreno.id"
+                >
+                  {{ terreno.nombre_terreno }}
+                </option>
               </select>
             </div>
           </div>
@@ -219,6 +223,12 @@ export default {
     this.listarPaises()
   }, */
 
+  created: function () {
+    this.$store.commit("SET_LAYOUT", "principal-layout");
+    this.listarPaises();
+    this.listarTerrenos();
+  },
+
   data() {
     return {
       nombre_estadio: "",
@@ -267,40 +277,36 @@ export default {
     } */
 
     async listarPaises() {
-       axios.get(ENDPOINT_PATH + "paises").then(
-        function (response) {
-          this.paises = response.data;
-        }.bind(this)
-      );
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "paises");
+        this.paises = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
 
-   async listarCiudades() {
-      axios
-        .get(ENDPOINT_PATH + "ciudades", {
+    async listarCiudades() {
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "ciudades", {
           params: {
             pais_id: this.pais,
           },
-        })
-        .then(
-          function (response) {
-            this.ciudades = response.data;
-          }.bind(this)
-        );
+        });
+        this.ciudades = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
-    async listarTerrenos(){
-      axios
-        .get(ENDPOINT_PATH1+"terrenos").then(
-        function (response) {
-          this.terrenos = response.data;
-        }.bind(this)
-      );
-    }
+    async listarTerrenos() {
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH1 + "terrenos");
+        this.terrenos = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
-  created: function () {
-    this.$store.commit("SET_LAYOUT", "principal-layout");
-    this.listarPaises();
-    this.listarTerrenos()
-  },
+
   components: {},
 };
 </script>

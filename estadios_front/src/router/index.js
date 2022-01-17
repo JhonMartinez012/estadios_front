@@ -2,21 +2,23 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 //import {store}  from "../store";
 
-Vue.use(VueRouter);
+import auth from "../middleware/auth";
+import log from "../middleware/log";
 
+Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
     name: "Raiz",
-    redirect: {name:'Login'},
+    redirect: { name: "Login" },
   },
   {
     path: "/login",
     name: "Login",
     component: () => import("../views/Login.vue"),
     meta: {
-      requiresAuth: false,
+      middleware: log,
     },
   },
   {
@@ -24,7 +26,7 @@ const routes = [
     name: "Loader",
     component: () => import("../views/Loader.vue"),
     meta: {
-      requiresAuth: true,
+      middleware: log,
     },
   },
   {
@@ -33,7 +35,7 @@ const routes = [
 
     component: () => import("../views/Estadios/Estadios.vue"),
     meta: {
-      requiresAuth: true,
+      middleware: [auth,log],
     },
   },
   {
@@ -42,7 +44,7 @@ const routes = [
 
     component: () => import("../views/Estadios/EstadiosCrear.vue"),
     meta: {
-      requiresAuth: true,
+      middleware: [log, auth],
     },
   },
   {
@@ -51,7 +53,7 @@ const routes = [
 
     component: () => import("../views/Estadios/EstadiosVer.vue"),
     meta: {
-      requiresAuth: true,
+      middleware: [log, auth],
     },
   },
   {
@@ -60,7 +62,7 @@ const routes = [
 
     component: () => import("../views/Estadios/EstadiosEditar.vue"),
     meta: {
-      requiresAuth: true,
+      middleware: [log, auth],
     },
   },
   {
@@ -69,7 +71,7 @@ const routes = [
 
     component: () => import("../views/Administradores/Administradores.vue"),
     meta: {
-      requiresAuth: true,
+      middleware: [log, auth],
     },
   },
   {
@@ -81,7 +83,7 @@ const routes = [
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradoresCrear.vue"
       ),
     meta: {
-      requiresAuth: true,
+      middleware: [log, auth],
     },
   },
   {
@@ -92,9 +94,9 @@ const routes = [
       import(
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradorVer.vue"
       ),
-      meta: {
-        requiresAuth: true,
-      },
+    meta: {
+      middleware: [log, auth],
+    },
   },
   {
     path: "/administradores/id/editar",
@@ -104,9 +106,9 @@ const routes = [
       import(
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradorUpdate.vue"
       ),
-      meta: {
-        requiresAuth: true,
-      },
+    meta: {
+      middleware: [log, auth],
+    },
   },
 
   {
@@ -116,9 +118,9 @@ const routes = [
       import(
         /* webpackChunkName: "about" */ "../views/Configuraciones/Configuraciones.vue"
       ),
-      meta: {
-        requiresAuth: true,
-      },
+    meta: {
+      middleware: [log, auth],
+    },
     redirect: { name: "ConfiguracionTerrenos" },
     children: [
       {
@@ -128,6 +130,9 @@ const routes = [
           import(
             "../views/Configuraciones/componentes/configuracionesTerreno.vue"
           ),
+          meta: {
+            middleware: [log, auth],
+          },
       },
       {
         path: "/Configuraciones",
@@ -136,6 +141,9 @@ const routes = [
           import(
             "../views/Configuraciones/componentes/configuracionesInactividad.vue"
           ),
+          meta: {
+            middleware: [log, auth],
+          },
       },
     ],
   },
@@ -144,16 +152,49 @@ const routes = [
     name: "Logout",
     component: () => import("../components/Logout.vue"),
   },
-  
 ];
-
-
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-  
+  auth,
+  log,
+});
+
+function nextFactory(context, middleware, index) {
+  const subsequentMiddleware = middleware[index];
+  // If no subsequent Middleware exists,
+  // the default `next()` callback is returned.
+  if (!subsequentMiddleware) return context.next;
+
+  return (...parameters) => {
+    // Run the default Vue Router `next()` callback first.
+    context.next(...parameters);
+    // Then run the subsequent Middleware with a new
+    // `nextMiddleware()` callback.
+    const nextMiddleware = nextFactory(context, middleware, index + 1);
+    subsequentMiddleware({ ...context, next: nextMiddleware });
+  };
+}
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.middleware) {
+    const middleware = Array.isArray(to.meta.middleware)
+      ? to.meta.middleware
+      : [to.meta.middleware];
+
+    const context = {
+      from,
+      next,
+      router,
+      to,
+    };
+    const nextMiddleware = nextFactory(context, middleware, 1);
+    return middleware[0]({ ...context, next: nextMiddleware });
+  }
+
+  return next();
 });
 
 export default router;

@@ -32,7 +32,8 @@
             >
               Cerrar
             </button>
-            <button type="button" class="btn boton-eliminar-terreno">
+            <button type="button" class="btn boton-eliminar-terreno"
+            >
               Eliminar
             </button>
           </div>
@@ -43,23 +44,11 @@
 
     <div class="container-fluid estilos-container">
       <label class="parrafo font-weight-bold ml-0">Tipos de terreno</label>
-      <button
-        class="btn btn-crear-t pr-2"
-        data-toggle="modal"
-        data-target="#exampleModal1"
-      >
-        Crear
-      </button>
+      <button class="btn btn-crear-t pr-2" @click="openModal()">Crear</button>
     </div>
 
     <!-- Modal para crear terreno -->
-    <div
-      class="modal fade"
-      id="exampleModal1"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal" :class="{ show: modal }">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -71,6 +60,7 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
+              @click="closeModal()"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -103,7 +93,12 @@
             </div>
           </div>
           <div class="modal-footer justify-content-center">
-            <button type="button" class="btn btn-cerrar" data-dismiss="modal">
+            <button
+              type="button"
+              class="btn btn-cerrar"
+              data-dismiss="modal"
+              @click="closeModal()"
+            >
               Cerrar
             </button>
             <button
@@ -117,7 +112,77 @@
         </div>
       </div>
     </div>
+    <!-- ******* FIN DE LA MODAL PARA CREAR ******** -->
 
+    <!-- ******* MODAL PARA EDITAR UN TERRENO ******* -->
+    <div class="modal" :class="{ show: modal }">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Editar terreno 
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              @click="closeModal()"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12 d-flex justify-content-center">
+                  <slim-cropper
+                    :options="slimOptions"
+                    
+                    ref="img_terreno"
+                    class="estilo-slim"
+                    
+                  >
+                    <input type="file" name="slim" />
+                    <img :src="terreno.img" alt="" srcset="">
+                  </slim-cropper>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-12 text-center">
+                  <p for="" class="p-terreno">Nombre terreno</p>
+                  <input
+                    placeholder="Nombre"
+                    type="text"
+                    class="inputt"
+                    v-model="terreno.nombre_terreno"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              type="button"
+              class="btn btn-cerrar"
+              data-dismiss="modal"
+              @click="closeModal()"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-guardar"
+              @click="editarTerreno"
+            >
+              añadir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- FIN DE LA MODAL PARA EDITAR TERRENO -->
     <div class="row">
       <div
         class="col-md-4 col-sm-6 col-lg-2 fondo-card mt-4"
@@ -160,6 +225,7 @@
                 alt=""
                 data-toggle="tooltip"
                 data-placement="bottom"
+                @click="terreno.id"
               />
             </button>
             <button
@@ -168,6 +234,7 @@
               alt=""
               data-toggle="tooltip"
               data-placement="bottom"
+              @click="openModalE(terreno)"
             >
               <img src="/assets/1. Estadios/Iconos/icon - Editar.svg" />
             </button>
@@ -182,23 +249,35 @@
 import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/terreno/";
 export default {
+  created: function () {
+    this.listarTerrenos();
+  },
+  updated() {
+    $('[data-toggle="tooltip"]').tooltip({
+      trigger: "hover",
+    });
+  },
   data: () => ({
     nombre_terreno: "",
     img: "",
-    modal: 0,
     show: true,
+    modal: 0,
     terrenos: [],
+    terreno:{
+      nombre_terreno:'',
+      img:''
+    },
     slimOptions: {
       label: "Añadir imagen del terreno",
+      
     },
+
+
   }),
   methods: {
     async listarTerrenos() {
-      await axios.get(ENDPOINT_PATH + "terrenos").then(
-        function (response) {
-          this.terrenos = response.data;
-        }.bind(this)
-      );
+      const { data } = await axios.get(ENDPOINT_PATH + "terrenos");
+      this.terrenos = data;
     },
     async crear_terreno() {
       let payload = {
@@ -207,40 +286,64 @@ export default {
       };
       /* console.log(payload.img); */
       try {
-        await axios
-          .post(ENDPOINT_PATH + "crear_terreno", payload, {
+        const { data } = await axios.post(
+          ENDPOINT_PATH + "crear_terreno",
+          payload,
+          {
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
-          })
-          .then((response) => {
-            this.data = response.data.data;
-            /* this.$router.push({ name: "Configuraciones" }); */
-            console.log(this.data);
-            this.closeModal();
-            this.listarTerrenos();
-          });
+          }
+        );
+        this.data = data;
+        console.log(this.data);
       } catch (error) {
         console.log(" pailas mi sooo");
       }
       this.closeModal();
       this.listarTerrenos();
     },
+
+    async editarTerreno() {
+      
+    },
+
+
+    async eliminarTerreno(id) {
+      try {
+        const res = await axios.delete(ENDPOINT_PATH + id);
+        if (res) {
+          this.closeModal();
+          this.listarTerrenos;
+        } else {
+          console.log("No se pudo eliminar este terreno");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     openModal() {
       this.modal = 1;
+    },
+    openModalE(data={}){
+      this.modal=1;
+      this.terreno.nombre_terreno=data.nombre_terreno
     },
     closeModal() {
       this.modal = 0;
     },
   },
-  created: function () {
-    this.listarTerrenos();
-  },
 };
 </script>
 
 <style scoped>
+.show {
+  display: list-item;
+  opacity: 1;
+  background: rgba(168, 167, 172, 0.6);
+}
 .estilos-container {
   font-family: "Gilroy";
   font-size: bold;

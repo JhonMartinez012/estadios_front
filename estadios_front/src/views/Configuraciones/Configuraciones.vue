@@ -25,7 +25,7 @@
       </ul>
     </div>
 
-  <router-view></router-view>
+  <router-view/>
       
   </div>
 </template>
@@ -35,6 +35,7 @@ export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
   },
+  
   
     
 };
