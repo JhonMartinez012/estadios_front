@@ -84,7 +84,7 @@
           />
         </div>
         <div v-if="error">
-          <p class="text text-danger text-center">No entras perro</p>
+          <p class="text text-danger text-center">Usuario o contraseña inválido</p>
         </div>
       </div>
     </div>

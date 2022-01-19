@@ -1,25 +1,14 @@
 <template>
   <div class="container m-0 mt-3">
     <!-- INICIO DE LA MODAL ELIMINAR -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal" :class="{ show: modal }">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
               Eliminar administrador
             </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
+            <button type="button" class="close" @click="closeModal">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -27,14 +16,14 @@
             <p>¿Desea eliminar este administrador?</p>
           </div>
           <div class="modal-footer d-flex justify-content-center">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
+            <button type="button" class="btn btn-secondary" @click="closeModal">
               Cerrar
             </button>
-            <button type="button" class="btn boton-eliminar-admin">
+            <button
+              type="button"
+              class="btn boton-eliminar-admin"
+              @click="eliminarAdministrador(administrador)"
+            >
               Eliminar
             </button>
           </div>
@@ -50,22 +39,26 @@
           >
         </li>
         <li class="breadcrumb-item active estilo_page" aria-current="page">
-          Nombre Administrador
+          {{ administrador.name }}
         </li>
       </ol>
     </nav>
+
     <div class="container titulo_formulario">
-      <label class="parrafo font-weight-bold ml-0"
-        >Nombre Administrador
-        <hr id="hr_decorativo" />
+      <label class="parrafo font-weight-bold ml-0 mb-3"
+        >{{ administrador.name + " " + administrador.last_name }}
       </label>
+      <div class="d-flex">
+        <div class="lineaT_1"></div>
+        <div class="lineaT_2"></div>
+      </div>
     </div>
 
     <div class="container contenido_formulario mt-4">
       <div class="row mx-0">
         <div class="form-group col-sm-6 col-md-2 anadir_img">
           <img
-            src="/assets/img_login/user-circle-regular.svg"
+            :src="administrador.img"
             id="estilo_subir_img"
             alt=""
             srcset=""
@@ -76,18 +69,20 @@
               data-toggle="tooltip"
               title="Eliminar"
               data-placement="bottom"
+              @click="openModal()"
             >
               <img
                 src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
                 alt=""
                 srcset=""
-                data-toggle="modal"
-                data-target="#exampleModal"
               />
             </button>
-            <button
+            <router-link
+              :to="{
+                name: 'AdministradorEditar',
+                params: { id: administrador.id },
+              }"
               class="btn boton-accion"
-              @click="editarAdministrador"
               data-toggle="tooltip"
               title="Editar"
               data-placement="bottom"
@@ -97,7 +92,7 @@
                 alt=""
                 srcset=""
               />
-            </button>
+            </router-link>
           </div>
         </div>
         <div class="form-group col-md-5">
@@ -106,7 +101,7 @@
               src="/assets/1. Estadios/Iconos/Icon - correo.svg"
               class="iconos_ver_admin"
             />
-            garcia.leandro@gmail.com
+            {{ administrador.email }}
           </label>
 
           <label for="inputState" class="titulo_form">
@@ -114,26 +109,23 @@
               src="/assets/1. Estadios/Iconos/Icon - telefono.svg"
               class="iconos_ver_admin"
             />
-            +57 300 123 4567
+            {{ administrador.phone }}
           </label>
           <label for="inputState" class="titulo_form">
             <img
               src="/assets/1. Estadios/Iconos/icon - pass.svg"
               class="iconos_ver_admin"
             />
-            dasdfasdfasdf
+            h4t1s8ac5c4v
           </label>
 
           <label for="" class="title_acerca_admin">
-            Acerca de "Administrador"</label
+            Acerca de {{ administrador.name }}</label
           >
 
-          <label for="inputState" class="descrip_acerca_admin">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et error
-            commodi omnis eaque cumque, sunt dolore magnam, esse iste
-            praesentium voluptas ad beatae! Ex, enim quaerat ut et officia
-            recusandae.
-          </label>
+          <p for="inputState" class="descrip_acerca_admin">
+            {{ administrador.acerca }}
+          </p>
         </div>
       </div>
     </div>
@@ -141,20 +133,58 @@
 </template>
 
 <script>
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/administrador/";
 export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
+    this.verAdministrador();
+  },
+  updated() {
+    $('[data-toggle="tooltip"]').tooltip({
+      trigger: "hover",
+    });
   },
   data() {
     return {
+      show: true,
+      modal: 0,
+      administrador: [],
       slimOptions: {
         label: "Añadir imagen",
       },
     };
   },
   methods: {
-    editarAdministrador() {
-      this.$router.push({ name: "AdministradorEditar" });
+    async verAdministrador() {
+      try {
+        const { data } = await axios.get(
+          ENDPOINT_PATH + "administrador/" + this.$route.params.id
+        );
+        this.administrador = data;
+        console.log(this.administrador);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async eliminarAdministrador(administrador) {
+      try {
+        const { data } = await axios.delete(
+          ENDPOINT_PATH + "eliminar_administrador/" + administrador.id
+        );
+        if (data) {
+          this.closeModal();
+          this.$router.push({ name: "Administradores" });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    openModal() {
+      this.modal = 1;
+    },
+    closeModal() {
+      this.modal = 0;
     },
   },
 };
@@ -163,6 +193,11 @@ export default {
 <style scoped>
 .admins {
   margin-left: 105px;
+}
+.show {
+  display: list-item;
+  opacity: 1;
+  background: rgba(168, 167, 172, 0.6);
 }
 body .tooltip-inner {
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -185,13 +220,24 @@ body .tooltip .arrow::before {
   letter-spacing: 0px;
   color: #707070;
 }
-#hr_decorativo {
+.lineaT_1 {
+  width: 210px;
   height: 5px;
-  width: 25%;
-  margin-left: 0px;
-  border-radius: 5px;
-  background: #ffd849 0% 0% no-repeat padding-box;
-  opacity: 3;
+  margin-left: 15px;
+  background: #ffd53d;
+  border-radius: 100px;
+  margin-top: -20px;
+  margin-bottom: 10px;
+}
+
+.lineaT_2 {
+  width: 15px;
+  height: 5px;
+  margin-left: 5px;
+  background: #ffd53d;
+  border-radius: 100px;
+  margin-top: -20px;
+  margin-bottom: 10px;
 }
 #mini_title {
   top: 140px;

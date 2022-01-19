@@ -87,7 +87,7 @@ const routes = [
     },
   },
   {
-    path: "/administradores/ver",
+    path: "/administradores/ver/:id",
     name: "AdministradorVer",
 
     component: () =>
@@ -99,9 +99,8 @@ const routes = [
     },
   },
   {
-    path: "/administradores/id/editar",
+    path: '/administradores/:id/editar',
     name: "AdministradorEditar",
-
     component: () =>
       import(
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradorUpdate.vue"

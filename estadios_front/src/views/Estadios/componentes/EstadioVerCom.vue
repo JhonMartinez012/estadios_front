@@ -43,14 +43,12 @@
 
     <div class="container-fluid ml-0 mt-5 d-flex align-items-center">
       <div class="container-fluid">
-        <label class="titulo_estadio w-100">Wembley Stadium </label> 
+        <label class="titulo_estadio w-100">Wembley Stadium </label>
         <div class="d-flex">
-        <div class="lineaT_1"></div>
-        <div class="lineaT_2"></div>
-        </div>  
+          <div class="lineaT_1"></div>
+          <div class="lineaT_2"></div>
+        </div>
       </div>
-      
-     
 
       <div class="container-fluid d-flex" style="justify-content: center">
         <button
@@ -84,7 +82,35 @@
     </div>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-6">1 of 2</div>
+        <div class="col-md-6">
+          <div class="col-md-12">
+           <!--  <vueper-slides
+              id="slider1"
+              class="slide"
+              ref="vueperslides1"
+              :touchable="false"
+              fade
+              :autoplay="false"
+              :bullets="false"
+              @slide="
+                $refs.vueperslides2.goToSlide($event.currentSlide.index, {
+                  emit: false,
+                })
+              "
+              fixed-height="400px"
+            >
+              <vueper-slide
+                v-for="(slide, i) in slides"
+                :key="i"
+                :image="slide.image"
+              >
+              </vueper-slide>
+            </vueper-slides> -->
+            <image-slider class="h-100" :imagenPrincipal="slides[0].image" :imagenesSecundarias="slides" />
+
+          </div>
+          
+        </div>
         <div class="col-md-6">
           <div class="container">
             <label class="titulo_pais w-100">Londres, Inglaterra </label>
@@ -110,17 +136,83 @@
 </template>
 
 <script>
+//import { VueperSlides, VueperSlide } from "vueperslides";
+import "vueperslides/dist/vueperslides.css";
+import ImageSlider from '../../../components/imageSlider.vue';
 export default {
+  components: {
+    //VueperSlides,
+    //VueperSlide,
+    ImageSlider,
+  },
+  data: () => ({
+    slides: [
+      {
+        image:
+          "/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg",
+          active: false
+      },
+      {
+        image:
+          "/assets/1. Estadios/Imágenes de estadios/1.2 wembley-stadium.jpg",
+          active: false
+      },
+      {
+        image:
+          "/assets/1. Estadios/Imágenes de estadios/1.3 wembley-stadium.jpg",
+        active: false
+      },
+    ],
+  }),
   methods: {
     editarEstadio() {
       this.$router.push({ name: "EstadiosEditar" });
     },
   },
+  mounted(){
+    
+  }
 };
 </script>
 
 <style scoped>
-cd .titulo_estadio,
+/* Estilos para el slider de imagenes */
+.slider1 {
+  height: 30rem;
+}
+.slide { 
+  border-radius: 55px;
+}
+.vueperslides--fixed-height .vueperslide,
+.vueperslides--fixed-height .vueperslides__inner,
+.vueperslides--fixed-height .vueperslides__parallax-wrapper {
+  height: inherit;
+  border-radius: 55px;
+  
+}
+.thumbnails {
+  margin: auto;
+  max-width: 300px;
+}
+
+.thumbnails .vueperslide {
+  border-radius: 20px;
+  box-sizing: border-box;
+  border: 1px solid #fff;
+  transition: 0.3s ease-in-out;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.thumbnails .vueperslide--active {
+  box-shadow: 0 0 6px rgba(239, 238, 245, 0.3);
+  opacity: 1;
+  border-color: rgb(115, 88, 250);
+}
+
+/* ****************  Fin  *********** */
+
+.titulo_estadio,
 .titulo_pais,
 .titulo_acerca,
 .descripcion_acerca {
@@ -173,7 +265,7 @@ cd .titulo_estadio,
   height: 5px;
   margin-left: 5px;
   background: #7358fa;
-  border-radius: 100px;  
+  border-radius: 100px;
   margin-bottom: 15px;
 }
 

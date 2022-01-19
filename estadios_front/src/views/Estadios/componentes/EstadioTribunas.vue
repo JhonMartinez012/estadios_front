@@ -103,7 +103,7 @@
       <div class="form-group botones-accion text-center">
         <button
           class="btn boton-accion mr-2"
-          @click="editarAdministrador"
+          @click="editarTribuna"
           data-toggle="tooltip"
           title="Editar"
           data-placement="bottom"
@@ -176,7 +176,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods:{
+    editarTribuna(){
+      
+    }
+  }
+};
 </script>
 
 <style scoped>

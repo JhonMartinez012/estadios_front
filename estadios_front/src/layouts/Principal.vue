@@ -126,6 +126,15 @@
 
 <script>
 export default {
+  name: "Principal",
+  created(){
+    this.usuarioLog();
+  },
+  updated(){
+       $('[data-toggle="tooltip"]').tooltip({
+         trigger:'hover'
+       }) 
+  },  
   data() {
     return {
       drawer: true,
@@ -138,12 +147,13 @@ export default {
       title: "Principal Layout",
     };
   },
-  updated(){
-       $('[data-toggle="tooltip"]').tooltip({
-         trigger:'hover'
-       }) 
-  },
-  name: "Principal",
+
+  methods:{
+    usuarioLog(){
+      
+    }
+  }
+  
 };
 </script>
 

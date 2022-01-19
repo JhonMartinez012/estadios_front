@@ -268,14 +268,6 @@ export default {
     };
   },
   methods: {
-    /* async listarPaises() {
-      const res = await axios.get(ENDPOINT_PATH + "paises");
-      this.paises = res.data.paises;
-    },
-    async listarCiudades(){
-
-    } */
-
     async listarPaises() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "paises");

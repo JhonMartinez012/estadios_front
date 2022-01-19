@@ -2,12 +2,17 @@
   <div class="administradores">
     <div class="row">
       <div
-        class="col-lg-2 col-md-4 d-flex justify-content-center align-items-center admins"
+        class="col-lg-2 col-md-4 d-flex justify-content-center align-items-center admins mb-3"
         v-for="administrador in administradores"
         :key="administrador.id"
       >
         <div class="form-group admin-info">
-          <router-link :to="{ name: '' }">
+          <router-link
+            :to="{
+              name: 'AdministradorVer',
+              params: { id: administrador.id },
+            }"
+          >
             <img
               class="img_admin"
               width="120px"
@@ -16,15 +21,18 @@
               alt=""
               srcset=""
               data-toggle="tooltip"
-              :title="administrador.acerca"              
+              :title="administrador.acerca"
               data-placement="bottom"
             />
 
             <div class="form-group mt-2">
               <label class="info_admin tres_puntos" for="">{{
-                administrador.name + administrador.last_name
+                administrador.name + " " + administrador.last_name
               }}</label>
-              <hr id="hr_decorativo" />
+              <div class="d-flex">
+                <div class="lineaT_1"></div>
+                <div class="lineaT_2"></div>
+              </div>
             </div>
           </router-link>
         </div>
@@ -52,10 +60,10 @@ export default {
   created() {
     this.listarAdministradores();
   },
-  updated(){
-       $('[data-toggle="tooltip"]').tooltip({
-         trigger:'hover'
-       }) 
+  updated() {
+    $('[data-toggle="tooltip"]').tooltip({
+      trigger: "hover",
+    });
   },
   data: () => ({
     administradores: [],
@@ -70,7 +78,6 @@ export default {
       }
     },
   },
-  
 };
 </script>
 
@@ -94,7 +101,7 @@ export default {
 .administradores {
   max-width: 1500px;
 }
-.tres_puntos{
+.tres_puntos {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -103,7 +110,7 @@ export default {
   width: 400px;
   /* height: 270px; */
 }
-.admin-info  {
+.admin-info {
   width: 125px;
   height: 120px;
   margin-left: 60px;
@@ -111,7 +118,7 @@ export default {
   border-radius: 35px;
   background-color: #f6f9fb;
 }
-.img_admin{
+.img_admin {
   border-radius: 35px;
 }
 
@@ -133,13 +140,24 @@ export default {
   letter-spacing: 0px;
   color: #000000;
 }
-#hr_decorativo {
+.lineaT_1 {
+  margin-left: 15px;
+  width: 200px;
   height: 5px;
-  width: 80%;
-  margin-top: 0px;
-  border-radius: 5px;
-  background: #ffd849 0% 0% no-repeat padding-box;
-  opacity: 3;
+  background: #ffd53d;
+  border-radius: 100px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.lineaT_2 {
+  width: 15px;
+  height: 5px;
+  margin-left: 5px;
+  background: #ffd53d;
+  border-radius: 100px;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 
 /* body .tooltip-inner {

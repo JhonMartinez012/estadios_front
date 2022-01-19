@@ -44,7 +44,7 @@
 
     <div class="container-fluid estilos-container">
       <label class="parrafo font-weight-bold ml-0">Tipos de terreno</label>
-      <button class="btn btn-crear-t pr-2" @click="openModal()">Crear</button>
+      <button class="btn btn-crear-t pr-2" @click="openModal">Crear</button>
     </div>
 
     <!-- Modal para crear terreno -->
@@ -60,7 +60,7 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
-              @click="closeModal()"
+              @click="closeModal"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -115,7 +115,7 @@
     <!-- ******* FIN DE LA MODAL PARA CREAR ******** -->
 
     <!-- ******* MODAL PARA EDITAR UN TERRENO ******* -->
-    <div class="modal" :class="{ show: modal }">
+    <div class="modal" :class="{ show: modalE }">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -137,9 +137,8 @@
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
                   <slim-cropper
-                    :options="slimOptions"
-                    
-                    ref="img_terreno"
+                    :options="slimOptions"                    
+                    ref="img_terrenoE"
                     class="estilo-slim"
                     
                   >
@@ -262,6 +261,7 @@ export default {
     img: "",
     show: true,
     modal: 0,
+    modalE:0,
     terrenos: [],
     terreno:{
       nombre_terreno:'',
@@ -272,7 +272,6 @@ export default {
       
     },
 
-
   }),
   methods: {
     async listarTerrenos() {
@@ -280,6 +279,7 @@ export default {
       this.terrenos = data;
     },
     async crear_terreno() {
+      console.log("entro");
       let payload = {
         nombre_terreno: this.nombre_terreno,
         img: this.$refs.img_terreno.instanciaCrop.dataBase64.output.image,
@@ -328,11 +328,12 @@ export default {
       this.modal = 1;
     },
     openModalE(data={}){
-      this.modal=1;
+      this.modalE=1;
       this.terreno.nombre_terreno=data.nombre_terreno
     },
     closeModal() {
       this.modal = 0;
+      this.modalE=0;
     },
   },
 };

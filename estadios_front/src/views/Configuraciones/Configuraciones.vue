@@ -76,14 +76,23 @@ body .tooltip .arrow::before {
   letter-spacing: 0px;
   color: #7358fa;
 }
+.nav-tabs .nav-link {
+    margin-bottom: -1px;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    color: #637381;
+    font-size: 19px;
+}
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   color: #7358fa;
   background-color: #fff0;
-  border-color: #1c72c900 #1f6fbf00 #7358fa;
+  border-bottom-width: 5px;
+  border-color: #1c72c900 #1f6fbf00 #7358fa;  
   font-family: "Gilroy";
-  font-size: 17px;
-  border-radius: 4px 4px 0px 0px;
+  font-size: 19px;
+  border-radius: 12px 12px 0px 0px;
 }
 
 

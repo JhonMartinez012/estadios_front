@@ -170,8 +170,6 @@ export default {
 </script>
 
 
-
-
 <style scoped>
 .admins {
   margin-top: 150px;

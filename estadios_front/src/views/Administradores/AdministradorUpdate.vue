@@ -16,7 +16,7 @@
     <div class="container-fluid titulo_formulario">
       <label class="parrafo font-weight-bold ml-0">Editar administrador</label>
       <!-- <router-link :to="{name:'EstadiosCrear'}" class="btn btn-crear pr-2"> Crear estadio </router-link> -->
-      <button class="btn btn-guardar pr-2">Guardar</button>
+      <button class="btn btn-guardar pr-2" @click="editarAdministrador">Guardar</button>
     </div>
     <div class="container contenido_formulario mt-4">
       <div class="row ml-0">
@@ -30,19 +30,19 @@
           <input
             type="text"
             placeholder="Nombres"
-            v-model="name"
+            v-model="administrador.name"
             class="cuadros_input"
           />
           <br />
 
           <label for="inputState" class="titulo_form">Apellidos</label>
-          <input type="text" v-model="last_name" class="cuadros_input" /> <br />
+          <input type="text" v-model="administrador.last_name" class="cuadros_input" /> <br />
 
           <label for="inputState" class="titulo_form">Correo electrónico</label>
-          <input type="email" v-model="email" class="cuadros_input" />
+          <input type="email" v-model="administrador.email" class="cuadros_input" />
 
           <label for="inputState" class="titulo_form">Contraseña</label>
-          <input type="password" v-model="password" class="cuadros_input" />
+          <input type="password" v-model="administrador.password" class="cuadros_input" />
         </div>
 
         <div class="form-group col-sm-8 col-md-4">
@@ -53,14 +53,14 @@
             cols="30"
             rows="10"
             class="cuadros_txtArea"
-            v-model="acerca"
+            v-model="administrador.acerca"
           ></textarea>
 
           <label for="inputState" class="titulo_form">Teléfono celular</label>
-          <input type="text" v-model="phone" class="cuadros_input" /> <br />
+          <input type="text" v-model="administrador.phone" class="cuadros_input" /> <br />
 
           <label for="inputState" class="titulo_form">Repetir contraseña</label>
-          <input type="password" v-model="repassword" class="cuadros_input" />
+          <input type="password" v-model="administrador.repassword" class="cuadros_input" />
         </div>
       </div>
     </div>
@@ -68,16 +68,66 @@
 </template>
 
 <script>
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/administrador/";
 export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
+    this.listarAdministrador();
   },
   data() {
     return {
+      administrador:[],
+      id:0,
       slimOptions: {
         label: "Añadir imagen",
       },
     };
+  },
+  methods: {
+    async listarAdministrador() {
+       try {
+        const { data } = await axios.get(ENDPOINT_PATH + "administrador/"+this.$route.params.id);
+        this.administrador = data;
+        console.log(this.administrador);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async editarAdministrador(){
+      const id=this.administrador.id;
+     let payload = {
+        name: this.administrador.name,
+        last_name:this.administrador.last_name,
+        acerca:this.administrador.acerca,
+        email:this.administrador.email,
+        phone:this.administrador.phone,
+        password:this.administrador.password,
+        repassword:this.administrador.repassword,        
+      };
+      
+      console.log(payload);      
+      try {
+        const { data } = await axios.put(
+          ENDPOINT_PATH + "editar_administrador/" + id,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        );
+        this.data = data;
+        if (this.data) {
+          this.$router.push({name:'Administradores'});
+        }else{
+          console.log("No se pudo actualizar")
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

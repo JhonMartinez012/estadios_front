@@ -209,8 +209,7 @@ export default {
     },
 
     async editarMotivoInactividad(key) {
-      let motivo=this.motivos[key];    
-      
+      let motivo=this.motivos[key];          
       let payload = {
         nombre_motivo: motivo.nombre_motivo,
       };
@@ -238,10 +237,8 @@ export default {
       }
     },
     habilitarInput(motivo) {
-      try {
-        
-        motivo.disabled = false;
-        
+      try {        
+        motivo.disabled = false;        
       } catch (error) {
         console.log(error);
       }
