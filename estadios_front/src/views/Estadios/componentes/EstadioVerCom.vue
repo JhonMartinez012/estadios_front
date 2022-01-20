@@ -84,7 +84,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="col-md-12">
-           <!--  <vueper-slides
+            <!--  <vueper-slides
               id="slider1"
               class="slide"
               ref="vueperslides1"
@@ -106,11 +106,14 @@
               >
               </vueper-slide>
             </vueper-slides> -->
-            <image-slider class="h-100" :imagenPrincipal="slides[0].image" :imagenesSecundarias="slides" />
-
+            <image-slider
+              class="h-100"
+              :imagenPrincipal="slides[0].image"
+              :imagenesSecundarias="slides"
+            />
           </div>
-          
         </div>
+
         <div class="col-md-6">
           <div class="container">
             <label class="titulo_pais w-100">Londres, Inglaterra </label>
@@ -137,41 +140,55 @@
 
 <script>
 //import { VueperSlides, VueperSlide } from "vueperslides";
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 import "vueperslides/dist/vueperslides.css";
-import ImageSlider from '../../../components/imageSlider.vue';
+import ImageSlider from "../../../components/imageSlider.vue";
 export default {
+  created() {
+    this.verEstadio();
+  },
   components: {
     //VueperSlides,
     //VueperSlide,
     ImageSlider,
   },
   data: () => ({
+    estadio: {},
     slides: [
       {
         image:
           "/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg",
-          active: false
+        active: false,
       },
       {
         image:
           "/assets/1. Estadios/Imágenes de estadios/1.2 wembley-stadium.jpg",
-          active: false
+        active: false,
       },
       {
         image:
           "/assets/1. Estadios/Imágenes de estadios/1.3 wembley-stadium.jpg",
-        active: false
+        active: false,
       },
     ],
   }),
   methods: {
-    editarEstadio() {
+    async editarEstadio() {
       this.$router.push({ name: "EstadiosEditar" });
     },
+    async verEstadio() {
+      try {
+        const { data } = await axios.get(
+          ENDPOINT_PATH + "ver_estadio/" + this.$route.params.id
+        );
+        this.estadio = data;
+        console.log(this.estadio);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
-  mounted(){
-    
-  }
 };
 </script>
 
@@ -180,7 +197,7 @@ export default {
 .slider1 {
   height: 30rem;
 }
-.slide { 
+.slide {
   border-radius: 55px;
 }
 .vueperslides--fixed-height .vueperslide,
@@ -188,7 +205,6 @@ export default {
 .vueperslides--fixed-height .vueperslides__parallax-wrapper {
   height: inherit;
   border-radius: 55px;
-  
 }
 .thumbnails {
   margin: auto;

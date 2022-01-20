@@ -10,30 +10,30 @@
           <div class="card-heading">
             <h2 class="font-weight-bold tres_puntos">{{ estadio.nombre }}</h2>
           </div>
-          
-          
-            <router-link class="router" to="/estadios/id">
+
+          <router-link
+            class="router"
+            :to="{ name: 'EstadiosVer', params: { id: estadio.id } }"
+          >
             <div class="card-image">
               <img
                 class="hover-image w-100"
-                :src="estadio.img_estadio"
+                :src="estadio.img_principal"
                 width="cover"
                 height="270px"
-                
               />
               <div class="card-action">
                 <img
-                  :src="estadio.terreno"
+                  :src="estadio.img"
                   width="60px"
                   height="45px"
                   alt=""
                   srcset=""
-
                 />
               </div>
             </div>
           </router-link>
-          
+
           <div class="card-text">
             <img
               class="icon_espectador"
@@ -49,43 +49,31 @@
 </template>
 
 <script>
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 export default {
+  created: function () {
+    this.listarEstadios();
+  },
   data() {
     return {
-      estadios: [
-        {
-          nombre: "Wembley Stadium",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg",
-          terreno: "/assets/1. Estadios/Terrenos de juego/1. gramilla.jpg",
-          capacidad: 90000,
-        },
-        {
-          nombre: "Madison Square Garden",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/2.1 Madison-Square-Garden.jpg",
-          terreno: "/assets/1. Estadios/Terrenos de juego/4. madera.jpg",
-          capacidad: 20789,
-        },
-        {
-          nombre: "Rogers center",
-          img_estadio: "/assets/1. Estadios/Imágenes de estadios/5.1 Rogers Centre.jpg",
-          terreno: "/assets/1. Estadios/Terrenos de juego/5. Cemento.jpg",
-          capacidad: 53506,
-        },
-        {
-          nombre: "Rogers center",
-          img_estadio: "/assets/1. Estadios/Imágenes de estadios/5.1 Rogers Centre.jpg",
-          terreno: "/assets/1. Estadios/Terrenos de juego/5. Cemento.jpg",
-          capacidad: 53506,
-        },
-      ],
+      estadios: [],
     };
+  },
+  methods: {
+    async listarEstadios() {
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "listar_estadios");
+        this.estadios = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>
 
-<style >
+<style>
 /*  Helper Styles */
 
 .router,
@@ -93,7 +81,6 @@ export default {
   text-decoration: none;
   color: black;
 }
-
 
 .icon_espectador {
   width: 35px;
@@ -132,12 +119,12 @@ export default {
   text-decoration-line: none;
 }
 
-.tres_puntos{
+.tres_puntos {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
-.card-image{
+.card-image {
   position: relative;
 }
 .card-image img {
@@ -150,7 +137,7 @@ export default {
 /* Modificar imagen pequeña */
 .card-action {
   position: absolute;
-  
+
   /* margin-top: -25px;
   margin-right: 130px; */
   z-index: 2;
@@ -163,8 +150,8 @@ export default {
   bottom: -40px;
 }
 
-.card-action img{
-border-radius: 15px;
+.card-action img {
+  border-radius: 15px;
 }
 
 .card-heading {

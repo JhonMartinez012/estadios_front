@@ -1,53 +1,5 @@
 <template>
   <div class="container-fluid cont-principal">
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              Seleccione una imagen
-            </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <!-- <slim-cropper ref="slim-cropper" :options="slimOptions" style="width:120px;height:150px">
-               
-             </slim-cropper> -->
-            <slim-cropper :options="slimOptions">
-              <input type="file" name="slim" />
-            </slim-cropper>
-          </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
-            <button type="button" class="btn boton-agregar-img-estadio">
-              Agregar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--  FIN DEL MODAL PARA AGREGAR IMAGENES DE ESTADIO -->
-
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -63,7 +15,13 @@
 
     <div class="container-fluid ml-0">
       <label class="parrafo font-weight-bold ml-0">Crear Estadio </label>
-      <a type="button" class="btn btn-crear-estadio pr-2">Guardar</a>
+      <button
+        type="button"
+        class="btn btn-crear-estadio pr-2"
+        @click="crearEstadio"
+      >
+        Guardar
+      </button>
     </div>
 
     <div class="container-fluid mt-4 ml-0">
@@ -129,82 +87,14 @@
 
         <div class="col-5 inner mr-5">
           <div class="agregar-imagen">
-            <label class="titulo w-100"
-              >Imagenes
-              <button
-                class="btn bton-agregar-img mx-5"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="17.5"
-                  height="17.5"
-                  fill="#FFFF"
-                  viewBox="0 0 17.5 17.5"
-                  title="Añadir imagen"
-                  alt=""
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                >
-                  <g
-                    id="icon_añadir"
-                    data-name="icon / añadir"
-                    transform="translate(-138.25 -648.25)"
-                  >
-                    <path
-                      id="Línea_5"
-                      data-name="Línea 5"
-                      d="M16,.75H0A.75.75,0,0,1-.75,0,.75.75,0,0,1,0-.75H16a.75.75,0,0,1,.75.75A.75.75,0,0,1,16,.75Z"
-                      transform="translate(139 657)"
-                    />
-                    <path
-                      id="Línea_6"
-                      data-name="Línea 6"
-                      d="M0,16.75A.75.75,0,0,1-.75,16V0A.75.75,0,0,1,0-.75.75.75,0,0,1,.75,0V16A.75.75,0,0,1,0,16.75Z"
-                      transform="translate(147 649)"
-                    />
-                  </g>
-                </svg>
-              </button>
-            </label>
-          </div>
-          <div class="container mt-4 inner">
-            <div class="row">
-              <div
-                class="col-md-6 col-lg-4 mt-0 styles_img_pre"
-                v-for="(estadio, index) in estadios"
-                :key="index"
-              >
-                <img
-                  :src="estadio.img_estadio"
-                  alt=""
-                  class="mt-4 w-100"
-                  width="cover"
-                  height="100px"
-                />
-                <div class="boton_accion">
-                  <button class="btn_accion_eliminar">
-                    <img
-                      src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
-                      width="cover"
-                      height="20px"
-                      alt=""
-                      srcset=""
-                    />
-                  </button>
-                  <button class="btn_accion_editar">
-                    <img
-                      src="/assets/1. Estadios/Iconos/icon - editar.svg"
-                      width="cover"
-                      height="20px"
-                      alt=""
-                      srcset=""
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
+            <label class="titulo w-100">Imagenes</label>
+            <slim-cropper
+              :options="slimOptions"
+              ref="img_principal"
+              class="img-principal"
+            >
+              <input type="file" name="slim" />
+            </slim-cropper>
           </div>
         </div>
       </div>
@@ -234,31 +124,8 @@ export default {
       nombre_estadio: "",
       acerca_estadio: "",
       terreno_id: 0,
-
-      estadios: [
-        {
-          nombre: "Wembley Stadium",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg",
-        },
-        {
-          nombre: "Madison Square Garden",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/2.1 Madison-Square-Garden.jpg",
-        },
-        {
-          nombre: "Rogers center",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/1.4 wembley-stadium.jpg",
-        },
-        {
-          nombre: "Rogers center",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/5.1 Rogers Centre.jpg",
-        },
-      ],
       slimOptions: {
-        label: "Subir imagen",
+        label: "Subir imagen principal del estadio",
       },
       pais: 0,
       paises: [],
@@ -293,6 +160,38 @@ export default {
       try {
         const { data } = await axios.get(ENDPOINT_PATH1 + "terrenos");
         this.terrenos = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async crearEstadio() {
+      let payload = {
+        nombre_estadio: this.nombre_estadio,
+        acerca_estadio: this.acerca_estadio,
+        img_principal:
+          this.$refs.img_principal.instanciaCrop.dataBase64.output.image,
+        ciudad_id: this.ciudad,
+        terreno_id: this.terreno_id,
+      };
+      try {
+        /* console.log(payload); */
+        const { data } = await axios.post(
+          ENDPOINT_PATH + "crear_estadio",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        );
+        this.estadio = data;
+        console.log(this.estadio);
+        if (this.estadio) {
+          console.log("se creo el estadio")
+          this.$router.push({name:"Estadio",params:{id:1}})
+        }
       } catch (error) {
         console.log(error);
       }
@@ -401,6 +300,11 @@ h1 {
 
 .agregar-imagen {
   position: relative;
+}
+.img-principal {
+  border-radius: 30px;
+  height: 100%;
+  width: 100%;
 }
 
 .posicion {

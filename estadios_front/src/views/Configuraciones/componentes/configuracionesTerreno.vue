@@ -32,8 +32,7 @@
             >
               Cerrar
             </button>
-            <button type="button" class="btn boton-eliminar-terreno"
-            >
+            <button type="button" class="btn boton-eliminar-terreno">
               Eliminar
             </button>
           </div>
@@ -119,9 +118,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              Editar terreno 
-            </h5>
+            <h5 class="modal-title" id="exampleModalLabel">Editar terreno</h5>
             <button
               type="button"
               class="close"
@@ -137,13 +134,11 @@
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
                   <slim-cropper
-                    :options="slimOptions"                    
+                    :options="slimOptions"
                     ref="img_terrenoE"
                     class="estilo-slim"
-                    
                   >
-                    <input type="file" name="slim" />
-                    <img :src="terreno.img" alt="" srcset="">
+                    <input id="imagen" type="file" name="slim" accept="image/*"/>                    
                   </slim-cropper>
                 </div>
               </div>
@@ -261,17 +256,15 @@ export default {
     img: "",
     show: true,
     modal: 0,
-    modalE:0,
+    modalE: 0,
     terrenos: [],
-    terreno:{
-      nombre_terreno:'',
-      img:''
+    terreno: {
+      nombre_terreno: "",
+      img: "",
     },
     slimOptions: {
       label: "Añadir imagen del terreno",
-      
     },
-
   }),
   methods: {
     async listarTerrenos() {
@@ -305,10 +298,7 @@ export default {
       this.listarTerrenos();
     },
 
-    async editarTerreno() {
-      
-    },
-
+    async editarTerreno() {},
 
     async eliminarTerreno(id) {
       try {
@@ -327,13 +317,16 @@ export default {
     openModal() {
       this.modal = 1;
     },
-    openModalE(data={}){
-      this.modalE=1;
-      this.terreno.nombre_terreno=data.nombre_terreno
+    openModalE(data = {}) {
+      //console.log(data.img);
+      this.modalE = 1;
+      this.terreno.nombre_terreno = data.nombre_terreno;
+      this.terreno.img = data.img;
+      this.$refs.img_terrenoE.instanciaCrop.load(`${this.terreno.img}`)
     },
     closeModal() {
       this.modal = 0;
-      this.modalE=0;
+      this.modalE = 0;
     },
   },
 };

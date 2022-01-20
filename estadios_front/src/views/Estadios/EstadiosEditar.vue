@@ -11,6 +11,53 @@
       </ol>
     </nav>
     
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Seleccione una imagen
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- <slim-cropper ref="slim-cropper" :options="slimOptions" style="width:120px;height:150px">
+               
+             </slim-cropper> -->
+            <slim-cropper :options="slimOptions">
+              <input type="file" name="slim" />
+            </slim-cropper>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button type="button" class="btn boton-agregar-img-estadio">
+              Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  FIN DEL MODAL PARA AGREGAR IMAGENES DE ESTADIO -->
 
     <div class="container-fluid ml-0">
       <label class="parrafo font-weight-bold ml-0">Editar Estadio </label>
@@ -59,14 +106,46 @@
 
         <div class="col-5 inner">
           <div class="agregar-imagen">
-            <label class="titulo w-100">Imagenes</label>
-            <!-- <slim-cropper ref="slim-cropper" :options="slimOptions" style="width:120px;height:150px">
-               
-             </slim-cropper> -->
-
-            <slim-cropper :options="slimOptions">
-              <input type="file" name="slim" />
-            </slim-cropper>
+            <label class="titulo w-100"
+              >Imagenes
+              <button
+                class="btn bton-agregar-img mx-5"
+                data-toggle="modal"
+                data-target="#exampleModal"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17.5"
+                  height="17.5"
+                  fill="#FFFF"
+                  viewBox="0 0 17.5 17.5"
+                  title="Añadir imagen"
+                  alt=""
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                >
+                  <g
+                    id="icon_añadir"
+                    data-name="icon / añadir"
+                    transform="translate(-138.25 -648.25)"
+                  >
+                    <path
+                      id="Línea_5"
+                      data-name="Línea 5"
+                      d="M16,.75H0A.75.75,0,0,1-.75,0,.75.75,0,0,1,0-.75H16a.75.75,0,0,1,.75.75A.75.75,0,0,1,16,.75Z"
+                      transform="translate(139 657)"
+                    />
+                    <path
+                      id="Línea_6"
+                      data-name="Línea 6"
+                      d="M0,16.75A.75.75,0,0,1-.75,16V0A.75.75,0,0,1,0-.75.75.75,0,0,1,.75,0V16A.75.75,0,0,1,0,16.75Z"
+                      transform="translate(147 649)"
+                    />
+                  </g>
+                </svg>
+              </button>
+            </label>
+            
           </div>
           <div class="container mt-4 inner">
             <div class="row">
