@@ -7,12 +7,12 @@
             Estadios</router-link
           >
         </li>
-        <li class="breadcrumb-item active estilo_page" aria-current="page">Wembley</li>
+        <li class="breadcrumb-item active estilo_page" aria-current="page">{{nombre_estadio}}</li>
       </ol>
     </nav>
     
 
-    <verEstadio></verEstadio>
+    <verEstadio v-on:resultado="resultados"></verEstadio>
     <tribunas></tribunas>
     <calendarioInactividad></calendarioInactividad>
   </div>
@@ -26,11 +26,19 @@ export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
   },
+  data:()=>({
+    nombre_estadio:"",
+  }),
   components: {
     verEstadio: VerEstadio,
     tribunas: TribunasEstadio,
     calendarioInactividad: InactividadEstadio,
   },
+  methods:{
+    async resultados(datos){
+      this.nombre_estadio=datos.nombre_estadio;
+    }
+  }
 };
 
 

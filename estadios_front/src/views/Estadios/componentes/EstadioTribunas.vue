@@ -1,13 +1,7 @@
 <template>
   <div class="container-fluid ml-0 mt-5">
     <!-- Modal para añadir una tribuna -->
-    <div
-      class="modal fade"
-      id="modalTribuna"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal" :class="{ show: modal }">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -17,6 +11,7 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
+              @click="closeModal"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -28,6 +23,7 @@
                   <p for="" class="p-tribuna">Nombre de la tribuna</p>
                   <input
                     placeholder="Nombre"
+                    v-model="nombre_tribuna"
                     type="text"
                     class="form-control input-tribuna"
                   />
@@ -39,6 +35,7 @@
                   <p for="" class="p-tribuna">Capacidad de expectadores</p>
                   <input
                     placeholder="Cantidad expectadores"
+                    v-model="capacidad"
                     type="text"
                     class="form-control input-tribuna"
                   />
@@ -50,7 +47,8 @@
                   <p for="" class="p-tribuna">Valor de la entrada</p>
                   <input
                     placeholder="Valor entrada"
-                    type="text"
+                    type="number"
+                    v-model="valor_boleta"
                     class="form-control input-tribuna"
                   />
                 </div>
@@ -58,10 +56,17 @@
             </div>
           </div>
           <div class="modal-footer justify-content-center">
-            <button type="button" class="btn btn-cerrar" data-dismiss="modal">
+            <button
+              type="button"
+              class="btn btn-cerrar"
+              data-dismiss="modal"
+              @click="closeModal"
+            >
               Cerrar
             </button>
-            <button type="button" class="btn btn-guardar">añadir</button>
+            <button type="button" class="btn btn-guardar" @click="crearTribuna">
+              añadir
+            </button>
           </div>
         </div>
       </div>
@@ -70,64 +75,64 @@
 
     <div class="container-fluid estilos-container">
       <label class="font-weight-bold ml-0 titulo_tribuna pr-5">Tribunas</label>
-      <button
-        class="btn btn-crear-tri"
-        data-toggle="modal"
-        data-target="#modalTribuna"
-      >
-        Añadir
-      </button>
+      <button class="btn btn-crear-tri" @click="openModal">Añadir</button>
     </div>
-    <div class="container-fluid">
-      <div class="card mt-4" style="width: 14rem">
-        <div class="card-body">
-          <h5 class="card-title text-center titulo-card">
-            Premium Bobby Moore
-          </h5>
-          <label class="card-subtitle mb-2 text-muted d-flex sub-card"
-            >15.000
-            <img
-              src="/assets/1. Estadios/Iconos/icon - espectadores.svg"
-              class="ml-auto"
-            />
-          </label>
-          <label class="card-text mb-2 text-muted d-flex txt-card"
-            >$ 97.000
-            <img
-              src="/assets/1. Estadios/Iconos/Icon - ticket.svg"
-              class="ml-auto"
-            />
-          </label>
+    <div class="row">
+      <div
+        class="tarjeta-tribunas"
+        v-for="tribuna in tribunas"
+        :key="tribuna.id"
+      >
+        <div class="card mt-4" style="width: 14rem">
+          <div class="card-body">
+            <h5 class="card-title text-center titulo-card">
+              {{ tribuna.nombre_tribuna }}
+            </h5>
+            <label class="card-subtitle mb-2 text-muted d-flex sub-card"
+              >{{ tribuna.capacidad }}
+              <img
+                src="/assets/1. Estadios/Iconos/icon - espectadores.svg"
+                class="ml-auto"
+              />
+            </label>
+            <label class="card-text mb-2 text-muted d-flex txt-card"
+              >$ {{ tribuna.valor_boleta }}
+              <img
+                src="/assets/1. Estadios/Iconos/Icon - ticket.svg"
+                class="ml-auto"
+              />
+            </label>
+          </div>
         </div>
-      </div>
-      <div class="form-group botones-accion text-center">
-        <button
-          class="btn boton-accion mr-2"
-          @click="editarTribuna"
-          data-toggle="tooltip"
-          title="Editar"
-          data-placement="bottom"
-        >
-          <img
-            src="/assets/1. Estadios/Iconos/icon - Editar.svg"
-            alt=""
-            srcset=""
-          />
-        </button>
-        <button
-          class="btn boton-accion"
-          data-toggle="tooltip"
-          title="Eliminar"
-          data-placement="bottom"
-        >
-          <img
-            src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
-            alt=""
-            srcset=""
-            data-toggle="modal"
-            data-target="#modalEliminarTribuna"
-          />
-        </button>
+        <div class="form-group botones-accion text-center">
+          <button
+            class="btn boton-accion mr-2"
+            @click="editarTribuna"
+            data-toggle="tooltip"
+            title="Editar"
+            data-placement="bottom"
+          >
+            <img
+              src="/assets/1. Estadios/Iconos/icon - Editar.svg"
+              alt=""
+              srcset=""
+            />
+          </button>
+          <button
+            class="btn boton-accion"
+            data-toggle="tooltip"
+            title="Eliminar"
+            data-placement="bottom"
+          >
+            <img
+              src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
+              alt=""
+              srcset=""
+              data-toggle="modal"
+              data-target="#modalEliminarTribuna"
+            />
+          </button>
+        </div>
       </div>
     </div>
     <!-- INICIO DE LA MODAL ELIMINAR -->
@@ -141,9 +146,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              Eliminar tribuna
-            </h5>
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar tribuna</h5>
             <button
               type="button"
               class="close"
@@ -176,16 +179,86 @@
 </template>
 
 <script>
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
+import axios from "axios";
 export default {
-  methods:{
-    editarTribuna(){
-      
-    }
-  }
+  created: function () {
+    this.listarTribunas();
+  },
+  data: () => ({
+    show: true,
+    modal: 0,
+    nombre_tribuna: "",
+    capacidad: 0,
+    valor_boleta: 0,
+    estadio_id: 0,
+    tribunas: [],
+  }),
+  methods: {
+    async listarTribunas() {
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "listar_tribunas", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+        });
+        this.tribunas = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async crearTribuna() {
+      let payload = {
+        nombre_tribuna: this.nombre_tribuna,
+        capacidad: this.capacidad,
+        valor_boleta: this.valor_boleta,
+        estadio_id: this.$route.params.id,
+      };
+      try {
+        console.log(payload);
+        const { data } = await axios.post(
+          ENDPOINT_PATH + "crear_tribuna",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        );
+        this.data = data;
+        if (this.data) {
+          console.log("Tribuna registrada");
+          this.closeModal();
+          this.listarTribunas();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    editarTribuna() {},
+    openModal() {
+      this.modal = 1;
+    },
+    closeModal() {
+      this.modal = 0;
+    },
+  },
 };
 </script>
 
 <style scoped>
+.tarjeta-tribunas{
+  width: cover;
+  padding: 3em;
+
+}
+.show {
+  display: list-item;
+  opacity: 1;
+  background: rgba(168, 167, 172, 0.6);
+}
 .titulo_tribuna {
   font-family: "Gilroy";
   font-weight: bold;
@@ -224,7 +297,8 @@ export default {
   letter-spacing: 0px;
   color: #3c2ea8;
 }
-.btn-guardar,.boton-eliminar-tribuna {
+.btn-guardar,
+.boton-eliminar-tribuna {
   width: 90px;
   height: 40px;
   background: transparent linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
@@ -237,7 +311,8 @@ export default {
   color: #ffffff;
   opacity: 1;
 }
-.btn-guardar:hover,.boton-eliminar-tribuna:hover {
+.btn-guardar:hover,
+.boton-eliminar-tribuna:hover {
   width: 90px;
   height: 40px;
   background: transparent linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%

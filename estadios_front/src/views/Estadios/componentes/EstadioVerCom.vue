@@ -43,7 +43,7 @@
 
     <div class="container-fluid ml-0 mt-5 d-flex align-items-center">
       <div class="container-fluid">
-        <label class="titulo_estadio w-100">Wembley Stadium </label>
+        <label class="titulo_estadio w-100">{{estadio.nombre_estadio}}</label>
         <div class="d-flex">
           <div class="lineaT_1"></div>
           <div class="lineaT_2"></div>
@@ -116,20 +116,14 @@
 
         <div class="col-md-6">
           <div class="container">
-            <label class="titulo_pais w-100">Londres, Inglaterra </label>
+            <label class="titulo_pais w-100">{{estadio.nombre}}, {{estadio.nom_pais}} </label>
             <div class="d-flex">
               <div class="linea_1"></div>
               <div class="linea_2"></div>
             </div>
             <label class="titulo_acerca w-100">Acerca </label>
             <label class="descripcion_acerca w-100"
-              >Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit
-              pariatur ut deleniti nobis? Fuga quos nihil labore nemo eos, et
-              ullam! Magni eum reprehenderit aliquam nihil dicta tempore
-              nesciunt quas? Lorem ipsum dolor sit amet consectetur adipisicing
-              elit. Fuga ad omnis at. Obcaecati animi laudantium voluptatem
-              dolore est nemo repudiandae modi vel magni, accusamus alias dicta
-              amet ex eligendi inventore!
+              >{{estadio.acerca_estadio}}
             </label>
           </div>
         </div>
@@ -147,6 +141,9 @@ import ImageSlider from "../../../components/imageSlider.vue";
 export default {
   created() {
     this.verEstadio();
+  },
+  props:{
+    nombre_estadio:String,
   },
   components: {
     //VueperSlides,
@@ -175,15 +172,22 @@ export default {
   }),
   methods: {
     async editarEstadio() {
-      this.$router.push({ name: "EstadiosEditar" });
+      this.$router.push({ name: "EstadiosEditar", params:{id:this.$route.params.id}});
     },
     async verEstadio() {
       try {
         const { data } = await axios.get(
-          ENDPOINT_PATH + "ver_estadio/" + this.$route.params.id
+          ENDPOINT_PATH + "ver_estadio/" + this.$route.params.id,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
         );
         this.estadio = data;
-        console.log(this.estadio);
+        this.$emit('resultado',this.estadio)
+        //console.log(this.estadio);
       } catch (error) {
         console.log(error);
       }

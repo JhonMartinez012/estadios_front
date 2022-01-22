@@ -159,7 +159,13 @@ export default {
     async verAdministrador() {
       try {
         const { data } = await axios.get(
-          ENDPOINT_PATH + "administrador/" + this.$route.params.id
+          ENDPOINT_PATH + "administrador/" + this.$route.params.id,
+           {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
         );
         this.administrador = data;
         console.log(this.administrador);
@@ -170,7 +176,13 @@ export default {
     async eliminarAdministrador(administrador) {
       try {
         const { data } = await axios.delete(
-          ENDPOINT_PATH + "eliminar_administrador/" + administrador.id
+          ENDPOINT_PATH + "eliminar_administrador/" + administrador.id,
+           {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
         );
         if (data) {
           this.closeModal();

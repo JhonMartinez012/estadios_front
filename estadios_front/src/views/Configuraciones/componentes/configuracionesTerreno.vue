@@ -184,7 +184,7 @@
         :key="terreno.id"
       >
         <div class="card-sl-terreno">
-          <a href="">
+          
             <div class="card-image-terreno">
               <img
                 class="hover-image w-100"
@@ -202,7 +202,7 @@
                 <label for="">{{ terreno.cant_estadios }} </label>
               </div>
             </div>
-          </a>
+          
           <div class="card-heading-terreno">
             <p class="tres_puntos">{{ terreno.nombre_terreno }}</p>
           </div>
@@ -268,7 +268,13 @@ export default {
   }),
   methods: {
     async listarTerrenos() {
-      const { data } = await axios.get(ENDPOINT_PATH + "terrenos");
+      const { data } = await axios.get(ENDPOINT_PATH + "terrenos",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          });
       this.terrenos = data;
     },
     async crear_terreno() {
@@ -290,9 +296,9 @@ export default {
           }
         );
         this.data = data;
-        console.log(this.data);
+        //console.log(this.data);
       } catch (error) {
-        console.log(" pailas mi sooo");
+        console.log(" No se pudo registrar");
       }
       this.closeModal();
       this.listarTerrenos();
@@ -302,7 +308,13 @@ export default {
 
     async eliminarTerreno(id) {
       try {
-        const res = await axios.delete(ENDPOINT_PATH + id);
+        const res = await axios.delete(ENDPOINT_PATH + id,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          });
         if (res) {
           this.closeModal();
           this.listarTerrenos;
@@ -322,7 +334,8 @@ export default {
       this.modalE = 1;
       this.terreno.nombre_terreno = data.nombre_terreno;
       this.terreno.img = data.img;
-      this.$refs.img_terrenoE.instanciaCrop.load(`${this.terreno.img}`)
+      console.log(this.terreno.img);
+      this.$refs.img_terrenoE.set_image(`${this.terreno.img}`)
     },
     closeModal() {
       this.modal = 0;

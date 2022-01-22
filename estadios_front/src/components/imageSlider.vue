@@ -71,8 +71,7 @@ export default {
       imagenPrincipal:"",
     }
   },
-  created(){
-   
+  created(){   
     this.imagenPrincipal = '/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg';
   },
   watch:{

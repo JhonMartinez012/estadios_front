@@ -7,7 +7,7 @@
             Estadios</router-link
           >
         </li>
-        <li class="breadcrumb-item active estilo_page" aria-current="page">Editar estadio</li>
+        <li class="breadcrumb-item active estilo_page" aria-current="page">Editar estadio: {{estadio.nombre_estadio}}</li>
       </ol>
     </nav>
     
@@ -73,14 +73,14 @@
               <p for="inputEmail4" class="p-titulo">Nombre del estadio</p>
               <input
                 type="text"
-                v-model="estadio_name"
+                v-model="estadio.nombre_estadio"
                 class="form-control texto-nombre"
                 id=""
                 placeholder="Nombre"
               />
               <p for="inputEmail4" class="p-titulo">Acerca del estadio</p>
               <textarea
-                v-model="estadio_info"
+                v-model="estadio.acerca_estadio"
                 cols="30"
                 rows="10"
                 placeholder="Acerca"
@@ -89,16 +89,38 @@
             </div>
             <div class="form-group col-md-6 inner">
               <p for="inputPassword4" class="p-titulo">pais</p>
-              <select v-model="estadio_pais" class="texto-select">
-                <option value="">seleccionar</option>
+              <select
+                v-model="estadio.pais_id"
+                @change="listarCiudades()"
+                class="texto-select"
+              >
+                <option :value="estadio.pais_id">{{estadio.nom_pais}}</option>
+                <option v-for="data in paises" :key="data.id" :value="data.id">
+                  {{ data.nombre }}
+                </option>
+                
               </select>
               <p for="" class="p-titulo">ciudad</p>
-              <select v-model="estadio_ciudad" class="texto-select">
-                <option value="">seleccionar</option>
+              <select v-model="estadio.ciudad_id" class="texto-select">
+                <option :value="estadio.ciudad_id">{{estadio.nombre}}</option>
+                <option
+                  v-for="data in ciudades"
+                  :key="data.id"
+                  :value="data.id"
+                >
+                  {{ data.nombre }}
+                </option>
               </select>
               <p for="" class="p-titulo">Tipo de terreno</p>
-              <select v-model="estadio_terreno" class="texto-select">
-                <option value="">seleccionar</option>
+              <select v-model="estadio.terreno_id" class="texto-select">
+                <option :value="estadio.terreno_id">{{estadio.nombre_terreno}}</option>
+                <option
+                  v-for="terreno in terrenos"
+                  :key="terreno.id"
+                  :value="terreno.id"
+                >
+                  {{ terreno.nombre_terreno }}
+                </option>
               </select>
             </div>
           </div>
@@ -150,16 +172,15 @@
           <div class="container mt-4 inner">
             <div class="row">
               <div
-                class="col-md-6 col-lg-4 mt-0 styles_img_pre"
-                v-for="(estadio, index) in estadios"
-                :key="index"
+                class="col-md-6 col-lg-4 mt-0 styles_img_pre"               
               >
+               <!-- v-for="(estadio, index) in estadios"
+                :key="index" -->
                 <img
-                  :src="estadio.img_estadio"
+                  :src="estadio.img_principal"
                   alt=""
-                  class="mt-4 w-100"
-                  width="cover"
-                  height="100px"
+                  class=" images-editar"
+                  
                 />
                 <div class="boton_accion">
                   <button class="btn_accion_eliminar">
@@ -182,6 +203,10 @@
                   </button>
                 </div>
               </div>
+
+              
+              
+              
             </div>
           </div>
         </div>
@@ -190,40 +215,76 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
+const ENDPOINT_PATH1 = "http://127.0.0.1:8000/api/terreno/";
 export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
+    this.listarEstadio();
+    this.listarPaises();
+    this.listarTerrenos();
   },
   data() {
     return {
-      estadios: [
-        {
-          nombre: "Wembley Stadium",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg",
-        },
-        {
-          nombre: "Madison Square Garden",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/2.1 Madison-Square-Garden.jpg",
-        },
-        {
-          nombre: "Rogers center",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/1.4 wembley-stadium.jpg",
-        },
-        {
-          nombre: "Rogers center",
-          img_estadio:
-            "/assets/1. Estadios/Imágenes de estadios/5.1 Rogers Centre.jpg",
-        },
-      ],
+      
       slimOptions: {
         label: "Subir imagen",
       },
+      estadio: {},
+      id:0,
+      pais: 0,
+      paises: [],
+      ciudad: 0,
+      ciudades: [],
+      terrenos: [],
     };
   },
+  
   components: {},
+  methods:{
+    async listarEstadio(){
+      try {        
+        const data = await axios.get(ENDPOINT_PATH+"ver_estadio/"+this.$route.params.id);
+        if(data?.data){
+          this.estadio=data.data;
+        }
+        //console.log(this.estadio);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+     async listarPaises() {
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "paises");
+        this.paises = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async listarCiudades() {
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "ciudades", {
+          params: {
+            pais_id: this.estadio.pais_id,
+          },
+        });
+        this.ciudades = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async listarTerrenos() {
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH1 + "terrenos");
+        this.terrenos = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+  }
 };
 </script>
 <style >
@@ -289,10 +350,19 @@ h1 {
   font-size: 30px;
   letter-spacing: 0px;
   color: #000000;
+  display: flex;
+  justify-content: space-between;
 }
 
 .agregar-imagen {
   position: relative;
+}
+
+.images-editar{
+  margin-top: 10px;
+  width: cover;
+  height: 120px;
+  border-radius: 20px;
 }
 
 .posicion {
@@ -410,5 +480,18 @@ h1 {
   padding: 0px;
   bottom: 10px;
   right: 86px;
+}
+.bton-agregar-img {
+  width: 40px;
+  height: 40px;
+  font-weight: normal;
+  font-size: 16px;
+  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  border-radius: 15px;
+  color: #ffff;
+  display: flex;
+  align-content: center;
+  align-items: center;
 }
 </style>

@@ -69,7 +69,7 @@
 
 <script>
 import axios from "axios";
-const ENDPOINT_PATH = "http://127.0.0.1:8000/api/administrador/";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/auth/";
 export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
@@ -87,7 +87,13 @@ export default {
   methods: {
     async listarAdministrador() {
        try {
-        const { data } = await axios.get(ENDPOINT_PATH + "administrador/"+this.$route.params.id);
+        const { data } = await axios.get(ENDPOINT_PATH + "administrador/"+this.$route.params.id,
+         {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          });
         this.administrador = data;
         console.log(this.administrador);
       } catch (error) {

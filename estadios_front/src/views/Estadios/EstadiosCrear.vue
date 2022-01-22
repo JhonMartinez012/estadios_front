@@ -187,10 +187,10 @@ export default {
           }
         );
         this.estadio = data;
-        console.log(this.estadio);
+        
         if (this.estadio) {
-          console.log("se creo el estadio")
-          this.$router.push({name:"Estadio",params:{id:1}})
+          console.log(this.estadio.id);
+          this.$router.push({name:"EstadiosEditar",params:{id:this.estadio.id}})
         }
       } catch (error) {
         console.log(error);
