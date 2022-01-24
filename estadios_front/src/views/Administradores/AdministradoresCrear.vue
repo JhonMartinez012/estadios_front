@@ -136,7 +136,7 @@ export default {
     async register() {
       let payload = {
         name: this.name,
-        last_name: this.last_name,
+        lastName: this.last_name,
         phone: this.phone,
         acerca: this.acerca,
         email: this.email,
@@ -155,7 +155,7 @@ export default {
               this.data = data;
               this.$router.push({ name: "Administradores" });
         } else {
-          console.log("contraseñas no coinciden");
+          alert("contraseñas no coinciden");
         }
       } catch (error) {
         console.log(error);

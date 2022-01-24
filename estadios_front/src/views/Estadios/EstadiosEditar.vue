@@ -1,16 +1,18 @@
 <template>
   <div class="container-fluid cont-principal">
-     <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <router-link :to="{ name: 'Estadios' }" id="mini_title">
             Estadios</router-link
           >
         </li>
-        <li class="breadcrumb-item active estilo_page" aria-current="page">Editar estadio: {{estadio.nombre_estadio}}</li>
+        <li class="breadcrumb-item active estilo_page" aria-current="page">
+          Editar estadio: {{ estadio.nombre_estadio }}
+        </li>
       </ol>
     </nav>
-    
+
     <!-- Modal -->
     <div
       class="modal fade"
@@ -38,7 +40,7 @@
             <!-- <slim-cropper ref="slim-cropper" :options="slimOptions" style="width:120px;height:150px">
                
              </slim-cropper> -->
-            <slim-cropper :options="slimOptions">
+            <slim-cropper :options="slimOptions" ref="imgSecundaria">
               <input type="file" name="slim" />
             </slim-cropper>
           </div>
@@ -50,7 +52,11 @@
             >
               Cerrar
             </button>
-            <button type="button" class="btn boton-agregar-img-estadio">
+            <button
+              type="button"
+              @click="agregarImagen"
+              class="btn boton-agregar-img-estadio"
+            >
               Agregar
             </button>
           </div>
@@ -94,15 +100,14 @@
                 @change="listarCiudades()"
                 class="texto-select"
               >
-                <option :value="estadio.pais_id">{{estadio.nom_pais}}</option>
+                <option :value="estadio.pais_id">{{ estadio.nom_pais }}</option>
                 <option v-for="data in paises" :key="data.id" :value="data.id">
                   {{ data.nombre }}
                 </option>
-                
               </select>
               <p for="" class="p-titulo">ciudad</p>
               <select v-model="estadio.ciudad_id" class="texto-select">
-                <option :value="estadio.ciudad_id">{{estadio.nombre}}</option>
+                <option :value="estadio.ciudad_id">{{ estadio.nombre }}</option>
                 <option
                   v-for="data in ciudades"
                   :key="data.id"
@@ -113,7 +118,9 @@
               </select>
               <p for="" class="p-titulo">Tipo de terreno</p>
               <select v-model="estadio.terreno_id" class="texto-select">
-                <option :value="estadio.terreno_id">{{estadio.nombre_terreno}}</option>
+                <option :value="estadio.terreno_id">
+                  {{ estadio.nombre_terreno }}
+                </option>
                 <option
                   v-for="terreno in terrenos"
                   :key="terreno.id"
@@ -167,20 +174,16 @@
                 </svg>
               </button>
             </label>
-            
           </div>
           <div class="container mt-4 inner">
             <div class="row">
-              <div
-                class="col-md-6 col-lg-4 mt-0 styles_img_pre"               
-              >
-               <!-- v-for="(estadio, index) in estadios"
+              <div class="col-md-6 col-lg-4 mt-0 styles_img_pre">
+                <!-- v-for="(estadio, index) in estadios"
                 :key="index" -->
                 <img
                   :src="estadio.img_principal"
                   alt=""
-                  class=" images-editar"
-                  
+                  class="images-editar"
                 />
                 <div class="boton_accion">
                   <button class="btn_accion_eliminar">
@@ -203,10 +206,6 @@
                   </button>
                 </div>
               </div>
-
-              
-              
-              
             </div>
           </div>
         </div>
@@ -227,12 +226,11 @@ export default {
   },
   data() {
     return {
-      
       slimOptions: {
         label: "Subir imagen",
       },
       estadio: {},
-      id:0,
+      id: 0,
       pais: 0,
       paises: [],
       ciudad: 0,
@@ -240,24 +238,31 @@ export default {
       terrenos: [],
     };
   },
-  
+  computed: {
+    idEstadio() {
+      return this.$route.params.id;
+    },
+  },
+
   components: {},
-  methods:{
-    async listarEstadio(){
-      try {        
-        const data = await axios.get(ENDPOINT_PATH+"ver_estadio/"+this.$route.params.id);
-        if(data?.data){
-          this.estadio=data.data;
+  methods: {
+    async listarEstadio() {
+      try {
+        const data = await axios.get(
+          ENDPOINT_PATH + "ver_estadio/" + this.idEstadio
+        );
+        if (data?.data) {
+          this.estadio = data.data.estadio;
         }
         //console.log(this.estadio);
       } catch (error) {
         console.log(error);
       }
     },
-     async listarPaises() {
+    async listarPaises() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "paises");
-        this.paises = data;
+        this.paises = data.paises;
       } catch (error) {
         console.log(error);
       }
@@ -270,7 +275,7 @@ export default {
             pais_id: this.estadio.pais_id,
           },
         });
-        this.ciudades = data;
+        this.ciudades = data.ciudades;
       } catch (error) {
         console.log(error);
       }
@@ -278,17 +283,39 @@ export default {
     async listarTerrenos() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH1 + "terrenos");
-        this.terrenos = data;
+        this.terrenos = data.terrenos;
       } catch (error) {
         console.log(error);
       }
     },
 
-  }
+    async agregarImagen() {
+      try {
+        let payload = {
+          imagenSecundaria:
+            this.$refs.imgSecundaria.instanciaCrop.dataBase64.output.image,
+          estadioId: this.idEstadio,
+        };
+        const { data } = await axios.post(
+          ENDPOINT_PATH + "imagenesSecundarias",
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + localStorage.getItem("access_token"),
+            },
+          }
+        );
+        this.imagen = data;
+        this.listarEstadio;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };
 </script>
-<style >
-
+<style>
 .cont-principal {
   margin-top: 90px;
 }
@@ -322,25 +349,6 @@ h1 {
   color: #000000;
   margin-right: 880px;
 }
-.btn-guardar {
-  width: 180px;
-  height: 40px;
-  font-weight: normal;
-  font-size: 16px;
-  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
-    no-repeat padding-box;
-  border-radius: 12px;
-  color: #ffff;
-  align-content: flex-end;
-  align-items: flex-end;
-}
-
-.btn-guardar:hover {
-  box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
-    0 10px 30px 0 rgba(134, 111, 247, 0.19);
-  color: #fff;
-  text-decoration-line: none;
-}
 
 /* ESTILOS PARA LOS FORMULARIOS */
 .titulo {
@@ -358,7 +366,7 @@ h1 {
   position: relative;
 }
 
-.images-editar{
+.images-editar {
   margin-top: 10px;
   width: cover;
   height: 120px;
@@ -457,6 +465,43 @@ h1 {
   position: relative;
 }
 
+/* ESTILOS PARA LOS BOTONES */
+.btn-guardar {
+  width: 180px;
+  height: 40px;
+  font-weight: normal;
+  font-size: 16px;
+  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  border-radius: 12px;
+  color: #ffff;
+  align-content: flex-end;
+  align-items: flex-end;
+}
+
+.btn-guardar:hover {
+  box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
+    0 10px 30px 0 rgba(134, 111, 247, 0.19);
+  color: #fff;
+  text-decoration-line: none;
+}
+.boton-agregar-img-estadio {
+  height: 40px;
+  font-weight: normal;
+  font-size: 16px;
+  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  border-radius: 10px;
+  color: #ffff;
+  align-content: flex-end;
+  align-items: flex-end;
+}
+.boton-agregar-img-estadio:hover {
+  box-shadow: 0 2px 8px 0 rgba(115, 88, 250, 0.4),
+    0 10px 30px 0 rgba(134, 111, 247, 0.19);
+  color: #fff;
+  text-decoration-line: none;
+}
 .btn_accion_eliminar {
   width: 36px;
   height: 36px;

@@ -275,7 +275,7 @@ export default {
               Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
           });
-      this.terrenos = data;
+      this.terrenos = data.terrenos;
     },
     async crear_terreno() {
       console.log("entro");

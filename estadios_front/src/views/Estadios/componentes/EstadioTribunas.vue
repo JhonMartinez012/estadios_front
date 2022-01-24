@@ -188,32 +188,38 @@ export default {
   data: () => ({
     show: true,
     modal: 0,
-    nombre_tribuna: "",
+    nombreTribuna: "",
     capacidad: 0,
-    valor_boleta: 0,
-    estadio_id: 0,
+    valorBoleta: 0,
+    estadioId:0,
     tribunas: [],
   }),
+  computed:{
+    idEstadio(){
+      return this.$route.params.id;
+    }
+  },
   methods: {
     async listarTribunas() {
       try {
-        const { data } = await axios.get(ENDPOINT_PATH + "listar_tribunas", {
+        const { data } = await axios.get(ENDPOINT_PATH + "listar_tribunas/"+this.idEstadio, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.getItem("access_token"),
           },
         });
-        this.tribunas = data;
+        this.tribunas = data.tribunas;
+        console.log(this.tribunas);
       } catch (error) {
         console.log(error);
       }
     },
     async crearTribuna() {
       let payload = {
-        nombre_tribuna: this.nombre_tribuna,
+        nombreTribuna: this.nombre_tribuna,
         capacidad: this.capacidad,
-        valor_boleta: this.valor_boleta,
-        estadio_id: this.$route.params.id,
+        valorBoleta: this.valor_boleta,
+        estadioId: this.idEstadio,
       };
       try {
         console.log(payload);

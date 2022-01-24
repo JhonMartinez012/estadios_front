@@ -78,7 +78,7 @@ export default {
               Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
           });
-        this.administradores = data;
+        this.administradores = data.administradores;
       } catch (error) {
         console.log(error);
       }

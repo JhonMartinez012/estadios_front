@@ -33,14 +33,14 @@
               <p for="inputEmail4" class="p-titulo">Nombre del estadio</p>
               <input
                 type="text"
-                v-model="nombre_estadio"
+                v-model="nombreEstadio"
                 class="form-control texto-nombre"
                 id=""
                 placeholder="Nombre"
               />
               <p for="inputEmail4" class="p-titulo">Acerca del estadio</p>
               <textarea
-                v-model="acerca_estadio"
+                v-model="acercaEstadio"
                 cols="30"
                 rows="10"
                 placeholder="Acerca"
@@ -71,7 +71,7 @@
                 </option>
               </select>
               <p for="" class="p-titulo">Tipo de terreno</p>
-              <select v-model="terreno_id" class="texto-select">
+              <select v-model="terrenoId" class="texto-select">
                 <option value="0">seleccionar</option>
                 <option
                   v-for="terreno in terrenos"
@@ -121,9 +121,9 @@ export default {
 
   data() {
     return {
-      nombre_estadio: "",
-      acerca_estadio: "",
-      terreno_id: 0,
+      nombreEstadio: "",
+      acercaEstadio: "",
+      terrenoId: 0,
       slimOptions: {
         label: "Subir imagen principal del estadio",
       },
@@ -138,7 +138,7 @@ export default {
     async listarPaises() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "paises");
-        this.paises = data;
+        this.paises = data.paises;
       } catch (error) {
         console.log(error);
       }
@@ -151,7 +151,7 @@ export default {
             pais_id: this.pais,
           },
         });
-        this.ciudades = data;
+        this.ciudades = data.ciudades;
       } catch (error) {
         console.log(error);
       }
@@ -159,7 +159,7 @@ export default {
     async listarTerrenos() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH1 + "terrenos");
-        this.terrenos = data;
+        this.terrenos = data.terrenos;
       } catch (error) {
         console.log(error);
       }
@@ -167,12 +167,12 @@ export default {
 
     async crearEstadio() {
       let payload = {
-        nombre_estadio: this.nombre_estadio,
-        acerca_estadio: this.acerca_estadio,
-        img_principal:
+        nombreEstadio: this.nombreEstadio,
+        acercaEstadio: this.acercaEstadio,
+        imgPrincipal:
           this.$refs.img_principal.instanciaCrop.dataBase64.output.image,
-        ciudad_id: this.ciudad,
-        terreno_id: this.terreno_id,
+        ciudadId: this.ciudad,
+        terrenoId: this.terrenoId,
       };
       try {
         /* console.log(payload); */

@@ -170,14 +170,19 @@ export default {
       },
     ],
   }),
+  computed:{
+    idEstadio(){
+      return this.$route.params.id
+    }
+  },
   methods: {
     async editarEstadio() {
-      this.$router.push({ name: "EstadiosEditar", params:{id:this.$route.params.id}});
+      this.$router.push({ name: "EstadiosEditar", params:{id:this.idEstadio}});
     },
     async verEstadio() {
       try {
         const { data } = await axios.get(
-          ENDPOINT_PATH + "ver_estadio/" + this.$route.params.id,
+          ENDPOINT_PATH + "ver_estadio/" + this.idEstadio,
           {
             headers: {
               "Content-Type": "application/json",
@@ -185,7 +190,7 @@ export default {
             },
           }
         );
-        this.estadio = data;
+        this.estadio = data.estadio;
         this.$emit('resultado',this.estadio)
         //console.log(this.estadio);
       } catch (error) {

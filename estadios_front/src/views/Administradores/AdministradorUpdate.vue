@@ -84,27 +84,32 @@ export default {
       },
     };
   },
+  computed:{
+    idAdministrador(){
+      return this.$route.params.id
+    }
+  },
   methods: {
     async listarAdministrador() {
        try {
-        const { data } = await axios.get(ENDPOINT_PATH + "administrador/"+this.$route.params.id,
+        const { data } = await axios.get(ENDPOINT_PATH + "administrador/"+ this.idAdministrador,
          {
             headers: {
               "Content-Type": "application/json",
               Authorization: "Bearer " + localStorage.getItem("access_token"),
             },
           });
-        this.administrador = data;
+        this.administrador = data.administrador;
         console.log(this.administrador);
       } catch (error) {
         console.log(error);
       }
     },
     async editarAdministrador(){
-      const id=this.administrador.id;
+      
      let payload = {
         name: this.administrador.name,
-        last_name:this.administrador.last_name,
+        lastName:this.administrador.last_name,
         acerca:this.administrador.acerca,
         email:this.administrador.email,
         phone:this.administrador.phone,
@@ -115,7 +120,7 @@ export default {
       console.log(payload);      
       try {
         const { data } = await axios.put(
-          ENDPOINT_PATH + "editar_administrador/" + id,
+          ENDPOINT_PATH + "editar_administrador/" + this.idAdministrador,
           payload,
           {
             headers: {

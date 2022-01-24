@@ -179,7 +179,7 @@ export default {
     async listarMotivosInactividad() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "motivos_inactividad");
-        this.motivos = data;
+        this.motivos = data.motivos_inactividad;
       } catch (error) {
         console.log(error);
       }
