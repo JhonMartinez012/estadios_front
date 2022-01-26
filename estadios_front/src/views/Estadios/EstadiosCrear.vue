@@ -178,19 +178,16 @@ export default {
         /* console.log(payload); */
         const { data } = await axios.post(
           ENDPOINT_PATH + "crear_estadio",
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
+          payload
         );
         this.estadio = data;
-        
+
         if (this.estadio) {
           console.log(this.estadio.id);
-          this.$router.push({name:"EstadiosEditar",params:{id:this.estadio.id}})
+          this.$router.push({
+            name: "EstadiosEditar",
+            params: { id: this.estadio.id },
+          });
         }
       } catch (error) {
         console.log(error);

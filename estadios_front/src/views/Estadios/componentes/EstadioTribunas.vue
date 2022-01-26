@@ -188,26 +188,25 @@ export default {
   data: () => ({
     show: true,
     modal: 0,
+    nombre_tribuna: "",
+    valor_boleta: 0,
     nombreTribuna: "",
     capacidad: 0,
     valorBoleta: 0,
-    estadioId:0,
+    estadioId: 0,
     tribunas: [],
   }),
-  computed:{
-    idEstadio(){
+  computed: {
+    idEstadio() {
       return this.$route.params.id;
-    }
+    },
   },
   methods: {
     async listarTribunas() {
       try {
-        const { data } = await axios.get(ENDPOINT_PATH + "listar_tribunas/"+this.idEstadio, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-        });
+        const { data } = await axios.get(
+          ENDPOINT_PATH + "listar_tribunas/" + this.idEstadio
+        );
         this.tribunas = data.tribunas;
         console.log(this.tribunas);
       } catch (error) {
@@ -225,13 +224,7 @@ export default {
         console.log(payload);
         const { data } = await axios.post(
           ENDPOINT_PATH + "crear_tribuna",
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
+          payload
         );
         this.data = data;
         if (this.data) {
@@ -255,10 +248,9 @@ export default {
 </script>
 
 <style scoped>
-.tarjeta-tribunas{
+.tarjeta-tribunas {
   width: cover;
   padding: 3em;
-
 }
 .show {
   display: list-item;

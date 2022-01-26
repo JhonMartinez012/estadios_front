@@ -146,12 +146,8 @@ export default {
       try {
         if (this.password == this.repassword) {
           const {data}= await axios
-            .post(ENDPOINT_PATH + "register", payload, {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + localStorage.getItem("access_token"),
-              },
-            })
+            .post(ENDPOINT_PATH + "register", payload
+              )
               this.data = data;
               this.$router.push({ name: "Administradores" });
         } else {

@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid admins m-0 mt-3 ml-0">
-   <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <router-link :to="{ name: 'Administradores' }" id="mini_title">
@@ -12,11 +12,13 @@
         </li>
       </ol>
     </nav>
-    
+
     <div class="container-fluid titulo_formulario">
       <label class="parrafo font-weight-bold ml-0">Editar administrador</label>
       <!-- <router-link :to="{name:'EstadiosCrear'}" class="btn btn-crear pr-2"> Crear estadio </router-link> -->
-      <button class="btn btn-guardar pr-2" @click="editarAdministrador">Guardar</button>
+      <button class="btn btn-guardar pr-2" @click="editarAdministrador">
+        Guardar
+      </button>
     </div>
     <div class="container contenido_formulario mt-4">
       <div class="row ml-0">
@@ -36,13 +38,26 @@
           <br />
 
           <label for="inputState" class="titulo_form">Apellidos</label>
-          <input type="text" v-model="administrador.last_name" class="cuadros_input" /> <br />
+          <input
+            type="text"
+            v-model="administrador.last_name"
+            class="cuadros_input"
+          />
+          <br />
 
           <label for="inputState" class="titulo_form">Correo electrónico</label>
-          <input type="email" v-model="administrador.email" class="cuadros_input" />
+          <input
+            type="email"
+            v-model="administrador.email"
+            class="cuadros_input"
+          />
 
           <label for="inputState" class="titulo_form">Contraseña</label>
-          <input type="password" v-model="administrador.password" class="cuadros_input" />
+          <input
+            type="password"
+            v-model="administrador.password"
+            class="cuadros_input"
+          />
         </div>
 
         <div class="form-group col-sm-8 col-md-4">
@@ -57,10 +72,19 @@
           ></textarea>
 
           <label for="inputState" class="titulo_form">Teléfono celular</label>
-          <input type="text" v-model="administrador.phone" class="cuadros_input" /> <br />
+          <input
+            type="text"
+            v-model="administrador.phone"
+            class="cuadros_input"
+          />
+          <br />
 
           <label for="inputState" class="titulo_form">Repetir contraseña</label>
-          <input type="password" v-model="administrador.repassword" class="cuadros_input" />
+          <input
+            type="password"
+            v-model="administrador.repassword"
+            class="cuadros_input"
+          />
         </div>
       </div>
     </div>
@@ -77,63 +101,52 @@ export default {
   },
   data() {
     return {
-      administrador:[],
-      id:0,
+      administrador: [],
+      id: 0,
       slimOptions: {
         label: "Añadir imagen",
       },
     };
   },
-  computed:{
-    idAdministrador(){
-      return this.$route.params.id
-    }
+  computed: {
+    idAdministrador() {
+      return this.$route.params.id;
+    },
   },
   methods: {
     async listarAdministrador() {
-       try {
-        const { data } = await axios.get(ENDPOINT_PATH + "administrador/"+ this.idAdministrador,
-         {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          });
+      try {
+        const { data } = await axios.get(
+          ENDPOINT_PATH + "administrador/" + this.idAdministrador
+        );
         this.administrador = data.administrador;
         console.log(this.administrador);
       } catch (error) {
         console.log(error);
       }
     },
-    async editarAdministrador(){
-      
-     let payload = {
+    async editarAdministrador() {
+      let payload = {
         name: this.administrador.name,
-        lastName:this.administrador.last_name,
-        acerca:this.administrador.acerca,
-        email:this.administrador.email,
-        phone:this.administrador.phone,
-        password:this.administrador.password,
-        repassword:this.administrador.repassword,        
+        lastName: this.administrador.last_name,
+        acerca: this.administrador.acerca,
+        email: this.administrador.email,
+        phone: this.administrador.phone,
+        password: this.administrador.password,
+        repassword: this.administrador.repassword,
       };
-      
-      console.log(payload);      
+
+      console.log(payload);
       try {
         const { data } = await axios.put(
           ENDPOINT_PATH + "editar_administrador/" + this.idAdministrador,
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
+          payload
         );
         this.data = data;
         if (this.data) {
-          this.$router.push({name:'Administradores'});
-        }else{
-          console.log("No se pudo actualizar")
+          this.$router.push({ name: "Administradores" });
+        } else {
+          console.log("No se pudo actualizar");
         }
       } catch (error) {
         console.log(error);
@@ -144,7 +157,6 @@ export default {
 </script>
 
 <style scoped>
-
 .admins {
   margin-left: 105px;
 }

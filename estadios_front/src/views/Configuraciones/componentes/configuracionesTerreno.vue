@@ -138,7 +138,12 @@
                     ref="img_terrenoE"
                     class="estilo-slim"
                   >
-                    <input id="imagen" type="file" name="slim" accept="image/*"/>                    
+                    <input
+                      id="imagen"
+                      type="file"
+                      name="slim"
+                      accept="image/*"
+                    />
                   </slim-cropper>
                 </div>
               </div>
@@ -184,25 +189,24 @@
         :key="terreno.id"
       >
         <div class="card-sl-terreno">
-          
-            <div class="card-image-terreno">
-              <img
-                class="hover-image w-100"
-                :src="terreno.img"
-                width="cover"
-                height="150px"
-              />
-              <div
-                class="card-action-terreno"
-                title="Estadios con este terreno"
-                alt=""
-                data-toggle="tooltip"
-                data-placement="bottom"
-              >
-                <label for="">{{ terreno.cant_estadios }} </label>
-              </div>
+          <div class="card-image-terreno">
+            <img
+              class="hover-image w-100"
+              :src="terreno.img"
+              width="cover"
+              height="150px"
+            />
+            <div
+              class="card-action-terreno"
+              title="Estadios con este terreno"
+              alt=""
+              data-toggle="tooltip"
+              data-placement="bottom"
+            >
+              <label for="">{{ terreno.cant_estadios }} </label>
             </div>
-          
+          </div>
+
           <div class="card-heading-terreno">
             <p class="tres_puntos">{{ terreno.nombre_terreno }}</p>
           </div>
@@ -268,13 +272,7 @@ export default {
   }),
   methods: {
     async listarTerrenos() {
-      const { data } = await axios.get(ENDPOINT_PATH + "terrenos",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          });
+      const { data } = await axios.get(ENDPOINT_PATH + "terrenos");
       this.terrenos = data.terrenos;
     },
     async crear_terreno() {
@@ -287,13 +285,7 @@ export default {
       try {
         const { data } = await axios.post(
           ENDPOINT_PATH + "crear_terreno",
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
+          payload
         );
         this.data = data;
         //console.log(this.data);
@@ -308,13 +300,7 @@ export default {
 
     async eliminarTerreno(id) {
       try {
-        const res = await axios.delete(ENDPOINT_PATH + id,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          });
+        const res = await axios.delete(ENDPOINT_PATH + id);
         if (res) {
           this.closeModal();
           this.listarTerrenos;
@@ -335,7 +321,7 @@ export default {
       this.terreno.nombre_terreno = data.nombre_terreno;
       this.terreno.img = data.img;
       console.log(this.terreno.img);
-      this.$refs.img_terrenoE.set_image(`${this.terreno.img}`)
+      this.$refs.img_terrenoE.set_image(`${this.terreno.img}`);
     },
     closeModal() {
       this.modal = 0;

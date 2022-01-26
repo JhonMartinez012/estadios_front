@@ -71,13 +71,7 @@ export default {
   methods: {
     async listarAdministradores() {
       try {
-        const { data } = await axios.get(ENDPOINT_PATH + "usuarios",
-        {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          });
+        const { data } = await axios.get(ENDPOINT_PATH + "usuarios");
         this.administradores = data.administradores;
       } catch (error) {
         console.log(error);

@@ -43,7 +43,7 @@
 
     <div class="container-fluid ml-0 mt-5 d-flex align-items-center">
       <div class="container-fluid">
-        <label class="titulo_estadio w-100">{{estadio.nombre_estadio}}</label>
+        <label class="titulo_estadio w-100">{{ estadio.nombre_estadio }}</label>
         <div class="d-flex">
           <div class="lineaT_1"></div>
           <div class="lineaT_2"></div>
@@ -108,22 +108,25 @@
             </vueper-slides> -->
             <image-slider
               class="h-100"
-              :imagenPrincipal="slides[0].image"
-              :imagenesSecundarias="slides"
+              :propimagenPrincipal="estadio.img_principal"
+              :imagenTerreno="estadio.img"
+              :imagenesSecundarias="fotosSecundarias"
             />
           </div>
         </div>
 
         <div class="col-md-6">
           <div class="container">
-            <label class="titulo_pais w-100">{{estadio.nombre}}, {{estadio.nom_pais}} </label>
+            <label class="titulo_pais w-100"
+              >{{ estadio.nombre }}, {{ estadio.nom_pais }}
+            </label>
             <div class="d-flex">
               <div class="linea_1"></div>
               <div class="linea_2"></div>
             </div>
             <label class="titulo_acerca w-100">Acerca </label>
             <label class="descripcion_acerca w-100"
-              >{{estadio.acerca_estadio}}
+              >{{ estadio.acerca_estadio }}
             </label>
           </div>
         </div>
@@ -141,9 +144,10 @@ import ImageSlider from "../../../components/imageSlider.vue";
 export default {
   created() {
     this.verEstadio();
+    this.listarImagenesSecundarias();
   },
-  props:{
-    nombre_estadio:String,
+  props: {
+    nombre_estadio: String,
   },
   components: {
     //VueperSlides,
@@ -151,48 +155,40 @@ export default {
     ImageSlider,
   },
   data: () => ({
-    estadio: {},
-    slides: [
-      {
-        image:
-          "/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg",
-        active: false,
-      },
-      {
-        image:
-          "/assets/1. Estadios/Imágenes de estadios/1.2 wembley-stadium.jpg",
-        active: false,
-      },
-      {
-        image:
-          "/assets/1. Estadios/Imágenes de estadios/1.3 wembley-stadium.jpg",
-        active: false,
-      },
-    ],
+    estadio: [],
+    fotosSecundarias: [],
   }),
-  computed:{
-    idEstadio(){
-      return this.$route.params.id
-    }
+  computed: {
+    idEstadio() {
+      return this.$route.params.id;
+    },
   },
   methods: {
     async editarEstadio() {
-      this.$router.push({ name: "EstadiosEditar", params:{id:this.idEstadio}});
+      this.$router.push({
+        name: "EstadiosEditar",
+        params: { id: this.idEstadio },
+      });
     },
     async verEstadio() {
       try {
         const { data } = await axios.get(
-          ENDPOINT_PATH + "ver_estadio/" + this.idEstadio,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
+          ENDPOINT_PATH + "ver_estadio/" + this.idEstadio
         );
         this.estadio = data.estadio;
-        this.$emit('resultado',this.estadio)
+        this.$emit("resultado", this.estadio);
         //console.log(this.estadio);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async listarImagenesSecundarias() {
+      try {
+        const { data } = await axios.get(
+          ENDPOINT_PATH + "imagenes-secundarias/" + this.idEstadio
+        );
+        this.fotosSecundarias = data.imagenesSecundarias;
+        console.log(this.fotosSecundarias);
       } catch (error) {
         console.log(error);
       }

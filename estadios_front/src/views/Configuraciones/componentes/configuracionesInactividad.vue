@@ -191,13 +191,7 @@ export default {
       try {
         const { data } = await axios.post(
           ENDPOINT_PATH + "crear_motivo",
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
+          payload
         );
         this.data = data;
         this.nombre_motivo = "";
@@ -209,36 +203,30 @@ export default {
     },
 
     async editarMotivoInactividad(key) {
-      let motivo=this.motivos[key];          
+      let motivo = this.motivos[key];
       let payload = {
         nombre_motivo: motivo.nombre_motivo,
       };
-      
+
       try {
         const { data } = await axios.put(
           ENDPOINT_PATH + "editar_motivo/" + motivo.id,
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
+          payload
         );
         this.data = data;
         if (this.data) {
           this.motivo.disabled = true;
           this.listarMotivosInactividad();
-        }else{
-          console.log("No se pudo actualizar")
+        } else {
+          console.log("No se pudo actualizar");
         }
       } catch (error) {
         console.log(error);
       }
     },
     habilitarInput(motivo) {
-      try {        
-        motivo.disabled = false;        
+      try {
+        motivo.disabled = false;
       } catch (error) {
         console.log(error);
       }

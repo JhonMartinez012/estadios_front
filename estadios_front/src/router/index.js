@@ -2,9 +2,9 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 //import {store}  from "../store";
 
-import auth from "../middleware/auth";
+/* import auth from "../middleware/auth";
 import log from "../middleware/log";
-
+ */
 Vue.use(VueRouter);
 
 const routes = [
@@ -17,62 +17,62 @@ const routes = [
     path: "/login",
     name: "Login",
     component: () => import("../views/Login.vue"),
-    meta: {
+    /* meta: {
       middleware: log,
-    },
+    }, */
   },
   {
     path: "/loader",
     name: "Loader",
     component: () => import("../views/Loader.vue"),
-    meta: {
+    /* meta: {
       middleware: log,
-    },
+    }, */
   },
   {
     path: "/estadios",
     name: "Estadios",
 
     component: () => import("../views/Estadios/Estadios.vue"),
-    meta: {
+   /*  meta: {
       middleware: [auth,log],
-    },
+    }, */
   },
   {
     path: "/estadios/crear",
     name: "EstadiosCrear",
 
     component: () => import("../views/Estadios/EstadiosCrear.vue"),
-    meta: {
+    /* meta: {
       middleware: [log, auth],
-    },
+    }, */
   },
   {
     path: "/estadios/:id",
     name: "EstadiosVer",
 
     component: () => import("../views/Estadios/EstadiosVer.vue"),
-    meta: {
+    /* meta: {
       middleware: [log, auth],
-    },
+    }, */
   },
   {
     path: "/estadios/:id/editar",
     name: "EstadiosEditar",
 
     component: () => import("../views/Estadios/EstadiosEditar.vue"),
-    meta: {
+    /* meta: {
       middleware: [log, auth],
-    },
+    }, */
   },
   {
     path: "/administradores",
     name: "Administradores",
 
     component: () => import("../views/Administradores/Administradores.vue"),
-    meta: {
+    /* meta: {
       middleware: [log, auth],
-    },
+    }, */
   },
   {
     path: "/administradores/crear",
@@ -82,9 +82,9 @@ const routes = [
       import(
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradoresCrear.vue"
       ),
-    meta: {
+   /*  meta: {
       middleware: [log, auth],
-    },
+    }, */
   },
   {
     path: "/administradores/ver/:id",
@@ -94,9 +94,9 @@ const routes = [
       import(
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradorVer.vue"
       ),
-    meta: {
+   /*  meta: {
       middleware: [log, auth],
-    },
+    }, */
   },
   {
     path: '/administradores/:id/editar',
@@ -105,9 +105,9 @@ const routes = [
       import(
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradorUpdate.vue"
       ),
-    meta: {
+    /* meta: {
       middleware: [log, auth],
-    },
+    }, */
   },
 
   {
@@ -117,9 +117,9 @@ const routes = [
       import(
         /* webpackChunkName: "about" */ "../views/Configuraciones/Configuraciones.vue"
       ),
-    meta: {
+    /* meta: {
       middleware: [log, auth],
-    },
+    }, */
     redirect: { name: "ConfiguracionTerrenos" },
     children: [
       {
@@ -129,9 +129,9 @@ const routes = [
           import(
             "../views/Configuraciones/componentes/configuracionesTerreno.vue"
           ),
-          meta: {
+          /* meta: {
             middleware: [log, auth],
-          },
+          }, */
       },
       {
         path: "/Configuraciones",
@@ -140,9 +140,9 @@ const routes = [
           import(
             "../views/Configuraciones/componentes/configuracionesInactividad.vue"
           ),
-          meta: {
+          /* meta: {
             middleware: [log, auth],
-          },
+          }, */
       },
     ],
   },
@@ -157,11 +157,11 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-  auth,
-  log,
+  /* auth,
+  log, */
 });
 
-function nextFactory(context, middleware, index) {
+/* function nextFactory(context, middleware, index) {
   const subsequentMiddleware = middleware[index];
   // If no subsequent Middleware exists,
   // the default `next()` callback is returned.
@@ -195,5 +195,5 @@ router.beforeEach((to, from, next) => {
 
   return next();
 });
-
+ */
 export default router;

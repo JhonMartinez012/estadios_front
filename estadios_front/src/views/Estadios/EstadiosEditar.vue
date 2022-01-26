@@ -13,14 +13,8 @@
       </ol>
     </nav>
 
-    <!-- Modal -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
+    <!-- Modal para agregar imagenes secundarias del estadio-->
+    <div class="modal" :class="{ show: modal }">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -32,6 +26,7 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
+              @click="closeModal"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -49,12 +44,13 @@
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
+              @click="closeModal"
             >
               Cerrar
             </button>
             <button
               type="button"
-              @click="agregarImagen"
+              @click="agregarImagenSecundaria"
               class="btn boton-agregar-img-estadio"
             >
               Agregar
@@ -137,11 +133,7 @@
           <div class="agregar-imagen">
             <label class="titulo w-100"
               >Imagenes
-              <button
-                class="btn bton-agregar-img mx-5"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
+              <button class="btn bton-agregar-img mx-5" @click="openModal">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="17.5"
@@ -206,6 +198,39 @@
                   </button>
                 </div>
               </div>
+              <div
+                class="col-md-6 col-lg-4 mt-0 styles_img_pre"
+                v-for="imgSecundaria in imagenesSecundarias"
+                :key="imgSecundaria.id"
+              >
+                <!-- v-for="(estadio, index) in estadios"
+                :key="index" -->
+                <img
+                  :src="imgSecundaria.ruta_img"
+                  alt=""
+                  class="images-editar"
+                />
+                <div class="boton_accion">
+                  <button class="btn_accion_eliminar">
+                    <img
+                      src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
+                      width="cover"
+                      height="20px"
+                      alt=""
+                      srcset=""
+                    />
+                  </button>
+                  <button class="btn_accion_editar">
+                    <img
+                      src="/assets/1. Estadios/Iconos/icon - editar.svg"
+                      width="cover"
+                      height="20px"
+                      alt=""
+                      srcset=""
+                    />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -223,12 +248,15 @@ export default {
     this.listarEstadio();
     this.listarPaises();
     this.listarTerrenos();
+    this.listarImagenesSecundarias();
   },
   data() {
     return {
       slimOptions: {
         label: "Subir imagen",
       },
+      show: true,
+      modal: 0,
       estadio: {},
       id: 0,
       pais: 0,
@@ -236,6 +264,7 @@ export default {
       ciudad: 0,
       ciudades: [],
       terrenos: [],
+      imagenesSecundarias: [],
     };
   },
   computed: {
@@ -289,33 +318,52 @@ export default {
       }
     },
 
-    async agregarImagen() {
+    async agregarImagenSecundaria() {
+      let payload = {
+        imagenSecundaria:
+          this.$refs.imgSecundaria.instanciaCrop.dataBase64.output.image,
+        estadioId: this.idEstadio,
+      };
       try {
-        let payload = {
-          imagenSecundaria:
-            this.$refs.imgSecundaria.instanciaCrop.dataBase64.output.image,
-          estadioId: this.idEstadio,
-        };
+        //console.log(payload)
         const { data } = await axios.post(
-          ENDPOINT_PATH + "imagenesSecundarias",
-          payload,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + localStorage.getItem("access_token"),
-            },
-          }
+          ENDPOINT_PATH + "guardar-imagenes-secundarias",
+          payload
         );
         this.imagen = data;
-        this.listarEstadio;
+        if (this.imagen) {
+          this.closeModal();
+          this.listarEstadio();          
+          this.listarImagenesSecundarias()
+        }
       } catch (error) {
         console.log(error);
       }
     },
+
+    async listarImagenesSecundarias() {
+      const { data } = await axios.get(
+        ENDPOINT_PATH + "imagenes-secundarias/" + this.idEstadio
+      );
+      this.imagenesSecundarias = data.imagenesSecundarias;
+      //console.log(this.imagenesSecundarias);
+    },
+
+    openModal() {
+      this.modal = 1;
+    },
+    closeModal() {
+      this.modal = 0;
+    },
   },
 };
 </script>
-<style>
+<style scoped>
+.show {
+  display: list-item;
+  opacity: 1;
+  background: rgba(168, 167, 172, 0.6);
+}
 .cont-principal {
   margin-top: 90px;
 }
@@ -368,7 +416,7 @@ h1 {
 
 .images-editar {
   margin-top: 10px;
-  width: cover;
+  width: 100%;
   height: 120px;
   border-radius: 20px;
 }

@@ -2,7 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import { store } from "./store";
-
+import api from "./api"
 
 import './slim/slim/slim/slim.css';
 import slimCropper from './slim/slim/slim/slim.vue';
@@ -15,14 +15,16 @@ import "bootstrap/dist/js/bootstrap.js";
 import "bootstrap/dist/css/bootstrap.css";
 
 
-
-
 Vue.config.productionTip = false;
+
+
+
 
 new Vue({
   el: "#app",
   router,
   store,
+  api,
   components: { App },
   template: "<App></App>",
   render: (h) => h(App),

@@ -5,7 +5,7 @@
         <div class="card-image">
           <img
             class="img-principal br-5"
-            :src="imagenPrincipal"
+            :src="propimagenPrincipal"
             alt=""
             srcset=""
             style=""
@@ -29,16 +29,21 @@
           /><label class="espectadores_cant">{{ capacidad }}</label>
         </div>
       </div>
-      <div class="col-md-2">
-        <img
-          class="img-secundaria my-3 d-block"
+      
+      <div class="col-md-2 cont-img-secundarias">        
+      <router-link to=""><i class="fas fa-chevron-up"></i></router-link>
+        <figure
           v-for="(imagenSecundaria, index) in imagenesSecundarias"
           :key="index"
-          :src="imagenSecundaria.image"
-          alt=""
-          @click="cambiarImagenPrincipal(imagenSecundaria)"
-          style=""
-        />
+        >
+          <img
+            class="img-secundaria d-block"
+            :src="imagenSecundaria.ruta_img"
+            alt=""
+            @click="cambiarImagenPrincipal(imagenSecundaria)"
+            style=""
+          />
+        </figure>        
       </div>
     </div>
   </div>
@@ -46,12 +51,10 @@
 
 <script>
 export default {
-  
   props: {
     propimagenPrincipal: {
       type: String,
-      default:
-        "/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg",
+      default: "",
     },
     imagenesSecundarias: {
       type: Array,
@@ -66,36 +69,55 @@ export default {
       default: "9000",
     },
   },
-  data(){
-    return{
-      imagenPrincipal:"",
-    }
+  data() {
+    return {
+      imagenPrincipal: "",
+    };
   },
-  created(){   
-    this.imagenPrincipal = '/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg';
+  created() {
+    //this.imagenPrincipal = '/assets/1. Estadios/Imágenes de estadios/1.1 wembley-stadium.jpg';
   },
-  watch:{
-    
-  },
+  watch: {},
   methods: {
-    cambiarImagenPrincipal(imagenSecundaria){
-      this.imagenPrincipal = imagenSecundaria.image;
+    cambiarImagenPrincipal(imagenSecundaria) {
+      this.propimagenPrincipal = imagenSecundaria.ruta_img;
     },
   },
-  
 };
 </script>
 
 <style scoped>
+
 .img-principal {
   width: 100%;
   height: 400px;
   border-radius: 5em / 5em;
 }
-.img-secundaria {
-  border-radius: 25px;
-  height: 18%;
-  width: 52%;
+
+.cont-img-secundarias {
+  width: 100%;
+  height: 25em;
+  overflow: scroll;
+}
+.cont-img-secundarias figure {
+  width: 100%;
+  height: 20%;
+  border-radius: 25px 25px 25px 25px;
+  overflow: hidden;
+  transition: all 500ms ease;
+}
+.cont-img-secundarias figure:hover {
+  
+  border: 3px solid #000000
+}
+.img-secundaria {  
+  width: 100%;
+  height: 100%;
+  transition: all 500ms ease;
+}
+.img-secundaria:hover { 
+  transform: scale(1.5);
+  cursor: pointer;
 }
 
 .card-image {

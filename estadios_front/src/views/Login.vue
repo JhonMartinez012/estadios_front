@@ -133,7 +133,6 @@ export default {
     async login() {
       try {
         this.error = false;
-
         let data = await auth.login(this.email, this.password);
         if (typeof Storage !== "undefined") {
           localStorage.setItem("access_token", data.data.access_token);
