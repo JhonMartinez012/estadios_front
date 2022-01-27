@@ -86,28 +86,22 @@
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
-                <img class="img_redondeada" src="../assets/black.jpg" alt="" />
+                <img
+                  class="img_redondeada"
+                  :src="userLog.img"
+                  :title="userLog.name"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                />
               </a>
               <div class="dropdown-menu" id="prueba">
-                <router-link class="dropdown-item" :to="{name:'Logout'}">Cerrar sesión</router-link>
+                <router-link class="dropdown-item" :to="{ name: 'Logout' }"
+                  >Cerrar sesión</router-link
+                >
                 <!-- <a class="dropdown-item" href="#">Cerrar sesión</a> -->
               </div>
             </li>
           </ul>
-          <!-- <form class="form-inline my-2 my-lg-0">
-              <input
-                class="form-control mr-sm-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button
-                class="btn btn-outline-success my-2 my-sm-0"
-                type="submit"
-              >
-                Search
-              </button>
-            </form> -->
         </div>
         <img
           src="../assets/1. Estadios/Logo/logo-coex-redondo.svg"
@@ -125,18 +119,21 @@
 </template>
 
 <script>
+import axios from "axios";
+const ENDPOINT = "http://127.0.0.1:8000/api/auth/";
 export default {
   name: "Principal",
-  created(){
+  created() {
     this.usuarioLog();
   },
-  updated(){
-       $('[data-toggle="tooltip"]').tooltip({
-         trigger:'hover'
-       }) 
-  },  
+  updated() {
+    $('[data-toggle="tooltip"]').tooltip({
+      trigger: "hover",
+    });
+  },
   data() {
     return {
+      userLog: [],
       drawer: true,
       items: [
         {
@@ -148,19 +145,22 @@ export default {
     };
   },
 
-  methods:{
-    usuarioLog(){
-      
-    }
-  }
-  
+  methods: {
+    async usuarioLog() {
+      try {
+        const user = await axios.get(ENDPOINT + "usuario_log");
+        this.userLog = user.data;
+        //console.log(this.userLog);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };
 </script>
 
-
-
 <style scoped>
- .tooltip-inner {
+.tooltip-inner {
   background: #ffffff 0% 0% no-repeat padding-box;
   box-shadow: 0px 3px 6px #5d5d5d14;
   border: 1px solid #f5f5f5;
@@ -200,8 +200,8 @@ ul {
   background-color: transparent;
 }
 
-#prueba:target{
-  display:block ;
+#prueba:target {
+  display: block;
 }
 
 .efecto,

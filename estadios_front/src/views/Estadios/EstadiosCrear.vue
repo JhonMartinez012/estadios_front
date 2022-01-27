@@ -81,6 +81,14 @@
                   {{ terreno.nombre_terreno }}
                 </option>
               </select>
+              <p for="inputEmail4" class="p-titulo">Capacidad</p>
+              <input
+                type="Number"
+                v-model="capacidadEstadio"
+                class="form-control texto-select"
+                id="evt"
+                placeholder="Capacidad de espectadores"
+              />
             </div>
           </div>
         </div>
@@ -124,6 +132,7 @@ export default {
       nombreEstadio: "",
       acercaEstadio: "",
       terrenoId: 0,
+      capacidadEstadio: 0,
       slimOptions: {
         label: "Subir imagen principal del estadio",
       },
@@ -173,6 +182,7 @@ export default {
           this.$refs.img_principal.instanciaCrop.dataBase64.output.image,
         ciudadId: this.ciudad,
         terrenoId: this.terrenoId,
+        capacidadEstadio: this.capacidadEstadio,
       };
       try {
         /* console.log(payload); */
@@ -333,8 +343,8 @@ h1 {
   color: #637381;
 }
 .acercaEstadio {
-  width: 345px;
-  height: 171px;
+  width: 70%;
+  height: 200px;
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid #dfe4e8;
   border-radius: 8px;
@@ -356,7 +366,7 @@ h1 {
 }
 
 .texto-nombre {
-  width: 345px;
+  width: 70%;
   height: 40px;
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid #dfe4e8;

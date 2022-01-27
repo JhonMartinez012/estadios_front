@@ -40,7 +40,7 @@
               src="/assets/1. Estadios/Iconos/icon - espectadores.svg"
               alt=""
               srcset=""
-            /><label class="espectadores_cant">{{ estadio.capacidad }}</label>
+            /><label class="espectadores_cant">{{ estadio.capacidad_estadio }}</label>
           </div>
         </div>
       </div>

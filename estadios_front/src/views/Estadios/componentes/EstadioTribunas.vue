@@ -23,7 +23,7 @@
                   <p for="" class="p-tribuna">Nombre de la tribuna</p>
                   <input
                     placeholder="Nombre"
-                    v-model="nombre_tribuna"
+                    v-model="nombreTribuna"
                     type="text"
                     class="form-control input-tribuna"
                   />
@@ -48,7 +48,7 @@
                   <input
                     placeholder="Valor entrada"
                     type="number"
-                    v-model="valor_boleta"
+                    v-model="valorBoleta"
                     class="form-control input-tribuna"
                   />
                 </div>
@@ -208,16 +208,16 @@ export default {
           ENDPOINT_PATH + "listar_tribunas/" + this.idEstadio
         );
         this.tribunas = data.tribunas;
-        console.log(this.tribunas);
+        //console.log(this.tribunas);
       } catch (error) {
         console.log(error);
       }
     },
     async crearTribuna() {
       let payload = {
-        nombreTribuna: this.nombre_tribuna,
+        nombreTribuna: this.nombreTribuna,
         capacidad: this.capacidad,
-        valorBoleta: this.valor_boleta,
+        valorBoleta: this.valorBoleta,
         estadioId: this.idEstadio,
       };
       try {
@@ -231,6 +231,10 @@ export default {
           console.log("Tribuna registrada");
           this.closeModal();
           this.listarTribunas();
+          this.nombreTribuna="";
+          this.capacidad="";
+          this.valorBoleta=0;
+          
         }
       } catch (error) {
         console.log(error);

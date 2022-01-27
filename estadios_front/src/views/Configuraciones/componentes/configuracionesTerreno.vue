@@ -203,7 +203,7 @@
               data-toggle="tooltip"
               data-placement="bottom"
             >
-              <label for="">{{ terreno.cant_estadios }} </label>
+              <label for="">{{ terreno.estadios_count }} </label>
             </div>
           </div>
 
@@ -262,6 +262,7 @@ export default {
     modal: 0,
     modalE: 0,
     terrenos: [],
+    terrenoNuevo: [],
     terreno: {
       nombre_terreno: "",
       img: "",
@@ -272,28 +273,37 @@ export default {
   }),
   methods: {
     async listarTerrenos() {
-      const { data } = await axios.get(ENDPOINT_PATH + "terrenos");
-      this.terrenos = data.terrenos;
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "terrenos");
+        this.terrenos = data.terrenos;
+        console.log(this.terrenos);        
+      } catch (error) {
+        console.log(error);
+      }
     },
+
     async crear_terreno() {
-      console.log("entro");
-      let payload = {
-        nombre_terreno: this.nombre_terreno,
-        img: this.$refs.img_terreno.instanciaCrop.dataBase64.output.image,
-      };
+      
       /* console.log(payload.img); */
       try {
+        let payload = {
+          nombre_terreno: this.nombre_terreno,
+          img: this.$refs.img_terreno.instanciaCrop.dataBase64.output.image,
+        };
         const { data } = await axios.post(
           ENDPOINT_PATH + "crear_terreno",
           payload
         );
-        this.data = data;
+        this.terrenoNuevo = data;
+        console.log(this.terrenoNuevo);
+        if (this.terrenoNuevo.aceptado == true) {
+          this.closeModal();
+          this.listarTerrenos();
+        }
         //console.log(this.data);
       } catch (error) {
         console.log(" No se pudo registrar");
       }
-      this.closeModal();
-      this.listarTerrenos();
     },
 
     async editarTerreno() {},

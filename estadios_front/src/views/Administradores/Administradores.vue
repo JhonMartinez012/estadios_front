@@ -49,11 +49,9 @@
 
           <input
             type="text"
-            class="buscador"
-            
+            class="buscador"            
             placeholder="Buscar"
           />
-
           <button class="btn btn-crear pr-2" @click="crearAdministrador">
             Crear administrador
           </button>
@@ -109,11 +107,11 @@ body .tooltip .arrow::before {
 }
 .icon-input {
   position: relative;
-  left: 28px;
+  left: 30px;
 }
 .buscador {
   width: 18em;
-  height: 2em;
+  height: 2.5em;
   background-image: "/assets/1. Estadios/Iconos/Icon - buscar.svg";
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid #dfe4e8;

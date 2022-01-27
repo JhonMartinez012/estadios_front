@@ -111,6 +111,7 @@
               :propimagenPrincipal="estadio.img_principal"
               :imagenTerreno="estadio.img"
               :imagenesSecundarias="fotosSecundarias"
+              :capacidad="estadio.capacidad_estadio"
             />
           </div>
         </div>
@@ -188,7 +189,7 @@ export default {
           ENDPOINT_PATH + "imagenes-secundarias/" + this.idEstadio
         );
         this.fotosSecundarias = data.imagenesSecundarias;
-        console.log(this.fotosSecundarias);
+        //console.log(this.fotosSecundarias);
       } catch (error) {
         console.log(error);
       }

@@ -125,6 +125,14 @@
                   {{ terreno.nombre_terreno }}
                 </option>
               </select>
+              <p for="inputEmail4" class="p-titulo">Capacidad</p>
+              <input
+                type="Number"
+                v-model="estadio.capacidad_estadio"
+                class="form-control texto-select"
+                id="evt"
+                placeholder="Capacidad de espectadores"
+              />
             </div>
           </div>
         </div>
@@ -451,7 +459,7 @@ h1 {
 }
 .acercaEstadio {
   width: 345px;
-  height: 171px;
+  height: 200px;
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid #dfe4e8;
   border-radius: 8px;

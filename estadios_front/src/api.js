@@ -34,7 +34,10 @@ axios.interceptors.response.use(
   error => {
     if (error.response.status) {
       switch (error.response.status) {
-        case 401 || 403:
+        case 401:
+          router.push({ name: 'Login' });
+          break;
+          case  403:
           router.push({ name: 'Login' });
           break;
 

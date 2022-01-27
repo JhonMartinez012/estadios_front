@@ -29,9 +29,9 @@
           /><label class="espectadores_cant">{{ capacidad }}</label>
         </div>
       </div>
-      
-      <div class="col-md-2 cont-img-secundarias">        
-      <router-link to=""><i class="fas fa-chevron-up"></i></router-link>
+
+      <div class="col-md-2 cont-img-secundarias">
+        <!-- <router-link to=""><i class="fas fa-chevron-up"></i></router-link> -->
         <figure
           v-for="(imagenSecundaria, index) in imagenesSecundarias"
           :key="index"
@@ -43,7 +43,7 @@
             @click="cambiarImagenPrincipal(imagenSecundaria)"
             style=""
           />
-        </figure>        
+        </figure>
       </div>
     </div>
   </div>
@@ -65,8 +65,8 @@ export default {
       default: "/assets/1. Estadios/Terrenos de juego/1. gramilla.jpg",
     },
     capacidad: {
-      type: String,
-      default: "9000",
+      type: Number,
+      default: 9000,
     },
   },
   data() {
@@ -87,7 +87,6 @@ export default {
 </script>
 
 <style scoped>
-
 .img-principal {
   width: 100%;
   height: 400px;
@@ -97,7 +96,7 @@ export default {
 .cont-img-secundarias {
   width: 100%;
   height: 25em;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .cont-img-secundarias figure {
   width: 100%;
@@ -105,17 +104,17 @@ export default {
   border-radius: 25px 25px 25px 25px;
   overflow: hidden;
   transition: all 500ms ease;
+  border: 7px double #7358FA;
 }
 .cont-img-secundarias figure:hover {
-  
-  border: 3px solid #000000
+  border: 7px double #807b83c5;
 }
-.img-secundaria {  
+.img-secundaria {
   width: 100%;
   height: 100%;
   transition: all 500ms ease;
 }
-.img-secundaria:hover { 
+.img-secundaria:hover {
   transform: scale(1.5);
   cursor: pointer;
 }
@@ -170,5 +169,29 @@ export default {
   font-size: 25px;
   letter-spacing: 0px;
   color: #000000;
+}
+
+/* Elemento base */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Carril */
+::-webkit-scrollbar-track {
+  background: rgba(192, 191, 197, 0.3);
+  border-radius: 50px;
+}
+
+/* Manejador */
+::-webkit-scrollbar-thumb {
+  background: #866ff78a;
+  border-radius: 50px;
+  height: 2em;
+}
+
+/* Manejador hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #866ff78a;
+  height: 2em;
 }
 </style>

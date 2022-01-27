@@ -144,7 +144,7 @@
           data-toggle="tooltip"
           data-placement="bottom"
         >
-          1
+          {{motivo.estadios_count}}
         </p>
       </div>
     </div>
