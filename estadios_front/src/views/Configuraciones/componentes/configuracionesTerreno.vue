@@ -1,51 +1,5 @@
 <template>
   <div class="container-fluid">
-    <!-- INICIO DE LA MODAL ELIMINAR -->
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Eliminar terreno</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body text-center">
-            <p>¿Desea eliminar este terreno?</p>
-          </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
-            <button type="button" class="btn boton-eliminar-terreno">
-              Eliminar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--  FIN DEL MODAL PARA ELIMINAR TERRENO -->
-
-    <div class="container-fluid estilos-container">
-      <label class="parrafo font-weight-bold ml-0">Tipos de terreno</label>
-      <button class="btn btn-crear-t pr-2" @click="openModal">Crear</button>
-    </div>
-
     <!-- Modal para crear terreno -->
     <div class="modal" :class="{ show: modal }">
       <div class="modal-dialog modal-dialog-centered">
@@ -112,6 +66,53 @@
       </div>
     </div>
     <!-- ******* FIN DE LA MODAL PARA CREAR ******** -->
+    <!-- INICIO DE LA MODAL ELIMINAR -->
+    <div class="modal" :class="{ show: modalD }">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar terreno</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              @click="closeModal"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <p v-if="cantidad_estadios == 0">¿Desea eliminar este terreno?</p>
+            <p v-else>
+              No se puede eliminar este terreno porque
+              {{ cantidad_estadios }} estadio(s) lo han usuado anteriormente
+            </p>
+          </div>
+          <div
+            v-if="cantidad_estadios == 0"
+            class="modal-footer d-flex justify-content-center"
+          >
+            <button type="button" class="btn btn-secondary" @click="closeModal">
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn boton-eliminar-terreno"
+              @click="eliminarTerreno(id)"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  FIN DEL MODAL PARA ELIMINAR TERRENO -->
+
+    <div class="container-fluid estilos-container">
+      <label class="parrafo font-weight-bold ml-0">Tipos de terreno</label>
+      <button class="btn btn-crear-t pr-2" @click="openModal">Crear</button>
+    </div>
 
     <!-- ******* MODAL PARA EDITAR UN TERRENO ******* -->
     <div class="modal" :class="{ show: modalE }">
@@ -214,15 +215,14 @@
           <div class="card-text-terreno btns-accion text-center">
             <button
               class="btn btn-accion"
-              data-toggle="modal"
-              data-target="#exampleModal"
+              title="Eliminar"
+              data-toggle="tooltip"
+              data-placement="bottom"
+              @click="openModalD(terreno)"
             >
               <img
                 src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
-                title="Eliminar"
                 alt=""
-                data-toggle="tooltip"
-                data-placement="bottom"
                 @click="terreno.id"
               />
             </button>
@@ -258,9 +258,12 @@ export default {
   data: () => ({
     nombre_terreno: "",
     img: "",
+    cantidad_estadios: 0,
     show: true,
     modal: 0,
     modalE: 0,
+    modalD: 0,
+    id: 0,
     terrenos: [],
     terrenoNuevo: [],
     terreno: {
@@ -270,20 +273,20 @@ export default {
     slimOptions: {
       label: "Añadir imagen del terreno",
     },
+    terrenoDelete: [],
   }),
   methods: {
     async listarTerrenos() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "terrenos");
         this.terrenos = data.terrenos;
-        console.log(this.terrenos);        
+        console.log(this.terrenos);
       } catch (error) {
         console.log(error);
       }
     },
 
     async crear_terreno() {
-      
       /* console.log(payload.img); */
       try {
         let payload = {
@@ -295,10 +298,12 @@ export default {
           payload
         );
         this.terrenoNuevo = data;
-        console.log(this.terrenoNuevo);
+        /* console.log(this.terrenoNuevo); */
         if (this.terrenoNuevo.aceptado == true) {
           this.closeModal();
           this.listarTerrenos();
+          this.nombre_terreno="";
+          
         }
         //console.log(this.data);
       } catch (error) {
@@ -310,16 +315,20 @@ export default {
 
     async eliminarTerreno(id) {
       try {
-        const res = await axios.delete(ENDPOINT_PATH + id);
-        if (res) {
-          this.closeModal();
-          this.listarTerrenos;
+        const res = await axios.delete(
+          ENDPOINT_PATH + "eliminar_terreno/" + id
+        );
+        this.terrenoDelete = res.status;
+        if (this.terrenoDelete == 200) {
+          this.closeModal();   
+          this.listarTerrenos();
         } else {
           console.log("No se pudo eliminar este terreno");
         }
       } catch (error) {
         console.log(error);
       }
+      
     },
 
     openModal() {
@@ -328,14 +337,21 @@ export default {
     openModalE(data = {}) {
       //console.log(data.img);
       this.modalE = 1;
-      this.terreno.nombre_terreno = data.nombre_terreno;
+      this.terreno.nombre_terreno = data.nombre_terreno; 
       this.terreno.img = data.img;
       console.log(this.terreno.img);
       this.$refs.img_terrenoE.set_image(`${this.terreno.img}`);
     },
+    openModalD(data = {}) {
+      //console.log(data.img);
+      this.modalD = 1;
+      this.cantidad_estadios = data.estadios_count;
+      this.id = data.id;
+    },
     closeModal() {
       this.modal = 0;
       this.modalE = 0;
+      this.modalD = 0;
     },
   },
 };

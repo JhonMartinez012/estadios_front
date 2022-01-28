@@ -72,6 +72,121 @@
       </div>
     </div>
     <!-- Fin del modal -->
+    <!--  *** MODAL PARA EDITAR UNA TRIBUNA *** -->
+    <div class="modal" :class="{ show: modalE }">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Editar tribuna {{ id }}
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              @click="closeModal"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <p for="" class="p-tribuna">Nombre de la tribuna</p>
+                  <input
+                    placeholder="Nombre"
+                    v-model="tribuna.nombreTribuna"
+                    type="text"
+                    class="form-control input-tribuna"
+                  />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <p for="" class="p-tribuna">Capacidad de expectadores</p>
+                  <input
+                    placeholder="Cantidad expectadores"
+                    v-model="tribuna.capacidad"
+                    type="text"
+                    class="form-control input-tribuna"
+                  />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <p for="" class="p-tribuna">Valor de la entrada</p>
+                  <input
+                    placeholder="Valor entrada"
+                    type="number"
+                    v-model="tribuna.valorBoleta"
+                    class="form-control input-tribuna"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              type="button"
+              class="btn btn-cerrar"
+              data-dismiss="modal"
+              @click="closeModal"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-guardar"
+              @click="editarTribuna(id)"
+            >
+              Editar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  ***  FIN DE LA MODAL PARA EDITAR  ***-->
+    <!-- INICIO DE LA MODAL ELIMINAR -->
+    <div
+      class="modal" :class="{ show: modalD }"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar tribuna {{id}}</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              @click="closeModal"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <p>¿Desea eliminar esta tribuna?</p>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              @click="closeModal"
+            >
+              Cerrar
+            </button>
+            <button type="button" class="btn boton-eliminar-tribuna" @click="eliminarTribuna(id)">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  FIN DEL MODAL PARA ELIMINAR TRIBUNA -->
 
     <div class="container-fluid estilos-container">
       <label class="font-weight-bold ml-0 titulo_tribuna pr-5">Tribunas</label>
@@ -107,7 +222,7 @@
         <div class="form-group botones-accion text-center">
           <button
             class="btn boton-accion mr-2"
-            @click="editarTribuna"
+            @click="openModalE(tribuna)"
             data-toggle="tooltip"
             title="Editar"
             data-placement="bottom"
@@ -123,6 +238,7 @@
             data-toggle="tooltip"
             title="Eliminar"
             data-placement="bottom"
+            @click="openModalD(tribuna)"
           >
             <img
               src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
@@ -135,46 +251,6 @@
         </div>
       </div>
     </div>
-    <!-- INICIO DE LA MODAL ELIMINAR -->
-    <div
-      class="modal fade"
-      id="modalEliminarTribuna"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Eliminar tribuna</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body text-center">
-            <p>¿Desea eliminar esta tribuna?</p>
-          </div>
-          <div class="modal-footer d-flex justify-content-center">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Cerrar
-            </button>
-            <button type="button" class="btn boton-eliminar-tribuna">
-              Eliminar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--  FIN DEL MODAL PARA ELIMINAR TRIBUNA -->
   </div>
 </template>
 
@@ -188,13 +264,24 @@ export default {
   data: () => ({
     show: true,
     modal: 0,
+    modalE: 0,
+    modalD:0,
     nombre_tribuna: "",
     valor_boleta: 0,
     nombreTribuna: "",
-    capacidad: 0,
+    capacidad: "",
     valorBoleta: 0,
     estadioId: 0,
     tribunas: [],
+
+    tribuna: {
+      nombreTribuna: "",
+      capacidad: "",
+      valorBoleta: 0,
+    },
+    tribunaEliminada:[],
+
+    id: 0, // id de la tribuna para eliminar o editar
   }),
   computed: {
     idEstadio() {
@@ -231,21 +318,72 @@ export default {
           console.log("Tribuna registrada");
           this.closeModal();
           this.listarTribunas();
-          this.nombreTribuna="";
-          this.capacidad="";
-          this.valorBoleta=0;
-          
+          this.nombreTribuna = "";
+          this.capacidad = "";
+          this.valorBoleta = 0;
         }
       } catch (error) {
         console.log(error);
       }
     },
-    editarTribuna() {},
+    async editarTribuna(id) {
+      let payload = {
+          nombreTribuna: this.tribuna.nombreTribuna,
+          capacidad: this.tribuna.capacidad,
+          valorBoleta: this.tribuna.valorBoleta,
+        };
+      try {        
+        console.log(payload);
+        const { data } = await axios.put(
+          ENDPOINT_PATH + "editar_tribuna/" + id,
+          payload
+        );
+        this.data = data.actualizado;
+        console.log(this.data);
+        if (this.data==true) {         
+          this.closeModal();
+          this.listarTribunas();
+          this.nombreTribuna = "";
+          this.capacidad = "";
+          this.valorBoleta = 0;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async eliminarTribuna(id){
+      try {
+        const res= await axios.delete(ENDPOINT_PATH+'eliminar_tribuna/'+id);
+        this.tribunaEliminada=res.status;
+        if (this.tribunaEliminada==200) {
+          this.closeModal();
+          this.listarTribunas();          
+        }else{
+          this.closeModal;
+          alert("No se pudo eliminar la tribuna");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     openModal() {
       this.modal = 1;
     },
+    openModalE(data = {}) {
+      this.modalE = 1;
+      this.tribuna.nombreTribuna = data.nombre_tribuna;
+      this.tribuna.capacidad = data.capacidad;
+      this.tribuna.valorBoleta = data.valor_boleta;
+      this.id = data.id;
+    },
+    openModalD(data={}){
+      this.modalD=1;
+      this.id=data.id
+    },
     closeModal() {
       this.modal = 0;
+      this.modalE = 0;
+      this.modalD=0;
     },
   },
 };
