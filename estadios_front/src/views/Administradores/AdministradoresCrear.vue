@@ -38,16 +38,17 @@
               placeholder="Nombres"
               class="cuadros_input"
             />
-            <br />
+            <label for="inputState" class="msg_error" v-if="errors.name">{{errors.name[0]}}</label>
+                     
 
             <label for="inputState" class="titulo_form">Apellidos</label>
             <input
               type="text"
               v-model="last_name"
-              placeholder="last_name"
+              placeholder="Apellidos"
               class="cuadros_input"
             />
-            <br />
+            <label for="inputState" class="msg_error" v-if="errors.lastName">{{errors.lastName[0]}}</label>        
 
             <label for="inputState" class="titulo_form"
               >Correo electrónico</label
@@ -58,6 +59,7 @@
               placeholder="Correo electrónico"
               class="cuadros_input"
             />
+            <label for="inputState" class="msg_error" v-if="errors.email">{{errors.email[0]}}</label>
 
             <label for="inputState" class="titulo_form">Contraseña</label>
             <input
@@ -66,6 +68,7 @@
               placeholder="contraseña"
               class="cuadros_input"
             />
+            <label for="inputState" class="msg_error" v-if="errors.password">{{errors.password[0]}}</label>
           </div>
 
           <div class="form-group col-sm-12 col-md-4">
@@ -79,6 +82,7 @@
               class="cuadros_txtArea"
               v-model="acerca"
             ></textarea>
+            <label for="inputState" class="msg_error" v-if="errors.acerca">{{errors.acerca[0]}}</label>
 
             <label for="inputState" class="titulo_form">Teléfono celular</label>
             <input
@@ -87,7 +91,7 @@
               placeholder="Teléfono celular"
               class="cuadros_input"
             />
-            <br />
+            <label for="inputState" class="msg_error" v-if="errors.phone">{{errors.phone[0]}}</label>           
 
             <label for="inputState" class="titulo_form"
               >Repetir contraseña</label
@@ -98,6 +102,7 @@
               placeholder="Repetir contraseña"
               class="cuadros_input"
             />
+            <label for="inputState" class="msg_error" v-if="errors.repassword">{{errors.repassword[0]}}</label>
           </div>
         </div>
       </form>
@@ -123,6 +128,9 @@ export default {
     repassword: "",
     img: "",
 
+    administrador: [],
+    errors: [],
+
     slimOptions: {
       label: "Añadir imagen",
     },
@@ -134,22 +142,27 @@ export default {
 
   methods: {
     async register() {
-      let payload = {
-        name: this.name,
-        lastName: this.last_name,
-        phone: this.phone,
-        acerca: this.acerca,
-        email: this.email,
-        password: this.password,
-        img: this.$refs.img_admin.instanciaCrop.dataBase64.output.image,
-      };
       try {
         if (this.password == this.repassword) {
-          const {data}= await axios
-            .post(ENDPOINT_PATH + "register", payload
-              )
-              this.data = data;
-              this.$router.push({ name: "Administradores" });
+          let payload = {
+            name: this.name,
+            lastName: this.last_name,
+            phone: this.phone,
+            acerca: this.acerca,
+            email: this.email,
+            password: this.password,
+            repassword: this.repassword,
+            img: this.$refs.img_admin.instanciaCrop.dataBase64.output.image,
+          };
+          const data = await axios.post(ENDPOINT_PATH + "register", payload);
+          this.administrador = data.data;
+          //console.log(this.administrador);
+          if (this.administrador.success == true) {
+            this.$router.push({ name: "Administradores" });
+          } else if (this.administrador.success == false) {
+            this.errors = this.administrador.error;
+            
+          }
         } else {
           alert("contraseñas no coinciden");
         }
@@ -157,14 +170,13 @@ export default {
         console.log(error);
       }
     },
-    
+
     VerAdministrador() {
       this.$router.push({ name: "AdministradorVer" });
     },
   },
 };
 </script>
-
 
 <style scoped>
 .admins {
@@ -251,9 +263,14 @@ body .tooltip .arrow::before {
   width: 120px;
   height: 120px;
 }
+.titulo_form{
+color: #637381;
+}
+.msg_error{
+  color: #ff0000;
+}
 
-.titulo_form {
-  color: #637381;
+.titulo_form, .msg_error {  
   text-align: left;
   margin-left: 20px;
   font-family: "Rubik";

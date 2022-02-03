@@ -46,7 +46,7 @@
       >
     </div>
 
-    <div class="form-row mb-5">
+    <div class="form-row mb-4">
       <div class="form-group col-lg-3 col-md-6 col-sm-12">
         <label for="inputMotivo">Motivo</label>
         <input
@@ -55,6 +55,7 @@
           class="form-control inputt"
           placeholder="Motivo"
         />
+        <label for="" class="msg_error" v-if="errores.nombre_motivo">{{errores.nombre_motivo[0]}}</label> 
       </div>
       <div class="form-group col-lg-3 col-md-6">
         <button class="btn btn-create" @click="crearMotivoInactividad">
@@ -73,6 +74,7 @@
           id="motivo"
           :disabled="motivo.disabled"
         />
+         
       </div>
       <div class="form-group col-lg-3 col-md-6 botones-inactividad">
         <button
@@ -144,7 +146,7 @@
           data-toggle="tooltip"
           data-placement="bottom"
         >
-          {{motivo.estadios_count}}
+          {{ motivo.estadios_count }}
         </p>
       </div>
     </div>
@@ -163,17 +165,16 @@ export default {
       trigger: "hover",
     });
   },
-  data() {
-    return {
-      motivo: {
-        nombre_motivo: "",
-      },
+  data:()=> ({
+   
       mostrar: false,
       nombre_motivo: "",
       motivos: [],
+      motivo: [],
+      errores: [],
       id: 0,
-    };
-  },
+    
+  }),
 
   methods: {
     async listarMotivosInactividad() {
@@ -184,22 +185,25 @@ export default {
         console.log(error);
       }
     },
+
     async crearMotivoInactividad() {
-      let payload = {
-        nombre_motivo: this.nombre_motivo,
-      };
       try {
-        const { data } = await axios.post(
-          ENDPOINT_PATH + "crear_motivo",
-          payload
-        );
-        this.data = data;
-        this.nombre_motivo = "";
-        //this.$router.push({ name: "Configuracion" });
+        let payload = {
+          nombre_motivo: this.nombre_motivo,
+        };
+        const data = await axios.post(ENDPOINT_PATH + "crear_motivo", payload);
+        this.motivo = data.data;
+       
+        if (this.motivo.success == true) {
+          this.nombre_motivo = "";
+          this.listarMotivosInactividad();
+          this.errores=[];
+        } else if(this.motivo.success == false){
+          this.errores = this.motivo.error;         
+        }
       } catch (error) {
         console.log(" No se pudo crear el motivo");
       }
-      this.listarMotivosInactividad();
     },
 
     async editarMotivoInactividad(key) {
@@ -363,5 +367,16 @@ body .tooltip .arrow::before {
     0 10px 30px 0 rgba(134, 111, 247, 0.19);
   color: #fff;
   text-decoration-line: none;
+}
+
+.msg_error {  
+  color: #ff0000;
+  text-align: left;
+  margin-left: 0px;
+  font-family: "Rubik";
+  font-size: 18px;
+  width: 100%;
+  margin-bottom: 0;
+  margin-top: 5px;
 }
 </style>

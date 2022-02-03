@@ -13,9 +13,10 @@
             </button>
           </div>
           <div class="modal-body text-center">
-            <p>¿Desea eliminar este administrador?</p>
+            <p v-if="userLog.id != administrador.id">¿Desea eliminar este administrador?</p>
+            <p v-else>No se puede eliminar porque es el usuario que esta con la sesión iniciada</p>
           </div>
-          <div class="modal-footer d-flex justify-content-center">
+          <div class="modal-footer d-flex justify-content-center" v-if="userLog.id != administrador.id">
             <button type="button" class="btn btn-secondary" @click="closeModal">
               Cerrar
             </button>
@@ -64,7 +65,7 @@
             srcset=""
           />
           <div class="form-group botones-accion">
-            <button
+            <button              
               class="btn boton-accion"
               data-toggle="tooltip"
               title="Eliminar"
@@ -139,6 +140,7 @@ export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
     this.verAdministrador();
+      this.usuarioLog(); 
   },
   updated() {
     $('[data-toggle="tooltip"]').tooltip({
@@ -150,6 +152,7 @@ export default {
       show: true,
       modal: 0,
       administrador: [],
+      userLog:[],
       slimOptions: {
         label: "Añadir imagen",
       },
@@ -161,13 +164,21 @@ export default {
     },
   },
   methods: {
+     async usuarioLog() {
+      try {
+        const user = await axios.get(ENDPOINT_PATH + "usuario_log");
+        this.userLog = user.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async verAdministrador() {
       try {
         const { data } = await axios.get(
           ENDPOINT_PATH + "administrador/" + this.idAdministrador
         );
         this.administrador = data.administrador;
-        console.log(this.administrador);
+        //console.log(this.administrador);
       } catch (error) {
         console.log(error);
       }

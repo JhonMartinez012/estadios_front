@@ -10,16 +10,14 @@ export default {
   }, */
 
   login(email, password) {
-    try{
+    try {
       const user = { email, password };
-    return axios.post(ENDPOINT_PATH + "login", user);
+      return axios.post(ENDPOINT_PATH + "login", user);
+    } catch (error) {
+      console.log(error);
     }
-    catch(error){
-      console.log(error)
-    }
-    
-    
-  } 
+  },
+
   /* ************* FIN DE LA MANERA 1 *********************/
 
   /* ****************************** MANERA DE HACER 2 ************************/
@@ -27,6 +25,9 @@ export default {
     access_token: null,
     loggingIn: false,
     loginError: null,
+  },
+  getters: {
+    access_token: state => state.access_token
   },
   mutations: {
     loginStart: (state) => (state.loggingIn = true),

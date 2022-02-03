@@ -1,5 +1,5 @@
-<template>
-  <div class="container-fluid">
+<template >
+  <div class="container-fluid"  v-if="terrenos">
     <!-- Modal para crear terreno -->
     <div class="modal" :class="{ show: modal }">
       <div class="modal-dialog modal-dialog-centered">
@@ -36,10 +36,12 @@
                 <div class="form-group col-md-12 text-center">
                   <p for="" class="p-terreno">Nombre terreno</p>
                   <input
+                    id="nombreTerreno"
                     placeholder="Nombre"
                     type="text"
-                    class="inputt"
+                    class="inputt"                   
                     v-model="nombre_terreno"
+                     @keyup="habilitarBtn()"
                   />
                 </div>
               </div>
@@ -56,8 +58,10 @@
             </button>
             <button
               type="button"
+              id="btnGuardar"
               class="btn btn-guardar"
               @click="crear_terreno"
+              disabled
             >
               añadir
             </button>
@@ -150,8 +154,8 @@
               </div>
 
               <div class="form-row">
+                <p for="" class="p-terreno">Nombre terreno</p>
                 <div class="form-group col-md-12 text-center">
-                  <p for="" class="p-terreno">Nombre terreno</p>
                   <input
                     placeholder="Nombre"
                     type="text"
@@ -247,8 +251,9 @@
 import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/terreno/";
 export default {
-  created: function () {
+  mounted(){
     this.listarTerrenos();
+    console.log("hola");
   },
   updated() {
     $('[data-toggle="tooltip"]').tooltip({
@@ -264,6 +269,7 @@ export default {
     modalE: 0,
     modalD: 0,
     id: 0,
+   
     terrenos: [],
     terrenoNuevo: [],
     terreno: {
@@ -272,15 +278,33 @@ export default {
     },
     slimOptions: {
       label: "Añadir imagen del terreno",
+      //initialImage:require('../../../../public/assets/1. Estadios/Terrenos de juego/1. gramilla.jpg')
     },
     terrenoDelete: [],
   }),
   methods: {
+    async habilitarBtn() {
+      try {        
+        let nombreTerreno = this.nombre_terreno;
+        let v=0;
+ 
+       if (nombreTerreno == "") {
+         v=v+1;
+       }
+       if (v == 0) {
+         document.getElementById("btnGuardar").disabled = false;
+       } else {
+         document.getElementById("btnGuardar").disabled = true;
+       }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async listarTerrenos() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "terrenos");
         this.terrenos = data.terrenos;
-        console.log(this.terrenos);
+        //console.log(this.terrenos);
       } catch (error) {
         console.log(error);
       }
@@ -291,8 +315,10 @@ export default {
       try {
         let payload = {
           nombre_terreno: this.nombre_terreno,
-          img: this.$refs.img_terreno.instanciaCrop.dataBase64.output.image,
+          img: this.$refs.img_terreno.get_image(),
         };
+        document.getElementById("btnGuardar").disabled = true;
+        
         const { data } = await axios.post(
           ENDPOINT_PATH + "crear_terreno",
           payload
@@ -302,8 +328,8 @@ export default {
         if (this.terrenoNuevo.aceptado == true) {
           this.closeModal();
           this.listarTerrenos();
-          this.nombre_terreno="";
-          
+          this.nombre_terreno = "";
+          this.$refs.img_terrenoE.set_image("");
         }
         //console.log(this.data);
       } catch (error) {
@@ -320,7 +346,7 @@ export default {
         );
         this.terrenoDelete = res.status;
         if (this.terrenoDelete == 200) {
-          this.closeModal();   
+          this.closeModal();
           this.listarTerrenos();
         } else {
           console.log("No se pudo eliminar este terreno");
@@ -328,7 +354,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-      
     },
 
     openModal() {
@@ -337,8 +362,9 @@ export default {
     openModalE(data = {}) {
       //console.log(data.img);
       this.modalE = 1;
-      this.terreno.nombre_terreno = data.nombre_terreno; 
-      this.terreno.img = data.img;
+      this.terreno.nombre_terreno = data.nombre_terreno;
+      this.terreno.img =
+        "/assets/1. Estadios/Terrenos de juego/1. gramilla.jpg";
       console.log(this.terreno.img);
       this.$refs.img_terrenoE.set_image(`${this.terreno.img}`);
     },
@@ -460,13 +486,22 @@ body .tooltip .arrow::before {
   opacity: 1;
 }
 .btn-guardar:hover {
-  width: 90px;
-  height: 40px;
-  background: transparent linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+  background: transparent linear-gradient(90deg, #7358fa 0%, #7358fa 100%) 0% 0%
     no-repeat padding-box;
   box-shadow: 0px 3px 6px #866ff766;
-  border-radius: 12px;
-  color: #fff;
+}
+.btn-guardar:disabled {
+  background: transparent linear-gradient(90deg, #545455 0%, #545455 100%) 0% 0%
+    no-repeat padding-box;
+  font: normal normal medium 16px/19px "Gilroy";
+  letter-spacing: 0px;
+  opacity: 1;
+}
+
+.btn-guardar:disabled:hover {
+  background: transparent linear-gradient(90deg, #545455 0%, #545455 100%) 0% 0%
+    no-repeat padding-box;
+  box-shadow: 0px 3px 6px #866ff766;
 }
 .estilo-slim {
   width: 120px;

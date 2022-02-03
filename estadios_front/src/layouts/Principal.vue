@@ -1,4 +1,4 @@
-<template>
+<template v-if="user">
   <div id="app">
     <div class="container-fluid m-0 p-0 mb-0 bg-white fixed-top">
       <!-- <router-link to="/">Home</router-link> |
@@ -114,6 +114,7 @@
     <!-- Aca se muestran las paginas -->
     <div class="about" id="about">
       <router-view />
+        
     </div>
   </div>
 </template>
@@ -121,8 +122,10 @@
 <script>
 import axios from "axios";
 const ENDPOINT = "http://127.0.0.1:8000/api/auth/";
+//import admins from "../views/Administradores/componentes/AdministradoresCom.vue"
 export default {
   name: "Principal",
+
   created() {
     this.usuarioLog();
   },
@@ -131,6 +134,7 @@ export default {
       trigger: "hover",
     });
   },
+  
   data() {
     return {
       userLog: [],

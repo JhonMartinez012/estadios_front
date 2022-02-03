@@ -41,7 +41,7 @@ export default {
             return this.instanciaCrop.dataBase64.output.image;
         },
         set_image(path = ''){
-            this.instanciaCrop.load(`${path}?v=${+new Date()}`)
+            this.instanciaCrop.load(`${path}?v=${+new Date()}`);
             console.log("pase por aca");
         }
     }

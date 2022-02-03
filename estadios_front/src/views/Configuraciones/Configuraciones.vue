@@ -10,23 +10,37 @@
       </ol>
     </nav>
 
-    <div class="container ml-0">
-      <ul class="nav nav-tabs">
+    <div class="container ml-0 d-flex">
+      <router-link
+        class="nav-link active"
+        v-for="(tab, index) in tabs"
+        :key="tab.id"
+        v-bind:class="tab.marka ? 'activar-menu' : 'menu-config'"
+        :to="{ name: tab.ruta }"
+      >
+        <label
+          class="h-100 w-100 centrar"
+          v-on:click="markMenuConfig($event, index)"
+          >{{ tab.label }}</label
+        ></router-link
+      >
+
+      <!-- <ul class="nav nav-tabs">
         <li class="nav-item">
           <router-link class="nav-link active" :to="{name:'ConfiguracionTerrenos'}"
             >Tipos de terrenos</router-link
           >
-        </li>
-        <li class="nav-item">
+        </li> -->
+
+      <!-- <li class="nav-item">
           <router-link class="nav-link" :to="{name:'ConfiguracionInactividad'}"
             >Motivos de inactividad</router-link
           >
-        </li>
-      </ul>
+        </li> -->
+      <!-- </ul> -->
     </div>
 
-  <router-view/>
-      
+    <router-view :key="$route.name" />
   </div>
 </template>
 
@@ -35,9 +49,30 @@ export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
   },
-  
-  
-    
+  data() {
+    return {
+      tabs: [
+        {
+          id: 1,
+          ruta:"ConfiguracionTerrenos",
+          label: "Tipos de terrenos",
+          marka: true,
+        },
+        {
+          id: 2,
+          ruta:"ConfiguracionInactividad",
+          label: "Motivos de inactividad",
+          marka: false,
+        },
+      ],
+    };
+  },
+  methods: {
+    markMenuConfig($event, index) {
+      this.tabs.forEach((tab) => (tab.marka = false));
+      this.tabs[index].marka = !this.tabs[index].marka;
+    },
+  },
 };
 </script>
 
@@ -76,24 +111,21 @@ body .tooltip .arrow::before {
   letter-spacing: 0px;
   color: #7358fa;
 }
-.nav-tabs .nav-link {
-    margin-bottom: -1px;
-    border: 1px solid transparent;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
-    color: #637381;
-    font-size: 19px;
-}
-.nav-tabs .nav-link.active,
-.nav-tabs .nav-item.show .nav-link {
-  color: #7358fa;
-  background-color: #fff0;
-  border-bottom-width: 5px;
-  border-color: #1c72c900 #1f6fbf00 #7358fa;  
+
+.menu-config {
+  color: #637381;
+  border: none;
   font-family: "Gilroy";
-  font-size: 19px;
-  border-radius: 12px 12px 0px 0px;
+  font-size: 20px;
 }
-
-
+.cont-menu-cat {
+  height: 45px;
+  width: 130px;
+}
+.activar-menu {
+  border-bottom: #7358fa solid 5px;
+  color: #7358fa;
+  font-family: "Gilroy";
+  font-size: 20px;
+}
 </style>

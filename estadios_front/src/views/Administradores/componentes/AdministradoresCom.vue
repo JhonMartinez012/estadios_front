@@ -36,28 +36,18 @@
             </div>
           </router-link>
         </div>
-      </div>
+      </div>     
     </div>
   </div>
-  <!-- <div class="sin_admins">
-        <div>
-      <img
-        src="/assets/1. Estadios/Iconos/icon large - admin.svg"
-        alt=""
-        srcset=""
-      />
-      </div>
-      <div>
-      <h1>Soy el componente de administradores</h1>
-      </div>
-    </div>   -->
 </template>
 
 <script>
 import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/auth/";
 export default {
+  name:"AdministradoresRegistrados", 
   created() {
+   
     this.listarAdministradores();
   },
   updated() {
@@ -67,8 +57,10 @@ export default {
   },
   data: () => ({
     administradores: [],
+    
   }),
   methods: {
+   
     async listarAdministradores() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "usuarios");
