@@ -136,7 +136,7 @@
           v-if="motivo.disabled == true"
           @click="habilitarInput(motivo)"
         >
-          <img src="/assets/1. Estadios/Iconos/icon - Editar.svg" />
+          <img src="/assets/1. Estadios/Iconos/icon - editar.svg" />
         </button>
 
         <p

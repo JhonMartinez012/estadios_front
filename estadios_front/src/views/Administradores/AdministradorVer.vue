@@ -88,8 +88,9 @@
               title="Editar"
               data-placement="bottom"
             >
+            
               <img
-                src="/assets/1. Estadios/Iconos/icon - Editar.svg"
+                src="/assets/1. Estadios/Iconos/icon - editar.svg"
                 alt=""
                 srcset=""
               />

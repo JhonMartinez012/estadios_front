@@ -238,7 +238,7 @@
               data-placement="bottom"
               @click="openModalE(terreno)"
             >
-              <img src="/assets/1. Estadios/Iconos/icon - Editar.svg" />
+              <img src="/assets/1. Estadios/Iconos/icon - editar.svg" />
             </button>
           </div>
         </div>
