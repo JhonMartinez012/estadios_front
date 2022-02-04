@@ -52,7 +52,7 @@
 import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 export default {
-  name:"estadioContenedor",
+  name:"estadiosListar",
   created: function () {
     this.listarEstadios();
   },

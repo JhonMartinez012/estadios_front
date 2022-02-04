@@ -26,6 +26,7 @@
 <script>
 import Estadios from "./componentes/EstadiosCom.vue";
 export default {
+   name:"Estadios",
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
   },

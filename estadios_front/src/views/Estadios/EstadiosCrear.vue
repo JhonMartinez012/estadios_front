@@ -114,13 +114,8 @@ import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 const ENDPOINT_PATH1 = "http://127.0.0.1:8000/api/terreno/";
 export default {
-  /*  created() {
-    this.$store.commit("SET_LAYOUT", "principal-layout");
-  }, */
-  /* mounted(){
-    this.listarPaises()
-  }, */
-
+   name:"CrearEstadio",
+  
   created: function () {
     this.$store.commit("SET_LAYOUT", "principal-layout");
     this.listarPaises();

@@ -38,8 +38,9 @@
               placeholder="Nombres"
               class="cuadros_input"
             />
-            <label for="inputState" class="msg_error" v-if="errors.name">{{errors.name[0]}}</label>
-                     
+            <label for="inputState" class="msg_error" v-if="errors.name">{{
+              errors.name[0]
+            }}</label>
 
             <label for="inputState" class="titulo_form">Apellidos</label>
             <input
@@ -48,7 +49,9 @@
               placeholder="Apellidos"
               class="cuadros_input"
             />
-            <label for="inputState" class="msg_error" v-if="errors.lastName">{{errors.lastName[0]}}</label>        
+            <label for="inputState" class="msg_error" v-if="errors.lastName">{{
+              errors.lastName[0]
+            }}</label>
 
             <label for="inputState" class="titulo_form"
               >Correo electrónico</label
@@ -59,7 +62,9 @@
               placeholder="Correo electrónico"
               class="cuadros_input"
             />
-            <label for="inputState" class="msg_error" v-if="errors.email">{{errors.email[0]}}</label>
+            <label for="inputState" class="msg_error" v-if="errors.email">{{
+              errors.email[0]
+            }}</label>
 
             <label for="inputState" class="titulo_form">Contraseña</label>
             <input
@@ -67,8 +72,12 @@
               v-model="password"
               placeholder="contraseña"
               class="cuadros_input"
+              minlength="6"
+              maxlength="20"
             />
-            <label for="inputState" class="msg_error" v-if="errors.password">{{errors.password[0]}}</label>
+            <label for="inputState" class="msg_error" v-if="errors.password">{{
+              errors.password[0]
+            }}</label>
           </div>
 
           <div class="form-group col-sm-12 col-md-4">
@@ -82,7 +91,9 @@
               class="cuadros_txtArea"
               v-model="acerca"
             ></textarea>
-            <label for="inputState" class="msg_error" v-if="errors.acerca">{{errors.acerca[0]}}</label>
+            <label for="inputState" class="msg_error" v-if="errors.acerca">{{
+              errors.acerca[0]
+            }}</label>
 
             <label for="inputState" class="titulo_form">Teléfono celular</label>
             <input
@@ -90,8 +101,12 @@
               v-model="phone"
               placeholder="Teléfono celular"
               class="cuadros_input"
+              minlength="7"
+              maxlength="10"
             />
-            <label for="inputState" class="msg_error" v-if="errors.phone">{{errors.phone[0]}}</label>           
+            <label for="inputState" class="msg_error" v-if="errors.phone">{{
+              errors.phone[0]
+            }}</label>
 
             <label for="inputState" class="titulo_form"
               >Repetir contraseña</label
@@ -101,8 +116,15 @@
               v-model="repassword"
               placeholder="Repetir contraseña"
               class="cuadros_input"
+              minlength="6"
+              maxlength="20"
             />
-            <label for="inputState" class="msg_error" v-if="errors.repassword">{{errors.repassword[0]}}</label>
+            <label
+              for="inputState"
+              class="msg_error"
+              v-if="errors.repassword"
+              >{{ errors.repassword[0] }}</label
+            >
           </div>
         </div>
       </form>
@@ -143,28 +165,31 @@ export default {
   methods: {
     async register() {
       try {
-        if (this.password == this.repassword) {
-          let payload = {
-            name: this.name,
-            lastName: this.last_name,
-            phone: this.phone,
-            acerca: this.acerca,
-            email: this.email,
-            password: this.password,
-            repassword: this.repassword,
-            img: this.$refs.img_admin.instanciaCrop.dataBase64.output.image,
-          };
-          const data = await axios.post(ENDPOINT_PATH + "register", payload);
-          this.administrador = data.data;
-          //console.log(this.administrador);
-          if (this.administrador.success == true) {
-            this.$router.push({ name: "Administradores" });
-          } else if (this.administrador.success == false) {
-            this.errors = this.administrador.error;
-            
+        if (this.password != "" && this.repassword != "") {
+          if (this.password == this.repassword) {
+            let payload = {
+              name: this.name,
+              lastName: this.last_name,
+              phone: this.phone,
+              acerca: this.acerca,
+              email: this.email,
+              password: this.password,
+              repassword: this.repassword,
+              img: this.$refs.img_admin.instanciaCrop.dataBase64.output.image,
+            };
+            const data = await axios.post(ENDPOINT_PATH + "register", payload);
+            this.administrador = data.data;
+            //console.log(this.administrador);
+            if (this.administrador.success == true) {
+              this.$router.push({ name: "Administradores" });
+            } else if (this.administrador.success == false) {
+              this.errors = this.administrador.error;
+            }
+          } else {
+            alert("contraseñas no coinciden");
           }
         } else {
-          alert("contraseñas no coinciden");
+          alert("ingrese una contraseña");
         }
       } catch (error) {
         console.log(error);
@@ -263,21 +288,23 @@ body .tooltip .arrow::before {
   width: 120px;
   height: 120px;
 }
-.titulo_form{
-color: #637381;
+.titulo_form {
+  color: #637381;
+  font-size: 18px;
 }
-.msg_error{
+.msg_error {
   color: #ff0000;
+  font-size: 12px;
 }
 
-.titulo_form, .msg_error {  
+.titulo_form,
+.msg_error {
   text-align: left;
   margin-left: 20px;
-  font-family: "Rubik";
-  font-size: 18px;
+  font-family: "Rubik";  
   width: 100%;
   margin-bottom: 0;
-  margin-top: 15px;
+  margin-top: 8px;
 }
 
 .cuadros_input,

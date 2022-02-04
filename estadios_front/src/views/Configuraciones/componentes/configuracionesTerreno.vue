@@ -288,7 +288,7 @@ export default {
         let nombreTerreno = this.nombre_terreno;
         let v=0;
  
-       if (nombreTerreno == "") {
+       if (nombreTerreno.length < 6) {
          v=v+1;
        }
        if (v == 0) {

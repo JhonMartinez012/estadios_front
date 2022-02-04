@@ -288,7 +288,7 @@ h2 {
   border: none;
   width: auto;
   margin: 5px;
-  width: 25vw;
+  width: 100%;
 }
 
 .input-container > input:focus {

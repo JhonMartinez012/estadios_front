@@ -47,7 +47,7 @@ const routes = [
     },
   },
   {
-    path: "/estadios/:id",
+    path: '/estadios/:id',
     name: "EstadiosVer",
 
     component: () => import("../views/Estadios/EstadiosVer.vue"),

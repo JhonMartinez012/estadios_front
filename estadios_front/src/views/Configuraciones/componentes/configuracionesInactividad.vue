@@ -54,8 +54,15 @@
           v-model="nombre_motivo"
           class="form-control inputt"
           placeholder="Motivo"
+          minlength="6"
+          maxlength="25"
         />
-        <label for="" class="msg_error" v-if="errores.nombre_motivo">{{errores.nombre_motivo[0]}}</label> 
+        <label for="" class="msg_error" v-if="error">{{
+          error
+        }}</label>
+        <label for="" class="msg_error" v-if="errores.nombre_motivo">{{
+          errores.nombre_motivo[0]
+        }}</label>
       </div>
       <div class="form-group col-lg-3 col-md-6">
         <button class="btn btn-create" @click="crearMotivoInactividad">
@@ -74,7 +81,6 @@
           id="motivo"
           :disabled="motivo.disabled"
         />
-         
       </div>
       <div class="form-group col-lg-3 col-md-6 botones-inactividad">
         <button
@@ -165,15 +171,14 @@ export default {
       trigger: "hover",
     });
   },
-  data:()=> ({
-   
-      mostrar: false,
-      nombre_motivo: "",
-      motivos: [],
-      motivo: [],
-      errores: [],
-      id: 0,
-    
+  data: () => ({
+    mostrar: false,
+    nombre_motivo: "",
+    motivos: [],
+    motivo: [],
+    errores: [],
+    error:"",
+    id: 0,
   }),
 
   methods: {
@@ -188,18 +193,23 @@ export default {
 
     async crearMotivoInactividad() {
       try {
-        let payload = {
-          nombre_motivo: this.nombre_motivo,
-        };
-        const data = await axios.post(ENDPOINT_PATH + "crear_motivo", payload);
-        this.motivo = data.data;
-       
-        if (this.motivo.success == true) {
-          this.nombre_motivo = "";
-          this.listarMotivosInactividad();
-          this.errores=[];
-        } else if(this.motivo.success == false){
-          this.errores = this.motivo.error;         
+        if (this.nombre_motivo.length>6){
+          let payload = {
+            nombre_motivo: this.nombre_motivo,
+          };
+          const data = await axios.post(ENDPOINT_PATH + "crear_motivo", payload);
+          this.motivo = data.data;
+
+          if (this.motivo.success == true) {
+            this.nombre_motivo = "";
+            this.listarMotivosInactividad();
+            this.errores = [];
+            this.error="";
+          } else if (this.motivo.success == false) {
+            this.errores = this.motivo.error;
+        }
+        }else{
+          this.error="El motivo debe tener mas de 6 caracteres"
         }
       } catch (error) {
         console.log(" No se pudo crear el motivo");
@@ -369,12 +379,12 @@ body .tooltip .arrow::before {
   text-decoration-line: none;
 }
 
-.msg_error {  
+.msg_error {
   color: #ff0000;
   text-align: left;
   margin-left: 0px;
   font-family: "Rubik";
-  font-size: 18px;
+  font-size: 11px;
   width: 100%;
   margin-bottom: 0;
   margin-top: 5px;
