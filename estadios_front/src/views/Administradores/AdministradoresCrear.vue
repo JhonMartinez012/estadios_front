@@ -129,6 +129,47 @@
         </div>
       </form>
     </div>
+
+    <!-- Modal para avisar que las contraseñas no coinciden -->
+    <div class="modal" :class="{ show: modal }">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              {{ tituloModal }}
+            </h5>
+            <button v-if="userRegistrado != true"            
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              @click="closeModal"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                {{ mensaje }}
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button v-if="userRegistrado != true"
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              @click="closeModal()"
+            >
+              Cerrar
+            </button>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ******* FIN DE LA MODAL PARA CREAR ******** -->
   </div>
 </template>
 
@@ -156,6 +197,14 @@ export default {
     slimOptions: {
       label: "Añadir imagen",
     },
+    contraNull: false,
+    contraDist: false,
+    contraMin: false,
+    userRegistrado: false,
+    modal: 0,
+    tituloModal: "",
+    mensaje: "",
+    descripcion: "",
   }),
   /* data() {
     return {
@@ -166,44 +215,94 @@ export default {
     async register() {
       try {
         if (this.password != "" && this.repassword != "") {
-          if (this.password == this.repassword) {
-            let payload = {
-              name: this.name,
-              lastName: this.last_name,
-              phone: this.phone,
-              acerca: this.acerca,
-              email: this.email,
-              password: this.password,
-              repassword: this.repassword,
-              img: this.$refs.img_admin.instanciaCrop.dataBase64.output.image,
-            };
-            const data = await axios.post(ENDPOINT_PATH + "register", payload);
-            this.administrador = data.data;
-            //console.log(this.administrador);
-            if (this.administrador.success == true) {
-              this.$router.push({ name: "Administradores" });
-            } else if (this.administrador.success == false) {
-              this.errors = this.administrador.error;
+          if (this.password.length >= 6 && this.repassword.length >= 6) {
+            if (this.password == this.repassword) {
+              let payload = {
+                name: this.name,
+                lastName: this.last_name,
+                phone: this.phone,
+                acerca: this.acerca,
+                email: this.email,
+                password: this.password,
+                repassword: this.repassword,
+                img: this.$refs.img_admin.instanciaCrop.dataBase64.output.image,
+              };
+              const data = await axios.post(
+                ENDPOINT_PATH + "register",
+                payload
+              );
+              this.administrador = data.data;
+              //console.log(this.administrador);
+              if (this.administrador.success == true) {
+                this.userRegistrado = true, 
+                this.openModal();
+                //this.$router.push({ name: "Administradores" });
+              } else if (this.administrador.success == false) {
+                this.errors = this.administrador.error;
+              }
+            } else {
+              this.contraDist = true, this.openModal();
+              //alert("contraseñas no coinciden");
             }
           } else {
-            alert("contraseñas no coinciden");
+            this.contraMin = true, this.openModal();
+            //alert("La contraseña debe tener minimo 6 caracteres")
           }
         } else {
-          alert("ingrese una contraseña");
+          this.contraNull = true,
+           this.openModal();
+          //alert("ingrese una contraseña");
         }
       } catch (error) {
         console.log(error);
       }
     },
 
+    Administradores() {
+      this.$router.push({ name: "Administradores" });
+    },
+
     VerAdministrador() {
       this.$router.push({ name: "AdministradorVer" });
+    },
+    openModal() {
+      this.modal = 1;
+      if (this.contraNull) {
+        this.tituloModal = "Contraseña nula";
+        this.mensaje = "El campo de contraseñas no puede ser nulo";
+        
+      } else if (this.contraDist) {
+        this.tituloModal = "Contraseñas diferentes";
+        this.mensaje = "Las contraseñas no coinciden";
+      } else if (this.contraMin) {
+        this.tituloModal = "Numero de caracteres",
+        this.mensaje = "La contraseña debe tener almenos 6 caracteres";
+      } else if (this.userRegistrado) {
+        this.tituloModal = "Registro exitoso",
+        this.mensaje = "El usuario se registro correctamente!";
+        this.tiempoEspera();
+      }
+    },
+    closeModal() {
+      this.modal = 0;
+    },
+    tiempoEspera() {
+      setTimeout(this.pasar, 3000);
+    },
+
+    pasar() {
+      this.$router.push({ name: "Administradores" });
     },
   },
 };
 </script>
 
 <style scoped>
+.show {
+  display: list-item;
+  opacity: 1;
+  background: rgba(168, 167, 172, 0.6);
+}
 .admins {
   margin-top: 150px;
 }
@@ -301,7 +400,7 @@ body .tooltip .arrow::before {
 .msg_error {
   text-align: left;
   margin-left: 20px;
-  font-family: "Rubik";  
+  font-family: "Rubik";
   width: 100%;
   margin-bottom: 0;
   margin-top: 8px;
