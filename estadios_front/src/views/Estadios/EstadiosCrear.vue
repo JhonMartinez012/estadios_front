@@ -17,8 +17,10 @@
       <label class="parrafo font-weight-bold ml-0">Crear Estadio </label>
       <button
         type="button"
+        id="btnGuardar"
         class="btn btn-crear-estadio pr-2"
         @click="crearEstadio"
+        disabled
       >
         Guardar
       </button>
@@ -37,7 +39,18 @@
                 class="form-control texto-nombre"
                 id=""
                 placeholder="Nombre"
+                minlength="7"
+                maxlength="45"
+                @keyup="habilitarBtn()"
               />
+              <label
+                for="inputState"
+                class="msg_error"
+                v-for="(error, index) in errores.nombreEstadio"
+                :key="`nombre-${index}`"
+              >
+                *{{ error }}</label
+              >
               <p for="inputEmail4" class="p-titulo">Acerca del estadio</p>
               <textarea
                 v-model="acercaEstadio"
@@ -45,7 +58,16 @@
                 rows="10"
                 placeholder="Acerca"
                 class="acercaEstadio"
+                @keyup="habilitarBtn()"
               ></textarea>
+              <label
+                for="inputState"
+                class="msg_error"
+                v-for="(error, index) in errores.acercaEstadio"
+                :key="`acerca-${index}`"
+              >
+                *{{ error }}</label
+              >
             </div>
             <div class="form-group col-md-6 inner">
               <p for="inputPassword4" class="p-titulo">pais</p>
@@ -70,8 +92,17 @@
                   {{ data.nombre }}
                 </option>
               </select>
+              <label
+                for="inputState"
+                class="msg_error"
+                v-for="(error, index) in errores.ciudadId"
+                :key="`ciudad-${index}`"
+              >
+                *{{ error }}</label
+              >
+
               <p for="" class="p-titulo">Tipo de terreno</p>
-              <select v-model="terrenoId" class="texto-select">
+              <select v-model="terrenoId" class="form-control texto-select">
                 <option value="0">seleccionar</option>
                 <option
                   v-for="terreno in terrenos"
@@ -81,6 +112,14 @@
                   {{ terreno.nombre_terreno }}
                 </option>
               </select>
+              <label
+                for="inputState"
+                class="msg_error"
+                v-for="(error, index) in errores.terrenoId"
+                :key="`terreno-${index}`"
+              >
+                *{{ error }}</label
+              >
               <p for="inputEmail4" class="p-titulo">Capacidad</p>
               <input
                 type="Number"
@@ -88,7 +127,22 @@
                 class="form-control texto-select"
                 id="evt"
                 placeholder="Capacidad de espectadores"
+                @keyup="habilitarBtn"
               />
+              <label for="" class="msg_error" v-if="capacidadInvalida != false">
+                La capacidad debe ser mayor a 500
+              </label>
+              <label
+                for="inputState"
+                class="msg_error"
+                v-for="(error, index) in errores.capacidadEstadio"
+                :key="`capacidad-${index}`"
+              >
+                *{{ error }}</label
+              >
+              <!-- <label for="inputState" class="msg_error" v-for="( error, index) in errores" :key="index">{{
+              error.capacidadEstadio[index]
+            }}</label> -->
             </div>
           </div>
         </div>
@@ -103,6 +157,14 @@
             >
               <input type="file" name="slim" />
             </slim-cropper>
+            <label
+              for="inputState"
+              class="msg_error"
+              v-for="(error, index) in errores.imgPrincipal"
+              :key="`img-${index}`"
+            >
+              *{{ error }}</label
+            >
           </div>
         </div>
       </div>
@@ -114,8 +176,8 @@ import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 const ENDPOINT_PATH1 = "http://127.0.0.1:8000/api/terreno/";
 export default {
-   name:"CrearEstadio",
-  
+  name: "CrearEstadio",
+
   created: function () {
     this.$store.commit("SET_LAYOUT", "principal-layout");
     this.listarPaises();
@@ -136,6 +198,8 @@ export default {
       ciudad: 0,
       ciudades: [],
       terrenos: [],
+      errores: [],
+      capacidadInvalida: false,
     };
   },
   methods: {
@@ -169,6 +233,49 @@ export default {
       }
     },
 
+   /*  capacidadMin() {
+      try {
+        let v = 0;
+        if (this.capacidadEstadio < 500) {
+          this.capacidadInvalida = true;
+          v = v + 1;
+          if (v == 0) {
+            document.getElementById("btnGuardar").disabled = false;
+          }
+        } else {
+          this.capacidadInvalida = false;
+          document.getElementById("btnGuardar").disabled = true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }, */
+    habilitarBtn() {
+      try {
+        let nombreEstadio = this.nombreEstadio;
+        let acerca = this.acercaEstadio;
+
+        let v = 0;
+
+        if (nombreEstadio.length < 6 || acerca.length < 10 ) {          
+          v = v + 1;        
+        }
+        if (this.capacidadEstadio<500) {
+          v = v+1 
+          this.capacidadInvalida=true
+        }else{
+          this.capacidadInvalida=false
+        }        
+        if (v == 0) {
+          document.getElementById("btnGuardar").disabled = false;
+        } else {
+          document.getElementById("btnGuardar").disabled = true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     async crearEstadio() {
       let payload = {
         nombreEstadio: this.nombreEstadio,
@@ -187,12 +294,15 @@ export default {
         );
         this.estadio = data;
 
-        if (this.estadio) {
+        if (this.estadio.success == true) {
           console.log(this.estadio.id);
-          this.$router.push({
+          /* this.$router.push({
             name: "EstadiosEditar",
             params: { id: this.estadio.id },
-          });
+          }); */
+        } else if (this.estadio.success == false) {
+          this.errores = this.estadio.errores;
+          console.log(this.errores);
         }
       } catch (error) {
         console.log(error);
@@ -325,8 +435,9 @@ h1 {
   width: 16px;
   height: 16px;
 }
-/* estilo de la caja del nombre del estadio */
+
 .p-titulo {
+  /* estilo de la caja del nombre del estadio */
   width: 117px;
   height: 15px;
   margin-top: 22px;
@@ -338,6 +449,7 @@ h1 {
   color: #637381;
 }
 .acercaEstadio {
+  /* estilo del texarea del estadio */
   width: 70%;
   height: 200px;
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -353,6 +465,7 @@ h1 {
 }
 
 .acercaEstadio::placeholder {
+  /* estilo del texarea:placeholdert del estadio */
   font-size: 15px;
   font-family: "Rubik";
   text-align: left;
@@ -361,6 +474,7 @@ h1 {
 }
 
 .texto-nombre {
+  /* estilo del input del nombre del estadio */
   width: 70%;
   height: 40px;
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -369,6 +483,7 @@ h1 {
   opacity: 1;
 }
 .texto-nombre::placeholder {
+  /*  estilo del input:placeholder del nombre del estadio */
   font-size: 15px;
   font-family: "Rubik";
   text-align: left;
@@ -377,6 +492,7 @@ h1 {
 }
 
 .texto-select {
+  /* Estilos para los campos del select */
   width: 230px;
   height: 40px;
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -428,5 +544,17 @@ h1 {
   padding: 0px;
   bottom: 10px;
   right: 86px;
+}
+
+.msg_error {
+  /* estilo para los mensajes que envia el back */
+  color: #ff0000;
+  font-size: 11px;
+  text-align: left;
+  margin-left: 10px;
+  font-family: "Rubik";
+  width: 100%;
+  margin-bottom: 0;
+  margin-top: 8px;
 }
 </style>

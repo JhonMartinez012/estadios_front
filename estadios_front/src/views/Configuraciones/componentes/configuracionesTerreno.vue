@@ -1,5 +1,5 @@
-<template >
-  <div class="container-fluid"  v-if="terrenos">
+<template>
+  <div class="container-fluid" v-if="terrenos">
     <!-- Modal para crear terreno -->
     <div class="modal" :class="{ show: modal }">
       <div class="modal-dialog modal-dialog-centered">
@@ -39,9 +39,10 @@
                     id="nombreTerreno"
                     placeholder="Nombre"
                     type="text"
-                    class="inputt"                   
+                    class="inputt"
+                    maxlength="10"
                     v-model="nombre_terreno"
-                     @keyup="habilitarBtn()"
+                    @keyup="habilitarBtn()"
                   />
                 </div>
               </div>
@@ -251,7 +252,7 @@
 import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/terreno/";
 export default {
-  mounted(){
+  mounted() {
     this.listarTerrenos();
     console.log("hola");
   },
@@ -269,7 +270,7 @@ export default {
     modalE: 0,
     modalD: 0,
     id: 0,
-   
+
     terrenos: [],
     terrenoNuevo: [],
     terreno: {
@@ -284,18 +285,18 @@ export default {
   }),
   methods: {
     async habilitarBtn() {
-      try {        
+      try {
         let nombreTerreno = this.nombre_terreno;
-        let v=0;
- 
-       if (nombreTerreno.length < 6) {
-         v=v+1;
-       }
-       if (v == 0) {
-         document.getElementById("btnGuardar").disabled = false;
-       } else {
-         document.getElementById("btnGuardar").disabled = true;
-       }
+        let v = 0;
+
+        if (nombreTerreno.length < 6) {
+          v = v + 1;
+        }
+        if (v == 0) {
+          document.getElementById("btnGuardar").disabled = false;
+        } else {
+          document.getElementById("btnGuardar").disabled = true;
+        }
       } catch (error) {
         console.log(error);
       }
@@ -318,7 +319,7 @@ export default {
           img: this.$refs.img_terreno.get_image(),
         };
         document.getElementById("btnGuardar").disabled = true;
-        
+
         const { data } = await axios.post(
           ENDPOINT_PATH + "crear_terreno",
           payload

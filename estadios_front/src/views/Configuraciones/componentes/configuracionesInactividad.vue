@@ -52,20 +52,25 @@
         <input
           type="text"
           v-model="nombre_motivo"
+          id="nombreMotivo"
           class="form-control inputt"
           placeholder="Motivo"
           minlength="6"
           maxlength="25"
+          @keyup="habilitarBtn()"
         />
-        <label for="" class="msg_error" v-if="error">{{
-          error
-        }}</label>
+        <label for="" class="msg_error" v-if="error">{{ error }}</label>
         <label for="" class="msg_error" v-if="errores.nombre_motivo">{{
           errores.nombre_motivo[0]
         }}</label>
       </div>
       <div class="form-group col-lg-3 col-md-6">
-        <button class="btn btn-create" @click="crearMotivoInactividad">
+        <button
+          class="btn btn-create"
+          id="crearMotivo"
+          @click="crearMotivoInactividad"
+          disabled
+        >
           crear
         </button>
       </div>
@@ -177,11 +182,38 @@ export default {
     motivos: [],
     motivo: [],
     errores: [],
-    error:"",
+    error: "",
     id: 0,
   }),
 
   methods: {
+    async habilitarBtn() {
+      try {
+        let nombreMotivo = this.nombre_motivo;
+        let v = 0;
+
+        if (nombreMotivo.length < 6) {
+          v = v + 1;
+        }
+        if (v == 0) {
+          document.getElementById("crearMotivo").disabled = false;
+        } else {
+          document.getElementById("crearMotivo").disabled = true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async listarTerrenos() {
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "terrenos");
+        this.terrenos = data.terrenos;
+        //console.log(this.terrenos);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     async listarMotivosInactividad() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "motivos_inactividad");
@@ -193,23 +225,27 @@ export default {
 
     async crearMotivoInactividad() {
       try {
-        if (this.nombre_motivo.length>6){
+        if (this.nombre_motivo.length > 6) {
           let payload = {
             nombre_motivo: this.nombre_motivo,
           };
-          const data = await axios.post(ENDPOINT_PATH + "crear_motivo", payload);
+          const data = await axios.post(
+            ENDPOINT_PATH + "crear_motivo",
+            payload
+          );
           this.motivo = data.data;
 
           if (this.motivo.success == true) {
             this.nombre_motivo = "";
+            document.getElementById("crearMotivo").disabled = true;
             this.listarMotivosInactividad();
             this.errores = [];
-            this.error="";
+            this.error = "";
           } else if (this.motivo.success == false) {
             this.errores = this.motivo.error;
-        }
-        }else{
-          this.error="El motivo debe tener mas de 6 caracteres"
+          }
+        } else {
+          this.error = "El motivo debe tener mas de 6 caracteres";
         }
       } catch (error) {
         console.log(" No se pudo crear el motivo");

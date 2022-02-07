@@ -16,7 +16,14 @@
     <div class="container-fluid titulo_formulario">
       <label class="parrafo font-weight-bold ml-0">Crear Administrador</label>
       <!-- <router-link :to="{name:'EstadiosCrear'}" class="btn btn-crear pr-2"> Crear estadio </router-link> -->
-      <button class="btn btn-guardar pr-2" @click="register">Guardar</button>
+      <button
+        class="btn btn-guardar pr-2"
+        id="btnGuardar"
+        @click="register"
+        disabled
+      >
+        Guardar
+      </button>
     </div>
     <div class="container contenido_formulario mt-4">
       <form>
@@ -28,8 +35,10 @@
               ref="img_admin"
             >
               <input type="file" name="slim" id="estilo_subir_img" />
-            </slim-cropper>
+            </slim-cropper>  
+                     
           </div>
+          
           <div class="form-group col-sm-12 col-md-4">
             <label for="inputState" class="titulo_form">Nombres</label>
             <input
@@ -37,9 +46,10 @@
               v-model="name"
               placeholder="Nombres"
               class="cuadros_input"
+              @keyup="habilitarBtn"
             />
-            <label for="inputState" class="msg_error" v-if="errors.name">{{
-              errors.name[0]
+            <label for="inputState" class="msg_error" v-for="(error,index) in errors.name" :key="`name-${index}`">{{
+              errors.name[index]
             }}</label>
 
             <label for="inputState" class="titulo_form">Apellidos</label>
@@ -48,6 +58,7 @@
               v-model="last_name"
               placeholder="Apellidos"
               class="cuadros_input"
+              @keyup="habilitarBtn"
             />
             <label for="inputState" class="msg_error" v-if="errors.lastName">{{
               errors.lastName[0]
@@ -61,6 +72,7 @@
               v-model="email"
               placeholder="Correo electrónico"
               class="cuadros_input"
+              @keyup="habilitarBtn"
             />
             <label for="inputState" class="msg_error" v-if="errors.email">{{
               errors.email[0]
@@ -72,8 +84,8 @@
               v-model="password"
               placeholder="contraseña"
               class="cuadros_input"
-              minlength="6"
               maxlength="20"
+              @keyup="habilitarBtn"
             />
             <label for="inputState" class="msg_error" v-if="errors.password">{{
               errors.password[0]
@@ -90,6 +102,7 @@
               placeholder="Acerca"
               class="cuadros_txtArea"
               v-model="acerca"
+              @keyup="habilitarBtn"
             ></textarea>
             <label for="inputState" class="msg_error" v-if="errors.acerca">{{
               errors.acerca[0]
@@ -103,9 +116,10 @@
               class="cuadros_input"
               minlength="7"
               maxlength="10"
+              @keyup="habilitarBtn"
             />
             <label for="inputState" class="msg_error" v-if="errors.phone">{{
-              errors.phone[0]
+              errors.phone[1]
             }}</label>
 
             <label for="inputState" class="titulo_form"
@@ -116,8 +130,8 @@
               v-model="repassword"
               placeholder="Repetir contraseña"
               class="cuadros_input"
-              minlength="6"
               maxlength="20"
+              @keyup="habilitarBtn"
             />
             <label
               for="inputState"
@@ -138,7 +152,8 @@
             <h5 class="modal-title" id="exampleModalLabel">
               {{ tituloModal }}
             </h5>
-            <button v-if="userRegistrado != true"            
+            <button
+              v-if="userRegistrado != true"
               type="button"
               class="close"
               data-dismiss="modal"
@@ -156,7 +171,8 @@
             </div>
           </div>
           <div class="modal-footer justify-content-center">
-            <button v-if="userRegistrado != true"
+            <button
+              v-if="userRegistrado != true"
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
@@ -164,7 +180,6 @@
             >
               Cerrar
             </button>
-           
           </div>
         </div>
       </div>
@@ -212,6 +227,36 @@ export default {
     }; */
 
   methods: {
+    habilitarBtn() {
+      try {
+        let v = 0;
+        let name = this.name;
+        let lastName = this.last_name;
+        let email = this.email;
+        let acerca = this.acerca;
+        let phone = this.phone;
+        let pass = this.password;
+        let repass = this.repassword;
+        if (
+          name.length < 4 ||
+          lastName.length < 4 ||
+          email.length < 6 ||
+          acerca.length < 6 ||
+          phone.length<7||
+          pass.length < 6 ||
+          repass.length < 6
+        ) {
+          v = v + 1;
+        }
+        if (v == 0) {
+          document.getElementById("btnGuardar").disabled = false;
+        } else {
+          document.getElementById("btnGuardar").disabled = true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async register() {
       try {
         if (this.password != "" && this.repassword != "") {
@@ -234,23 +279,21 @@ export default {
               this.administrador = data.data;
               //console.log(this.administrador);
               if (this.administrador.success == true) {
-                this.userRegistrado = true, 
-                this.openModal();
+                (this.userRegistrado = true), this.openModal();
                 //this.$router.push({ name: "Administradores" });
               } else if (this.administrador.success == false) {
                 this.errors = this.administrador.error;
               }
             } else {
-              this.contraDist = true, this.openModal();
+              (this.contraDist = true), this.openModal();
               //alert("contraseñas no coinciden");
             }
           } else {
-            this.contraMin = true, this.openModal();
+            (this.contraMin = true), this.openModal();
             //alert("La contraseña debe tener minimo 6 caracteres")
           }
         } else {
-          this.contraNull = true,
-           this.openModal();
+          (this.contraNull = true), this.openModal();
           //alert("ingrese una contraseña");
         }
       } catch (error) {
@@ -270,16 +313,15 @@ export default {
       if (this.contraNull) {
         this.tituloModal = "Contraseña nula";
         this.mensaje = "El campo de contraseñas no puede ser nulo";
-        
       } else if (this.contraDist) {
         this.tituloModal = "Contraseñas diferentes";
         this.mensaje = "Las contraseñas no coinciden";
       } else if (this.contraMin) {
-        this.tituloModal = "Numero de caracteres",
-        this.mensaje = "La contraseña debe tener almenos 6 caracteres";
+        (this.tituloModal = "Numero de caracteres"),
+          (this.mensaje = "La contraseña debe tener almenos 6 caracteres");
       } else if (this.userRegistrado) {
-        this.tituloModal = "Registro exitoso",
-        this.mensaje = "El usuario se registro correctamente!";
+        (this.tituloModal = "Registro exitoso"),
+          (this.mensaje = "El usuario se registro correctamente!");
         this.tiempoEspera();
       }
     },
