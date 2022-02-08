@@ -7,10 +7,11 @@
             Estadios</router-link
           >
         </li>
-        <li class="breadcrumb-item active estilo_page" aria-current="page">{{nombre_estadio}}</li>
+        <li class="breadcrumb-item active estilo_page" aria-current="page">
+          {{ nombre_estadio }}
+        </li>
       </ol>
     </nav>
-    
 
     <verEstadio v-on:resultado="resultados"></verEstadio>
     <tribunas></tribunas>
@@ -26,28 +27,30 @@ export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
   },
-  data:()=>({
-    nombre_estadio:"",
+  data: () => ({
+    nombre_estadio: "",
+    success: false,
   }),
   components: {
     verEstadio: VerEstadio,
     tribunas: TribunasEstadio,
     calendarioInactividad: InactividadEstadio,
   },
-  methods:{
-    async resultados(datos){
-      this.nombre_estadio=datos.nombre_estadio;
-    }
-  }
+  methods: {
+    async resultados(datos) {
+      if (datos.nombre_estadio != "") {
+        this.nombre_estadio = datos.nombre_estadio;
+      }
+      if (datos.success == false) {
+        console.log(datos.success);        
+        this.$router.push({ name: "Estadios" });
+      }
+    },
+  },
 };
-
-
 </script>
 
-
-
 <style scoped>
-
 .cont-principal {
   margin-top: 90px;
 }
@@ -64,5 +67,4 @@ export default {
   letter-spacing: 0px;
   color: #7358fa;
 }
-
 </style>

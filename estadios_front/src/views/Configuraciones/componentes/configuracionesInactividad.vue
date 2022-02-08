@@ -56,13 +56,14 @@
           class="form-control inputt"
           placeholder="Motivo"
           minlength="6"
-          maxlength="25"
+          :maxlength="longName"
           @keyup="habilitarBtn()"
         />
-        <label for="" class="msg_error" v-if="error">{{ error }}</label>
-        <label for="" class="msg_error" v-if="errores.nombre_motivo">{{
+        <span class="cont-caracteres">{{ contCaracteres }}/{{ longName }}</span>
+        <span for="" class="msg_error" v-if="error">{{ error }}</span>
+        <span for="" class="msg_error" v-if="errores.nombre_motivo">{{
           errores.nombre_motivo[0]
-        }}</label>
+        }}</span>
       </div>
       <div class="form-group col-lg-3 col-md-6">
         <button
@@ -176,6 +177,11 @@ export default {
       trigger: "hover",
     });
   },
+  computed:{
+    contCaracteres(){
+      return this.nombre_motivo.length;
+    }
+  },
   data: () => ({
     mostrar: false,
     nombre_motivo: "",
@@ -184,6 +190,8 @@ export default {
     errores: [],
     error: "",
     id: 0,
+    longName:25,
+    
   }),
 
   methods: {

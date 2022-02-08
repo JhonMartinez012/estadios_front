@@ -30,6 +30,9 @@
                     <input type="file" name="slim" />
                   </slim-cropper>
                 </div>
+                <span class="msg_error text-center" v-if="errores.img != null">{{
+                  errores.img[0]
+                }}</span>
               </div>
 
               <div class="form-row">
@@ -40,10 +43,13 @@
                     placeholder="Nombre"
                     type="text"
                     class="inputt"
-                    maxlength="10"
+                    :maxlength="longName"
                     v-model="nombre_terreno"
                     @keyup="habilitarBtn()"
                   />
+                  <span class="cont-caracteres"
+                    >{{ contCaracteres }}/{{ longName }}</span
+                  >
                 </div>
               </div>
             </div>
@@ -261,6 +267,11 @@ export default {
       trigger: "hover",
     });
   },
+  computed: {
+    contCaracteres() {
+      return this.nombre_terreno.length;
+    },
+  },
   data: () => ({
     nombre_terreno: "",
     img: "",
@@ -270,6 +281,7 @@ export default {
     modalE: 0,
     modalD: 0,
     id: 0,
+    longName: 25,
 
     terrenos: [],
     terrenoNuevo: [],
@@ -282,6 +294,7 @@ export default {
       //initialImage:require('../../../../public/assets/1. Estadios/Terrenos de juego/1. gramilla.jpg')
     },
     terrenoDelete: [],
+    errores: [],
   }),
   methods: {
     async habilitarBtn() {
@@ -289,7 +302,7 @@ export default {
         let nombreTerreno = this.nombre_terreno;
         let v = 0;
 
-        if (nombreTerreno.length < 6) {
+        if (nombreTerreno.length < 5) {
           v = v + 1;
         }
         if (v == 0) {
@@ -326,11 +339,13 @@ export default {
         );
         this.terrenoNuevo = data;
         /* console.log(this.terrenoNuevo); */
-        if (this.terrenoNuevo.aceptado == true) {
+        if (this.terrenoNuevo.success == true) {
           this.closeModal();
           this.listarTerrenos();
           this.nombre_terreno = "";
           this.$refs.img_terrenoE.set_image("");
+        } else if (this.terrenoNuevo.success == false) {
+          this.errores = this.terrenoNuevo.errores;
         }
         //console.log(this.data);
       } catch (error) {
@@ -415,6 +430,7 @@ body .tooltip .arrow::before {
   letter-spacing: 0px;
   color: #707070;
 }
+
 .parrafo {
   margin-top: 30px;
   text-align: left;

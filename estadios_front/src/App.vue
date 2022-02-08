@@ -111,4 +111,20 @@ body .tooltip .arrow::before {
   font-weight: normal;
   font-style: normal;
 }
+.cont-caracteres{ /* Estilo para mostrar el contador de caracteres de los input */
+  font-family: "Gilroy";
+  font-size: 11px;
+  color: #6b6b72;
+  padding: 0px 0px 0px 10px;
+}
+.msg_error { /*  Estilo para mostrar los mensajes de error tanto del front como del back */
+  color: #ff0000;
+  font-size: 12px;
+  text-align: left;
+  margin-left: 20px;
+  font-family: "Rubik";
+  width: 100%;
+  margin-bottom: 0;
+  margin-top: 8px;
+}
 </style>

@@ -35,110 +35,140 @@
               ref="img_admin"
             >
               <input type="file" name="slim" id="estilo_subir_img" />
-            </slim-cropper>  
-                     
-          </div>
-          
-          <div class="form-group col-sm-12 col-md-4">
-            <label for="inputState" class="titulo_form">Nombres</label>
-            <input
-              type="text"
-              v-model="name"
-              placeholder="Nombres"
-              class="cuadros_input"
-              @keyup="habilitarBtn"
-            />
-            <label for="inputState" class="msg_error" v-for="(error,index) in errors.name" :key="`name-${index}`">{{
-              errors.name[index]
-            }}</label>
-
-            <label for="inputState" class="titulo_form">Apellidos</label>
-            <input
-              type="text"
-              v-model="last_name"
-              placeholder="Apellidos"
-              class="cuadros_input"
-              @keyup="habilitarBtn"
-            />
-            <label for="inputState" class="msg_error" v-if="errors.lastName">{{
-              errors.lastName[0]
-            }}</label>
-
-            <label for="inputState" class="titulo_form"
-              >Correo electrónico</label
-            >
-            <input
-              type="email"
-              v-model="email"
-              placeholder="Correo electrónico"
-              class="cuadros_input"
-              @keyup="habilitarBtn"
-            />
-            <label for="inputState" class="msg_error" v-if="errors.email">{{
-              errors.email[0]
-            }}</label>
-
-            <label for="inputState" class="titulo_form">Contraseña</label>
-            <input
-              type="password"
-              v-model="password"
-              placeholder="contraseña"
-              class="cuadros_input"
-              maxlength="20"
-              @keyup="habilitarBtn"
-            />
-            <label for="inputState" class="msg_error" v-if="errors.password">{{
-              errors.password[0]
-            }}</label>
+            </slim-cropper>
           </div>
 
           <div class="form-group col-sm-12 col-md-4">
-            <label for="inputState" class="titulo_form"
-              >Acerca del administrador</label
-            >
-            <textarea
-              cols="30"
-              rows="10"
-              placeholder="Acerca"
-              class="cuadros_txtArea"
-              v-model="acerca"
-              @keyup="habilitarBtn"
-            ></textarea>
-            <label for="inputState" class="msg_error" v-if="errors.acerca">{{
-              errors.acerca[0]
-            }}</label>
+            <div class="" style="height: 25%">
+              <label for="inputState" class="titulo_form">Nombres</label>
+              <input
+                type="text"
+                v-model="name"
+                placeholder="Nombres"
+                class="cuadros_input"
+                @keyup="habilitarBtn"
+              />
+              <span
+                for="inputState"
+                class="msg_error"
+                v-for="(error, index) in errors.name"
+                :key="`name-${index}`"
+                >{{ errors.name[index] }}</span
+              >
+            </div>
+            <div class="" style="height: 25%">
+              <label for="inputState" class="titulo_form">Apellidos</label>
+              <input
+                type="text"
+                v-model="last_name"
+                placeholder="Apellidos"
+                class="cuadros_input"
+                @keyup="habilitarBtn"
+              />
+              <label
+                for="inputState"
+                class="msg_error"
+                v-if="errors.lastName"
+                >{{ errors.lastName[0] }}</label
+              >
+            </div>
+            <div class="" style="height: 25%">
+              <label for="inputState" class="titulo_form"
+                >Correo electrónico</label
+              >
+              <input
+                type="email"
+                v-model="email"
+                placeholder="Correo electrónico"
+                class="cuadros_input"
+                @keyup="habilitarBtn"
+              />
+              <label for="inputState" class="msg_error" v-if="errors.email">{{
+                errors.email[0]
+              }}</label>
+            </div>
+            <div class="" style="height: 25%">
+              <label for="inputState" class="titulo_form">Contraseña</label>
+              <input
+                type="password"
+                v-model="password"
+                placeholder="contraseña"
+                class="cuadros_input"
+                maxlength="20"
+                @keyup="habilitarBtn"
+              />
+              <label
+                for="inputState"
+                class="msg_error"
+                v-if="errors.password"
+                >{{ errors.password[0] }}</label
+              >
+            </div>
+          </div>
 
-            <label for="inputState" class="titulo_form">Teléfono celular</label>
-            <input
-              type="text"
-              v-model="phone"
-              placeholder="Teléfono celular"
-              class="cuadros_input"
-              minlength="7"
-              maxlength="10"
-              @keyup="habilitarBtn"
-            />
-            <label for="inputState" class="msg_error" v-if="errors.phone">{{
-              errors.phone[1]
-            }}</label>
+          <div class="form-group col-sm-12 col-md-4">
+            <div class="" style="height: 50%">
+              <label for="inputState" class="titulo_form"
+                >Acerca del administrador</label
+              >
+              <textarea
+                cols="30"
+                rows="10"
+                placeholder="Acerca"
+                class="cuadros_txtArea"
+                v-model="acerca"
+                @keyup="habilitarBtn"
+              ></textarea>
+              <label for="inputState" class="msg_error" v-if="errors.acerca">{{
+                errors.acerca[0]
+              }}</label>
+            </div>
 
-            <label for="inputState" class="titulo_form"
-              >Repetir contraseña</label
-            >
-            <input
-              type="password"
-              v-model="repassword"
-              placeholder="Repetir contraseña"
-              class="cuadros_input"
-              maxlength="20"
-              @keyup="habilitarBtn"
-            />
-            <label
-              for="inputState"
-              class="msg_error"
-              v-if="errors.repassword"
-              >{{ errors.repassword[0] }}</label
-            >
+            <div class="" style="height: 25%">
+              <label for="inputState" class="titulo_form"
+                >Teléfono celular</label
+              >
+              <div class="d-flex align-content-center align-items-center">
+              <input
+                type="text"
+                v-model="phone"
+                placeholder="Teléfono celular"
+                class="cuadros_input"
+                minlength="7"
+                :maxlength="longPhone"
+                @keyup="habilitarBtn"
+              />
+              <span class="cont-caracteres"
+                >{{ contPhone }}/{{ longPhone }}</span
+              >
+              </div>
+              <label
+                for="inputState"
+                class="msg_error"
+                v-for="(error, index) in errors.phone"
+                :key="`phone-${index}`"
+                >{{ error }}</label
+              >
+            </div>
+            <div class="" style="height: 25%">
+              <label for="inputState" class="titulo_form"
+                >Repetir contraseña</label
+              >
+              <input
+                type="password"
+                v-model="repassword"
+                placeholder="Repetir contraseña"
+                class="cuadros_input"
+                maxlength="20"
+                @keyup="habilitarBtn"
+              />
+              <label
+                for="inputState"
+                class="msg_error"
+                v-if="errors.repassword"
+                >{{ errors.repassword[0] }}</label
+              >
+            </div>
           </div>
         </div>
       </form>
@@ -196,6 +226,11 @@ export default {
   created() {
     this.$store.commit("SET_LAYOUT", "principal-layout");
   },
+  computed: {
+    contPhone() {
+      return this.phone.length;
+    },
+  },
   data: () => ({
     name: "",
     last_name: "",
@@ -220,6 +255,7 @@ export default {
     tituloModal: "",
     mensaje: "",
     descripcion: "",
+    longPhone: 10,
   }),
   /* data() {
     return {
@@ -242,7 +278,7 @@ export default {
           lastName.length < 4 ||
           email.length < 6 ||
           acerca.length < 6 ||
-          phone.length<7||
+          phone.length < 7 ||
           pass.length < 6 ||
           repass.length < 6
         ) {
@@ -433,13 +469,8 @@ body .tooltip .arrow::before {
   color: #637381;
   font-size: 18px;
 }
-.msg_error {
-  color: #ff0000;
-  font-size: 12px;
-}
 
-.titulo_form,
-.msg_error {
+.titulo_form {
   text-align: left;
   margin-left: 20px;
   font-family: "Rubik";

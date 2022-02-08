@@ -233,23 +233,7 @@ export default {
       }
     },
 
-   /*  capacidadMin() {
-      try {
-        let v = 0;
-        if (this.capacidadEstadio < 500) {
-          this.capacidadInvalida = true;
-          v = v + 1;
-          if (v == 0) {
-            document.getElementById("btnGuardar").disabled = false;
-          }
-        } else {
-          this.capacidadInvalida = false;
-          document.getElementById("btnGuardar").disabled = true;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }, */
+  
     habilitarBtn() {
       try {
         let nombreEstadio = this.nombreEstadio;
@@ -546,15 +530,4 @@ h1 {
   right: 86px;
 }
 
-.msg_error {
-  /* estilo para los mensajes que envia el back */
-  color: #ff0000;
-  font-size: 11px;
-  text-align: left;
-  margin-left: 10px;
-  font-family: "Rubik";
-  width: 100%;
-  margin-bottom: 0;
-  margin-top: 8px;
-}
 </style>

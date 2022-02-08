@@ -1,4 +1,4 @@
-<template>
+<template >
   <div class="container-fluid">
     <!-- INICIO DE LA MODAL -->
     <div
@@ -40,7 +40,7 @@
       </div>
     </div>
     <!--  FIN DEL MODAL PARA ELIMINAR -->
-
+   
     <div class="container-fluid ml-0 mt-5 d-flex align-items-center">
       <div class="container-fluid">
         <label class="titulo_estadio w-100">{{ estadio.nombre_estadio }}</label>
@@ -84,28 +84,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="col-md-12">
-            <!--  <vueper-slides
-              id="slider1"
-              class="slide"
-              ref="vueperslides1"
-              :touchable="false"
-              fade
-              :autoplay="false"
-              :bullets="false"
-              @slide="
-                $refs.vueperslides2.goToSlide($event.currentSlide.index, {
-                  emit: false,
-                })
-              "
-              fixed-height="400px"
-            >
-              <vueper-slide
-                v-for="(slide, i) in slides"
-                :key="i"
-                :image="slide.image"
-              >
-              </vueper-slide>
-            </vueper-slides> -->
+            
             <image-slider
               class="h-100"
               :propimagenPrincipal="estadio.img_principal"
@@ -151,8 +130,7 @@ export default {
     nombre_estadio: String,
   },
   components: {
-    //VueperSlides,
-    //VueperSlide,
+    
     ImageSlider,
   },
   data: () => ({
@@ -176,8 +154,14 @@ export default {
         const { data } = await axios.get(
           ENDPOINT_PATH + "ver_estadio/" + this.idEstadio
         );
-        this.estadio = data.estadio;
-        this.$emit("resultado", this.estadio);
+        this.estadio = data;
+        if (this.estadio.success==true) {
+          this.estadio=data.estadio
+          this.$emit("resultado", this.estadio);
+        }else if(this.estadio.success==false){
+          this.estadio=data
+          this.$emit("resultado", this.estadio);
+        }
         //console.log(this.estadio);
       } catch (error) {
         console.log(error);
@@ -188,7 +172,12 @@ export default {
         const { data } = await axios.get(
           ENDPOINT_PATH + "imagenes-secundarias/" + this.idEstadio
         );
-        this.fotosSecundarias = data.imagenesSecundarias;
+        this.fotosSecundarias = data;
+        if (this.fotosSecundarias.success==false) {
+          console.log('no existen imagenes relacionadas');
+        }else{
+          this.fotosSecundarias=data.imagenesSecundarias;
+        }
         //console.log(this.fotosSecundarias);
       } catch (error) {
         console.log(error);
