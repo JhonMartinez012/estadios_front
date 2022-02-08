@@ -4,8 +4,50 @@ import VueRouter from "vue-router";
 
 import auth from "../middleware/auth";
 import log from "../middleware/log";
-
 Vue.use(VueRouter);
+
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/auth/";
+const ENDPOINT_PATH1 = "http://127.0.0.1:8000/api/estadio/";
+
+const guardAdmin = async (to, from, next) => {
+  var exist = false;
+
+  const data = await axios.get(ENDPOINT_PATH + "administrador/" + to.params.id);
+
+  let administrador = data.data;
+  if (administrador.success == true) {
+    exist = true;
+  } else {
+    exist = false;
+  }
+
+  if (exist) {
+    next();
+  } else {
+    next({ name: "Administradores" });
+  }
+};
+
+const guardEstadio = async (to, from, next) => {
+  var exist = false;
+
+  const  data  = await axios.get(
+    ENDPOINT_PATH1 + "ver_estadio/" + to.params.id
+  );
+  let estadio = data.data;
+
+  if (estadio.success == true) {
+    exist = true;
+  } else {
+    exist = false;
+  }
+  if (exist) {
+    next();
+  } else {
+    next({ name: "Estadios" });
+  }
+};
 
 const routes = [
   {
@@ -34,7 +76,7 @@ const routes = [
     name: "Estadios",
     component: () => import("../views/Estadios/Estadios.vue"),
     meta: {
-      middleware: [auth,log],
+      middleware: [auth, log],
     },
   },
   {
@@ -43,16 +85,17 @@ const routes = [
 
     component: () => import("../views/Estadios/EstadiosCrear.vue"),
     meta: {
-      middleware: [auth,log],
+      middleware: [auth, log],
     },
   },
   {
-    path: '/estadios/:id',
+    path: "/estadios/:id",
     name: "EstadiosVer",
 
     component: () => import("../views/Estadios/EstadiosVer.vue"),
+    beforeEnter: guardEstadio,
     meta: {
-      middleware: [auth,log],
+      middleware: [auth, log],
     },
   },
   {
@@ -61,7 +104,7 @@ const routes = [
 
     component: () => import("../views/Estadios/EstadiosEditar.vue"),
     meta: {
-      middleware: [auth,log],
+      middleware: [auth, log],
     },
   },
   {
@@ -70,7 +113,7 @@ const routes = [
 
     component: () => import("../views/Administradores/Administradores.vue"),
     meta: {
-      middleware: [auth,log],
+      middleware: [auth, log],
     },
   },
   {
@@ -82,7 +125,7 @@ const routes = [
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradoresCrear.vue"
       ),
     meta: {
-      middleware: [auth,log],
+      middleware: [auth, log],
     },
   },
   {
@@ -93,19 +136,32 @@ const routes = [
       import(
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradorVer.vue"
       ),
+    beforeEnter: guardAdmin,
     meta: {
-      middleware: [auth,log],
+      middleware: [auth, log],
     },
+
+    /*  beforeEnter: (to, from, next) => {
+      const { data } = axios.get(ENDPOINT_PATH + "administrador/" + this.$route.params.id
+      );
+      let administrador = data;
+      
+      if (administrador.success==true) {
+        next();        
+      }else{
+        next({name:"Administradores"});
+      }
+    }, */
   },
   {
-    path: '/administradores/:id/editar',
+    path: "/administradores/:id/editar",
     name: "AdministradorEditar",
     component: () =>
       import(
         /* webpackChunkName: "about" */ "../views/Administradores/AdministradorUpdate.vue"
       ),
     meta: {
-      middleware: [auth,log],
+      middleware: [auth, log],
     },
   },
 
@@ -117,7 +173,7 @@ const routes = [
         /* webpackChunkName: "about" */ "../views/Configuraciones/Configuraciones.vue"
       ),
     meta: {
-      middleware: [auth,log],
+      middleware: [auth, log],
     },
     redirect: { name: "ConfiguracionTerrenos" },
     children: [
@@ -128,9 +184,9 @@ const routes = [
           import(
             "../views/Configuraciones/componentes/configuracionesTerreno.vue"
           ),
-          meta: {
-            middleware: [auth,log],
-          },
+        meta: {
+          middleware: [auth, log],
+        },
       },
       {
         path: "/Configuraciones",
@@ -139,9 +195,9 @@ const routes = [
           import(
             "../views/Configuraciones/componentes/configuracionesInactividad.vue"
           ),
-          meta: {
-            middleware: [log, auth],
-          },
+        meta: {
+          middleware: [log, auth],
+        },
       },
     ],
   },

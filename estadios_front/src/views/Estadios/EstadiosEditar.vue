@@ -96,14 +96,15 @@
                 @change="listarCiudades()"
                 class="texto-select"
               >
-                <option :value="estadio.pais_id">{{ estadio.nom_pais }}</option>
+                
+                <!-- <option :value="estadio.pais_id">{{ estadio.nom_pais }}</option> -->
                 <option v-for="data in paises" :key="data.id" :value="data.id">
                   {{ data.nombre }}
                 </option>
               </select>
               <p for="" class="p-titulo">ciudad</p>
               <select v-model="estadio.ciudad_id" class="texto-select">
-                <option :value="estadio.ciudad_id">{{ estadio.nombre }}</option>
+                <!-- <option :value="estadio.ciudad_id">{{ estadio.nombre }}</option> -->
                 <option
                   v-for="data in ciudades"
                   :key="data.id"
@@ -253,11 +254,7 @@ const ENDPOINT_PATH1 = "http://127.0.0.1:8000/api/terreno/";
 export default {
    name:"editarEstadio",
   created() {
-    this.$store.commit("SET_LAYOUT", "principal-layout");
-    this.listarEstadio();
-    this.listarPaises();
-    this.listarTerrenos();
-    this.listarImagenesSecundarias();
+    this.init()
   },
   data() {
     return {
@@ -284,6 +281,14 @@ export default {
 
   components: {},
   methods: {
+    async init(){
+      this.$store.commit("SET_LAYOUT", "principal-layout");
+      await this.listarEstadio();
+      await this.listarPaises();
+      await this.listarCiudades();
+      await this.listarTerrenos();
+      await this.listarImagenesSecundarias();
+    },
     async listarEstadio() {
       try {
         const data = await axios.get(
