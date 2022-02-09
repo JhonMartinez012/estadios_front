@@ -1,11 +1,16 @@
 <template>
   <div class="administradores">
+    
+    <h1 v-if="filtrarAdmins == null" >ssss</h1>
+    
     <div class="row">
       <div
         class="col-lg-2 col-md-4 d-flex justify-content-center align-items-center admins mb-3"
-        v-for="administrador in administradores"
+        v-for="administrador in filtrarAdmins"
         :key="administrador.id"
       >
+      
+      
         <div class="form-group admin-info">
           <router-link
             :to="{
@@ -36,7 +41,11 @@
             </div>
           </router-link>
         </div>
-      </div>     
+        
+          
+        
+      </div>   
+     
     </div>
   </div>
 </template>
@@ -46,9 +55,9 @@ import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/auth/";
 export default {
   name:"AdministradoresRegistrados", 
-  created() {
-   
-    this.listarAdministradores();
+  created() {   
+    this.funcIniciales();
+    this.administradores=this.listarAdministradores();
   },
   updated() {
     $('[data-toggle="tooltip"]').tooltip({
@@ -59,7 +68,22 @@ export default {
     administradores: [],
     
   }),
+  props:{
+    buscador:String,
+  },
+  computed:{
+    filtrarAdmins(){      
+      if (this.buscador.length != "") {        
+        return  this.administradores.filter(o => o.name.toLowerCase().indexOf(this.buscador)> -1);
+      }else{
+        return this.administradores;
+      }
+    }
+  },
   methods: {
+    async funcIniciales(){
+      await this.listarAdministradores();
+    },
    
     async listarAdministradores() {
       try {
