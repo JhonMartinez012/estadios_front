@@ -32,56 +32,68 @@
           <label class="titulo">Informacion general</label>
           <div class="form-row mt-2 contenido">
             <div class="form-group col-md-6 col-sm-12 inner">
-              <p for="inputEmail4" class="p-titulo">Nombre del estadio</p>
-              <input
-                type="text"
-                v-model="nombreEstadio"
-                class="form-control texto-nombre"
-                id=""
-                placeholder="Nombre"
-                minlength="7"
-                maxlength="45"
-                @keyup="habilitarBtn()"
-              />
-              <label
-                for="inputState"
-                class="msg_error"
-                v-for="(error, index) in errores.nombreEstadio"
-                :key="`nombre-${index}`"
-              >
-                *{{ error }}</label
-              >
-              <p for="inputEmail4" class="p-titulo">Acerca del estadio</p>
-              <textarea
-                v-model="acercaEstadio"
-                cols="30"
-                rows="10"
-                placeholder="Acerca"
-                class="acercaEstadio"
-                @keyup="habilitarBtn()"
-              ></textarea>
-              <label
-                for="inputState"
-                class="msg_error"
-                v-for="(error, index) in errores.acercaEstadio"
-                :key="`acerca-${index}`"
-              >
-                *{{ error }}</label
-              >
+              <div class="" style="height: 25%">
+                <p for="inputEmail4" class="p-titulo">Nombre del estadio</p>
+                <input
+                  type="text"
+                  v-model="nombreEstadio"
+                  class="form-control texto-nombre"
+                  id=""
+                  placeholder="Nombre"
+                  minlength="7"
+                  maxlength="45"
+                  @keyup="habilitarBtn()"
+                />
+                <label
+                  for="inputState"
+                  class="msg_error"
+                  v-for="(error, index) in errores.nombreEstadio"
+                  :key="`nombre-${index}`"
+                >
+                  *{{ error }}</label
+                >
+              </div>
+              <div class="" style="height: 75%">
+                <p for="inputEmail4" class="p-titulo mt-0">Acerca del estadio</p>
+                <textarea
+                  v-model="acercaEstadio"
+                  cols="30"
+                  rows="10"
+                  placeholder="Acerca"
+                  class="acercaEstadio"
+                  @keyup="habilitarBtn()"
+                ></textarea>
+                <label
+                  for="inputState"
+                  class="msg_error"
+                  v-for="(error, index) in errores.acercaEstadio"
+                  :key="`acerca-${index}`"
+                >
+                  *{{ error }}</label
+                >
+              </div>
             </div>
             <div class="form-group col-md-6 inner">
-              <p for="inputPassword4" class="p-titulo">pais</p>
-              <select
-                v-model="pais"
-                @change="listarCiudades()"
-                class="texto-select"
-              >
-                <option value="0">seleccione pais</option>
-                <option v-for="data in paises" :key="data.id" :value="data.id">
-                  {{ data.nombre }}
-                </option>
-              </select>
-              <p for="" class="p-titulo">ciudad</p>
+              <div class="" style="height: 25%">
+                <p for="inputPassword4" class="p-titulo">pais</p>
+                <select
+                  v-model="pais"
+                  @change="listarCiudades()"
+                  class="texto-select"
+                >
+                  <option value="0">seleccione pais</option>
+                  <option
+                    v-for="data in paises"
+                    :key="data.id"
+                    :value="data.id"
+                  >
+                    {{ data.nombre }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="" style="height: 25%">
+              <p for="" class="p-titulo mt-0">ciudad</p>
               <select class="texto-select" v-model="ciudad">
                 <option value="0">seleccione ciudad</option>
                 <option
@@ -100,8 +112,10 @@
               >
                 *{{ error }}</label
               >
-
-              <p for="" class="p-titulo">Tipo de terreno</p>
+              </div>
+              
+              <div class="" style="height: 25%">
+              <p for="" class="p-titulo mt-0">Tipo de terreno</p>
               <select v-model="terrenoId" class="form-control texto-select">
                 <option value="0">seleccionar</option>
                 <option
@@ -120,7 +134,9 @@
               >
                 *{{ error }}</label
               >
-              <p for="inputEmail4" class="p-titulo">Capacidad</p>
+              </div>
+              <div class="" style="height: 25%">
+              <p for="inputEmail4" class="p-titulo mt-0">Capacidad</p>
               <input
                 type="Number"
                 v-model="capacidadEstadio"
@@ -129,17 +145,18 @@
                 placeholder="Capacidad de espectadores"
                 @keyup="habilitarBtn"
               />
-              <label for="" class="msg_error" v-if="capacidadInvalida != false">
+              <label for="" class="msg_error mb-0" v-if="capacidadInvalida != false">
                 La capacidad debe ser mayor a 500
               </label>
               <label
                 for="inputState"
-                class="msg_error"
+                class="msg_error mb-0"
                 v-for="(error, index) in errores.capacidadEstadio"
                 :key="`capacidad-${index}`"
               >
                 *{{ error }}</label
               >
+              </div>
               <!-- <label for="inputState" class="msg_error" v-for="( error, index) in errores" :key="index">{{
               error.capacidadEstadio[index]
             }}</label> -->
@@ -233,7 +250,6 @@ export default {
       }
     },
 
-  
     habilitarBtn() {
       try {
         let nombreEstadio = this.nombreEstadio;
@@ -241,15 +257,15 @@ export default {
 
         let v = 0;
 
-        if (nombreEstadio.length < 6 || acerca.length < 10 ) {          
-          v = v + 1;        
+        if (nombreEstadio.length < 6 || acerca.length < 10) {
+          v = v + 1;
         }
-        if (this.capacidadEstadio<500) {
-          v = v+1 
-          this.capacidadInvalida=true
-        }else{
-          this.capacidadInvalida=false
-        }        
+        if (this.capacidadEstadio < 500) {
+          v = v + 1;
+          this.capacidadInvalida = true;
+        } else {
+          this.capacidadInvalida = false;
+        }
         if (v == 0) {
           document.getElementById("btnGuardar").disabled = false;
         } else {
@@ -261,6 +277,7 @@ export default {
     },
 
     async crearEstadio() {
+      document.getElementById("btnGuardar").disabled = true;
       let payload = {
         nombreEstadio: this.nombreEstadio,
         acercaEstadio: this.acercaEstadio,
@@ -279,14 +296,15 @@ export default {
         this.estadio = data;
 
         if (this.estadio.success == true) {
-          console.log(this.estadio.id);
-          /* this.$router.push({
+          
+          this.$router.push({
             name: "EstadiosEditar",
             params: { id: this.estadio.id },
-          }); */
+          });
         } else if (this.estadio.success == false) {
           this.errores = this.estadio.errores;
           console.log(this.errores);
+          document.getElementById("btnGuardar").disabled = false;
         }
       } catch (error) {
         console.log(error);
@@ -529,5 +547,4 @@ h1 {
   bottom: 10px;
   right: 86px;
 }
-
 </style>

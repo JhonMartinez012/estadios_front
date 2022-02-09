@@ -260,7 +260,7 @@ const ENDPOINT_PATH = "http://127.0.0.1:8000/api/terreno/";
 export default {
   mounted() {
     this.listarTerrenos();
-    console.log("hola");
+    
   },
   updated() {
     $('[data-toggle="tooltip"]').tooltip({

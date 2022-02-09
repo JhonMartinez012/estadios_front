@@ -47,6 +47,7 @@ export default {
       //this.dias=dayjs('2022-01').daysInMonth();// devuelve cuantos dias tiene el mes actual
       //this.dias=dayjs().date(31) // obtiene o establece el dia del mes
       //console.log(this.dias);
+      
       this.mesAnterior = dayjs().month() - 1;
 
       for (let index = 0; index < 7; index++) {

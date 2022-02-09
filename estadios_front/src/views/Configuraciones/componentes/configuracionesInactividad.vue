@@ -2,7 +2,8 @@
   <div class="container-fluid">
     <!-- INICIO DE LA MODAL ELIMINAR -->
     <div
-      class="modal fade"
+      class="modal"
+      :class="{ show: modal }"
       id="exampleModal"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
@@ -17,22 +18,35 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
+              @click="closeModal"
             >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body text-center">
-            <p>¿Desea eliminar este motivo?</p>
+            <p v-if="cantEstadios == 0">¿Desea eliminar este motivo?</p>
+            <p v-else>
+              No se puede eliminar este motivo porque
+              {{ cantEstadios }} estadio(s) lo han usuado anteriormente
+            </p>
           </div>
-          <div class="modal-footer d-flex justify-content-center">
+          <div
+            class="modal-footer d-flex justify-content-center"
+            v-if="cantEstadios == 0"
+          >
             <button
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
+              @click="closeModal"
             >
               Cerrar
             </button>
-            <button type="button" class="btn boton-eliminar-motivo">
+            <button
+              type="button"
+              class="btn boton-eliminar-motivo"
+              @click="eliminarMotivoInactividad(id)"
+            >
               Eliminar
             </button>
           </div>
@@ -132,12 +146,9 @@
           data-toggle="tooltip"
           data-placement="bottom"
           v-if="motivo.disabled == true"
+          @click="openModal(motivo)"
         >
-          <img
-            src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
-            data-toggle="modal"
-            data-target="#exampleModal"
-          />
+          <img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" />
         </button>
         <button
           class="btn btn-accion-inactividad"
@@ -177,10 +188,10 @@ export default {
       trigger: "hover",
     });
   },
-  computed:{
-    contCaracteres(){
+  computed: {
+    contCaracteres() {
       return this.nombre_motivo.length;
-    }
+    },
   },
   data: () => ({
     mostrar: false,
@@ -190,8 +201,12 @@ export default {
     errores: [],
     error: "",
     id: 0,
-    longName:25,
-    
+    longName: 25,
+    motivoDelete: [],
+
+    modal: 0,
+    show: true,
+    cantEstadios: 0,
   }),
 
   methods: {
@@ -212,20 +227,12 @@ export default {
         console.log(error);
       }
     },
-    async listarTerrenos() {
-      try {
-        const { data } = await axios.get(ENDPOINT_PATH + "terrenos");
-        this.terrenos = data.terrenos;
-        //console.log(this.terrenos);
-      } catch (error) {
-        console.log(error);
-      }
-    },
 
     async listarMotivosInactividad() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "motivos_inactividad");
         this.motivos = data.motivos_inactividad;
+        
       } catch (error) {
         console.log(error);
       }
@@ -282,12 +289,35 @@ export default {
         console.log(error);
       }
     },
+    async eliminarMotivoInactividad(id) {
+      try {        
+        const res = await axios.delete(ENDPOINT_PATH + "eliminarMotivo/" + id);
+        this.motivoDelete = res;
+        if (this.motivoDelete.status == 200) {
+          this.closeModal();
+          this.listarMotivosInactividad();
+        } else {
+          this.motivoDelete = this.motivoDelete.msg;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     habilitarInput(motivo) {
       try {
         motivo.disabled = false;
       } catch (error) {
         console.log(error);
       }
+    },
+    openModal(data = {}) {
+      this.modal = 1;
+      this.cantEstadios = data.estadios_count;
+      this.id = data.id;
+      console.log(this.id);
+    },
+    closeModal() {
+      this.modal = 0;
     },
   },
 };
@@ -297,6 +327,11 @@ export default {
 .estilos-container {
   font-family: "Gilroy";
   font-size: bold;
+}
+.show {
+  display: list-item;
+  opacity: 1;
+  background: rgba(168, 167, 172, 0.6);
 }
 body .tooltip-inner {
   background: #ffffff 0% 0% no-repeat padding-box;
