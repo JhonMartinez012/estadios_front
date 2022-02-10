@@ -1,16 +1,11 @@
 <template>
   <div class="administradores">
-    
-    <h1 v-if="filtrarAdmins == null" >ssss</h1>
-    
     <div class="row">
       <div
         class="col-lg-2 col-md-4 d-flex justify-content-center align-items-center admins mb-3"
         v-for="administrador in filtrarAdmins"
         :key="administrador.id"
       >
-      
-      
         <div class="form-group admin-info">
           <router-link
             :to="{
@@ -41,23 +36,21 @@
             </div>
           </router-link>
         </div>
-        
-          
-        
-      </div>   
-     
+      </div>
     </div>
+     <sinAdmins v-if="filtrarAdmins == ''" />
   </div>
 </template>
 
 <script>
+import sinAdmins from "../../../components/sinAdmins.vue";
 import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/auth/";
 export default {
-  name:"AdministradoresRegistrados", 
-  created() {   
+  name: "AdministradoresRegistrados",
+  created() {
     this.funcIniciales();
-    this.administradores=this.listarAdministradores();
+    this.administradores = this.listarAdministradores();
   },
   updated() {
     $('[data-toggle="tooltip"]').tooltip({
@@ -66,25 +59,29 @@ export default {
   },
   data: () => ({
     administradores: [],
-    
   }),
-  props:{
-    buscador:String,
+  components: {
+    sinAdmins: sinAdmins,
   },
-  computed:{
-    filtrarAdmins(){      
-      if (this.buscador.length != "") {        
-        return  this.administradores.filter(o => o.name.toLowerCase().indexOf(this.buscador)> -1);
-      }else{
+  props: {
+    buscador: String,
+  },
+  computed: {
+    filtrarAdmins() {
+      if (this.buscador.length != "") {
+        return this.administradores.filter(
+          (o) => o.name.toLowerCase().indexOf(this.buscador) > -1
+        );
+      } else {
         return this.administradores;
       }
-    }
+    },
   },
   methods: {
-    async funcIniciales(){
+    async funcIniciales() {
       await this.listarAdministradores();
     },
-   
+
     async listarAdministradores() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "usuarios");
@@ -105,15 +102,8 @@ export default {
   font-family: "Gilroy";
   background-color: #f6f9fb;
 }
-.sin_admins {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 68vh;
+*/
 
-} */
 .administradores {
   max-width: 1500px;
 }

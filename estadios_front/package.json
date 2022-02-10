@@ -17,6 +17,7 @@
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
     "vue": "^2.6.14",
+    "vue-advanced-cropper": "^1.10.0",
     "vue-auth": "^1.0.0-alpha.1",
     "vue-dayjs": "^1.0.2",
     "vue-router": "^3.2.0",

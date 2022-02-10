@@ -9,6 +9,12 @@ import "./slim/slim/slim/slim.css";
 import slimCropper from "./slim/slim/slim/slim.vue";
 Vue.component("slimCropper", slimCropper);
 
+
+import  cropper  from 'vue-advanced-cropper'
+import 'vue-advanced-cropper/dist/style.css';
+Vue.component("cropper",cropper)
+
+
 //import Estadios from "./components/HelloWorld.vue"
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)

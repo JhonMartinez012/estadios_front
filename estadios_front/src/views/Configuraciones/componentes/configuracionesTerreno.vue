@@ -30,9 +30,11 @@
                     <input type="file" name="slim" />
                   </slim-cropper>
                 </div>
-                <span class="msg_error text-center" v-if="errores.img != null">{{
-                  errores.img[0]
-                }}</span>
+                <span
+                  class="msg_error text-center"
+                  v-if="errores.img != null"
+                  >{{ errores.img[0] }}</span
+                >
               </div>
 
               <div class="form-row">
@@ -145,7 +147,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
-                  <slim-cropper
+                  <!-- <slim-cropper
                     :options="slimOptions"
                     ref="img_terrenoE"
                     class="estilo-slim"
@@ -156,7 +158,15 @@
                       name="slim"
                       accept="image/*"
                     />
-                  </slim-cropper>
+                  </slim-cropper> -->
+
+                  <cropper
+                    class="cropper"
+                    :src="terreno.img"
+                    :stencil-props="{
+                      aspectRatio: 10/12
+                    }"                    
+                  />
                 </div>
               </div>
 
@@ -260,7 +270,6 @@ const ENDPOINT_PATH = "http://127.0.0.1:8000/api/terreno/";
 export default {
   mounted() {
     this.listarTerrenos();
-    
   },
   updated() {
     $('[data-toggle="tooltip"]').tooltip({
@@ -376,13 +385,18 @@ export default {
       this.modal = 1;
     },
     openModalE(data = {}) {
-      //console.log(data.img);
+      // console.log(data.img);
+      const self = this
       this.modalE = 1;
-      this.terreno.nombre_terreno = data.nombre_terreno;
-      this.terreno.img =
-        "/assets/1. Estadios/Terrenos de juego/1. gramilla.jpg";
-      console.log(this.terreno.img);
-      this.$refs.img_terrenoE.set_image(`${this.terreno.img}`);
+      setTimeout(() => {
+        self.terreno.nombre_terreno = data.nombre_terreno;
+        self.terreno.img = data.img;  
+      }, 1000);
+     
+      
+      /* console.log(this.terreno.img);
+      this.$refs.img_terrenoE.set_image(`${this.terreno.img}`);       
+      */
     },
     openModalD(data = {}) {
       //console.log(data.img);
@@ -400,6 +414,17 @@ export default {
 </script>
 
 <style scoped>
+.cropper {
+  width: 120px;
+  height: 120px;
+  margin-top: 0px;
+  border-radius: 30px;
+  margin-bottom: 12px;
+  font-family: "Gilroy";
+  font-size: 13px;
+  color: #637381;
+  background: #b3b3b3;
+}
 .show {
   display: list-item;
   opacity: 1;

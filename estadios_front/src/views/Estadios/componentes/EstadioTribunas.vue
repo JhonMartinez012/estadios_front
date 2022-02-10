@@ -18,7 +18,7 @@
           </div>
           <div class="modal-body">
             <div class="container">
-              <div class="form-row">
+              <div class="form-row h-33">
                 <div class="form-group col-md-12">
                   <p for="" class="p-tribuna">Nombre de la tribuna</p>
                   <input
@@ -26,31 +26,61 @@
                     v-model="nombreTribuna"
                     type="text"
                     class="form-control input-tribuna"
+                    @keyup="habilitarBtn"
                   />
+                  <label
+                    for="inputState"
+                    class="msg_error"
+                    v-for="(error, index) in errores.nombreTribuna"
+                    :key="`nombre-${index}`"
+                  >
+                    *{{ error }}</label
+                  >
                 </div>
               </div>
 
-              <div class="form-row">
+              <div class="form-row h-33">
                 <div class="form-group col-md-12">
-                  <p for="" class="p-tribuna">Capacidad de expectadores</p>
+                  <p for="" class="p-tribuna mt-0">Capacidad de expectadores</p>
                   <input
                     placeholder="Cantidad expectadores"
                     v-model="capacidad"
-                    type="text"
+                    type="number"
                     class="form-control input-tribuna"
+                    @keyup="habilitarBtn"
+                    min="0"
                   />
+                  <label
+                    for="inputState"
+                    class="msg_error"
+                    v-for="(error, index) in errores.capacidad"
+                    :key="`capacidad-${index}`"
+                  >
+                    *{{ error }}</label
+                  >
                 </div>
               </div>
 
-              <div class="form-row">
+              <div class="form-row h-33">
                 <div class="form-group col-md-12">
-                  <p for="" class="p-tribuna">Valor de la entrada</p>
+                  <p for="" class="p-tribuna mt-0">Valor de la entrada</p>
                   <input
                     placeholder="Valor entrada"
                     type="number"
+                    min="1000"
                     v-model="valorBoleta"
                     class="form-control input-tribuna"
+                    @keyup="habilitarBtn"
                   />
+                  <label
+                    for="inputState"
+                    class="msg_error"
+                    v-for="(error, index) in errores.valorBoleta"
+                    :key="`valor-${index}`"
+                  >
+                    *{{ error }}</label
+                  >
+                  
                 </div>
               </div>
             </div>
@@ -64,7 +94,13 @@
             >
               Cerrar
             </button>
-            <button type="button" class="btn btn-guardar" @click="crearTribuna">
+            <button
+              type="button"
+              id="btnCrearTribuna"
+              class="btn btn-guardar"
+              @click="crearTribuna"
+              disabled
+            >
               añadir
             </button>
           </div>
@@ -101,6 +137,7 @@
                     type="text"
                     class="form-control input-tribuna"
                   />
+                  
                 </div>
               </div>
               <div class="form-row">
@@ -112,7 +149,9 @@
                     type="text"
                     class="form-control input-tribuna"
                   />
+                  
                 </div>
+                
               </div>
 
               <div class="form-row">
@@ -124,6 +163,7 @@
                     v-model="tribuna.valorBoleta"
                     class="form-control input-tribuna"
                   />
+                  
                 </div>
               </div>
             </div>
@@ -150,13 +190,13 @@
     </div>
     <!--  ***  FIN DE LA MODAL PARA EDITAR  ***-->
     <!-- INICIO DE LA MODAL ELIMINAR -->
-    <div
-      class="modal" :class="{ show: modalD }"
-    >
+    <div class="modal" :class="{ show: modalD }">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Eliminar tribuna {{id}}</h5>
+            <h5 class="modal-title" id="exampleModalLabel">
+              Eliminar tribuna {{ id }}
+            </h5>
             <button
               type="button"
               class="close"
@@ -179,7 +219,11 @@
             >
               Cerrar
             </button>
-            <button type="button" class="btn boton-eliminar-tribuna" @click="eliminarTribuna(id)">
+            <button
+              type="button"
+              class="btn boton-eliminar-tribuna"
+              @click="eliminarTribuna(id)"
+            >
               Eliminar
             </button>
           </div>
@@ -265,23 +309,25 @@ export default {
     show: true,
     modal: 0,
     modalE: 0,
-    modalD:0,
+    modalD: 0,
     nombre_tribuna: "",
     valor_boleta: 0,
     nombreTribuna: "",
     capacidad: "",
-    valorBoleta: 0,
+    valorBoleta: "",
     estadioId: 0,
     tribunas: [],
+    tribunaCreate: [],
 
     tribuna: {
       nombreTribuna: "",
       capacidad: "",
       valorBoleta: 0,
     },
-    tribunaEliminada:[],
+    tribunaEliminada: [],
 
     id: 0, // id de la tribuna para eliminar o editar
+    errores: [],
   }),
   computed: {
     idEstadio() {
@@ -300,6 +346,29 @@ export default {
         console.log(error);
       }
     },
+    habilitarBtn() {
+      try {
+        let tribuna = this.nombreTribuna;
+        let capacidad = this.capacidad;
+        let precio = this.valorBoleta;
+
+        let v = 0;
+        if (tribuna.length < 3) {
+          v = v + 1;
+        }
+        if (capacidad < 500 || precio < 1000) {
+          v = v + 1;
+        }
+
+        if (v == 0) {
+          document.getElementById("btnCrearTribuna").disabled = false;
+        } else {
+          document.getElementById("btnCrearTribuna").disabled = true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async crearTribuna() {
       let payload = {
         nombreTribuna: this.nombreTribuna,
@@ -313,14 +382,19 @@ export default {
           ENDPOINT_PATH + "crear_tribuna",
           payload
         );
-        this.data = data;
-        if (this.data) {
+        this.tribunaCreate = data;
+        if (this.tribunaCreate.success == true) {
           console.log("Tribuna registrada");
           this.closeModal();
           this.listarTribunas();
           this.nombreTribuna = "";
           this.capacidad = "";
           this.valorBoleta = 0;
+          document.getElementById("btnCrearTribuna").disabled = true;
+        } else if(this.tribunaCreate.success == false){
+          this.errores = this.tribunaCreate.errores;
+          console.log(this.errores);
+          document.getElementById("btnCrearTribuna").disabled = false;
         }
       } catch (error) {
         console.log(error);
@@ -328,11 +402,11 @@ export default {
     },
     async editarTribuna(id) {
       let payload = {
-          nombreTribuna: this.tribuna.nombreTribuna,
-          capacidad: this.tribuna.capacidad,
-          valorBoleta: this.tribuna.valorBoleta,
-        };
-      try {        
+        nombreTribuna: this.tribuna.nombreTribuna,
+        capacidad: this.tribuna.capacidad,
+        valorBoleta: this.tribuna.valorBoleta,
+      };
+      try {
         console.log(payload);
         const { data } = await axios.put(
           ENDPOINT_PATH + "editar_tribuna/" + id,
@@ -340,7 +414,7 @@ export default {
         );
         this.data = data.actualizado;
         console.log(this.data);
-        if (this.data==true) {         
+        if (this.data == true) {
           this.closeModal();
           this.listarTribunas();
           this.nombreTribuna = "";
@@ -351,14 +425,16 @@ export default {
         console.log(error);
       }
     },
-    async eliminarTribuna(id){
+    async eliminarTribuna(id) {
       try {
-        const res= await axios.delete(ENDPOINT_PATH+'eliminar_tribuna/'+id);
-        this.tribunaEliminada=res.status;
-        if (this.tribunaEliminada==200) {
+        const res = await axios.delete(
+          ENDPOINT_PATH + "eliminar_tribuna/" + id
+        );
+        this.tribunaEliminada = res.status;
+        if (this.tribunaEliminada == 200) {
           this.closeModal();
-          this.listarTribunas();          
-        }else{
+          this.listarTribunas();
+        } else {
           this.closeModal;
           alert("No se pudo eliminar la tribuna");
         }
@@ -376,14 +452,14 @@ export default {
       this.tribuna.valorBoleta = data.valor_boleta;
       this.id = data.id;
     },
-    openModalD(data={}){
-      this.modalD=1;
-      this.id=data.id
+    openModalD(data = {}) {
+      this.modalD = 1;
+      this.id = data.id;
     },
     closeModal() {
       this.modal = 0;
       this.modalE = 0;
-      this.modalD=0;
+      this.modalD = 0;
     },
   },
 };
@@ -398,6 +474,27 @@ export default {
   display: list-item;
   opacity: 1;
   background: rgba(168, 167, 172, 0.6);
+}
+body .tooltip-inner {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
+
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
+}
+body .tooltip .arrow::before {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #5d5d5d14;
+  border: 1px solid #f5f5f5;
+  border-radius: 16px;
+  text-align: center;
+  font: normal normal 300 12px/14px Rubik;
+  letter-spacing: 0px;
+  color: #707070;
 }
 .titulo_tribuna {
   font-family: "Gilroy";
@@ -460,6 +557,20 @@ export default {
   box-shadow: 0px 3px 6px #866ff766;
   border-radius: 12px;
   color: #fff;
+}
+
+.btn-guardar:disabled {
+  width: 90px;
+  height: 40px;
+  background: transparent linear-gradient(90deg, #605f64da 0%, #605f64da 100%)
+    0% 0% no-repeat padding-box;
+  border-radius: 12px;
+
+  text-align: center;
+  font: normal normal medium 16px/19px "Gilroy";
+  letter-spacing: 0px;
+  color: #ffffff;
+  opacity: 1;
 }
 
 .p-tribuna {
