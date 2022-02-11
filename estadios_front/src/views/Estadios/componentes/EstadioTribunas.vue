@@ -328,6 +328,7 @@ export default {
 
     id: 0, // id de la tribuna para eliminar o editar
     errores: [],
+    msj:"",
   }),
   computed: {
     idEstadio() {
@@ -383,10 +384,10 @@ export default {
           payload
         );
         this.tribunaCreate = data;
-        if (this.tribunaCreate.success == true) {
-          console.log("Tribuna registrada");
+        if (this.tribunaCreate.success == true) {          
           this.closeModal();
           this.listarTribunas();
+          this.msj=this.tribunaCreate.message;
           this.nombreTribuna = "";
           this.capacidad = "";
           this.valorBoleta = 0;

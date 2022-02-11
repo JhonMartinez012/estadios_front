@@ -363,6 +363,10 @@ export default {
     },
     closeModal() {
       this.modal = 0;
+      this.contraNull = false,
+      this.contraDist = false;
+      this.contraMin = false;
+      this.userUpdate = false;
     },
     tiempoEspera() {
       setTimeout(this.pasar, 3000);

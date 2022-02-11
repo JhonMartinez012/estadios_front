@@ -1,5 +1,47 @@
 <template>
   <div class="container-fluid admins m-0 mt-3 ml-0">
+    <!-- Modal para avisar que las contraseñas no coinciden -->
+    <div class="modal" :class="{ show: modal }">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              {{ tituloModal }}
+            </h5>
+            <button
+              v-if="userUpdate != true"
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              @click="closeModal"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <div class="row">
+                {{ mensaje }}
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              v-if="userUpdate != true"
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              @click="closeModal()"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ******* FIN DE LA MODAL PARA CREAR ******** -->
+
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
@@ -28,63 +70,77 @@
           </slim-cropper>
         </div>
         <div class="form-group col-sm-8 col-md-4">
-          <label for="inputState" class="titulo_form">Nombres</label>
-          <input
-            type="text"
-            placeholder="Nombres"
-            v-model="administrador.name"
-            class="cuadros_input"
-          />
-          <br />
+          <div class="" style="height: 25%">
+            <label for="inputState" class="titulo_form">Nombres</label>
+            <input
+              type="text"
+              placeholder="Nombres"
+              v-model="administrador.name"
+              class="cuadros_input"
+            />
+          </div>
 
-          <label for="inputState" class="titulo_form">Apellidos</label>
-          <input
-            type="text"
-            v-model="administrador.last_name"
-            class="cuadros_input"
-          />
-          <br />
+          <div class="" style="height: 25%">
+            <label for="inputState" class="titulo_form">Apellidos</label>
+            <input
+              type="text"
+              v-model="administrador.last_name"
+              class="cuadros_input"
+            />
+          </div>
 
-          <label for="inputState" class="titulo_form">Correo electrónico</label>
-          <input
-            type="email"
-            v-model="administrador.email"
-            class="cuadros_input"
-          />
+          <div class="" style="height: 25%">
+            <label for="inputState" class="titulo_form"
+              >Correo electrónico</label
+            >
+            <input
+              type="email"
+              v-model="administrador.email"
+              class="cuadros_input"
+            />
+          </div>
 
-          <label for="inputState" class="titulo_form">Contraseña</label>
-          <input
-            type="password"
-            v-model="administrador.password"
-            class="cuadros_input"
-          />
+          <div class="" style="height: 25%">
+            <label for="inputState" class="titulo_form">Contraseña</label>
+            <input type="password" v-model="password" class="cuadros_input" />
+          </div>
         </div>
 
         <div class="form-group col-sm-8 col-md-4">
-          <label for="inputState" class="titulo_form"
-            >Acerca del administrador</label
-          >
-          <textarea
-            cols="30"
-            rows="10"
-            class="cuadros_txtArea"
-            v-model="administrador.acerca"
-          ></textarea>
+          <div class="" style="height: 50%">
+            <label for="inputState" class="titulo_form"
+              >Acerca del administrador</label
+            >
+            <textarea
+              cols="30"
+              rows="10"
+              class="cuadros_txtArea"
+              v-model="administrador.acerca"
+            ></textarea>
+          </div>
 
-          <label for="inputState" class="titulo_form">Teléfono celular</label>
-          <input
-            type="text"
-            v-model="administrador.phone"
-            class="cuadros_input"
-          />
-          <br />
+          <div class="" style="height: 25%">
+            <label for="inputState" class="titulo_form">Teléfono celular</label>
+            <div class="d-flex align-content-center align-items-center">
+              <input
+                class="cuadros_input"
+                type="text"
+                v-model="administrador.phone"
+                minlength="7"
+                :maxlength="longPhone"
+              />
+              <span class="cont-caracteres"
+                >{{ contPhone }}/{{ longPhone }}</span
+              >
+            </div>
+          </div>
 
-          <label for="inputState" class="titulo_form">Repetir contraseña</label>
-          <input
-            type="password"
-            v-model="administrador.repassword"
-            class="cuadros_input"
-          />
+          <div class="" style="height: 25%">
+            <label for="inputState" class="titulo_form"
+              >Repetir contraseña</label
+            >
+            <input type="password" v-model="repassword" class="cuadros_input" />
+          </div>
         </div>
       </div>
     </div>
@@ -101,16 +157,40 @@ export default {
   },
   data() {
     return {
-      administrador: [],
+      administrador: {
+        name: "",
+        last_name: "",
+        email: "",
+        acerca: "",
+        phone: "",
+      },
+      password: "",
+      repassword: "",
       id: 0,
       slimOptions: {
         label: "Añadir imagen",
       },
+      longPhone: 10,
+
+      //Variables para validar actualización del admin
+      adminActualizado: [],
+      errores: [],
+      modal: 0,
+      tituloModal: "",
+      contraNull: false,
+      contraDist: false,
+      contraMin: false,
+      userUpdate: false,
+      mensaje: "",
+      message: "",
     };
   },
   computed: {
     idAdministrador() {
       return this.$route.params.id;
+    },
+    contPhone() {
+      return this.administrador.phone.length;
     },
   },
   methods: {
@@ -120,43 +200,105 @@ export default {
           ENDPOINT_PATH + "administrador/" + this.idAdministrador
         );
         this.administrador = data.administrador;
-        console.log(this.administrador);
+        //console.log(this.administrador);
       } catch (error) {
         console.log(error);
       }
     },
     async editarAdministrador() {
-      let payload = {
-        name: this.administrador.name,
-        lastName: this.administrador.last_name,
-        acerca: this.administrador.acerca,
-        email: this.administrador.email,
-        phone: this.administrador.phone,
-        password: this.administrador.password,
-        repassword: this.administrador.repassword,
-      };
-
-      console.log(payload);
+      //console.log(payload);
       try {
-        const { data } = await axios.put(
-          ENDPOINT_PATH + "editar_administrador/" + this.idAdministrador,
-          payload
-        );
-        this.data = data;
-        if (this.data) {
-          this.$router.push({ name: "Administradores" });
+        if (this.password != "" && this.repassword != "") {
+          if (this.password.length >= 6 && this.repassword.length >= 6) {
+            if (this.password == this.repassword) {
+              let payload = {
+                name: this.administrador.name,
+                lastName: this.administrador.last_name,
+                acerca: this.administrador.acerca,
+                email: this.administrador.email,
+                phone: this.administrador.phone,
+                password: this.password,
+                repassword: this.repassword,
+              };
+              const { data } = await axios.put(
+                ENDPOINT_PATH + "editar_administrador/" + this.idAdministrador,
+                payload
+              );
+              this.adminActualizado = data;
+              if (this.adminActualizado.success == true) {
+                //this.$router.push({ name: "Administradores" });
+                //console.log(this.adminActualizado.message);
+                this.userUpdate = true;
+                this.message = this.adminActualizado.message;
+                this.contraNull = false;
+                this.contraDist = false;
+                this.contraMin = false;
+
+                this.openModal();
+              } else {
+                this.errores = this.adminActualizado.errores;
+                //console.log(this.adminActualizado.errores);
+              }
+            } else {
+              this.contraDist = true, 
+              this.openModal();
+              //alert("contraseñas no coinciden");
+            }
+          } else {
+            (this.contraMin = true), 
+            this.openModal();
+            //alert("La contraseña debe tener minimo 6 caracteres")
+          }
         } else {
-          console.log("No se pudo actualizar");
+          (this.contraNull = true), 
+          this.openModal();
+          //alert("ingrese una contraseña");
         }
       } catch (error) {
         console.log(error);
       }
+    },
+
+    openModal() {
+      this.modal = 1;
+      if (this.contraNull) {
+        this.tituloModal = "Contraseña nula";
+        this.mensaje = "El campo de contraseñas no puede ser nulo";
+      } else if (this.contraDist) {
+        this.tituloModal = "Contraseñas diferentes";
+        this.mensaje = "Las contraseñas no coinciden";
+      } else if (this.contraMin) {
+        (this.tituloModal = "Numero de caracteres"),
+          (this.mensaje = "La contraseña debe tener almenos 6 caracteres");
+      } else if (this.userUpdate) {
+        (this.tituloModal = "Actualización exitosa"),
+          (this.mensaje = this.message);
+        this.tiempoEspera();
+      }
+    },
+    closeModal() {
+      this.modal = 0;
+      this.contraNull = false,
+      this.contraDist = false;
+      this.contraMin = false;
+      this.userUpdate = false;
+    },
+    tiempoEspera() {
+      setTimeout(this.pasar, 2000);
+    },
+    pasar() {
+      this.$router.push({ name: "Administradores" });
     },
   },
 };
 </script>
 
 <style scoped>
+.show {
+  display: list-item;
+  opacity: 1;
+  background: rgba(168, 167, 172, 0.6);
+}
 .admins {
   margin-left: 105px;
 }
