@@ -64,7 +64,8 @@
     <!-- ******* FIN DE LA MODAL PARA INACTIVAR DIA ******** -->    
     <h2 class="bold mb-2">Motivos de inactividad</h2>    
     
-      <meses />
+      <!-- <meses /> -->
+      <mesesMoment />
       
 
       <!-- <div class="meses col-md-4 col-sm-6">
@@ -176,9 +177,11 @@
 
 <script>
 import axios from "axios";
-import meses from "../../../components/meses.vue"
+//import meses from "../../../components/meses.vue"
+import mesesMoment from "../../../components/meseMoment.vue"
 const END_POINT = "http://127.0.0.1:8000/api/motivo_inactividad/";
 export default {
+  name:"calendarioEstadio",
   created() {
     this.listMotivosInactividad();
   },
@@ -191,7 +194,8 @@ export default {
     };
   },
   components:{
-    meses,
+    //meses,
+    mesesMoment,
   },
   methods: {
     async listMotivosInactividad() {

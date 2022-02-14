@@ -122,6 +122,7 @@ const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 import "vueperslides/dist/vueperslides.css";
 import ImageSlider from "../../../components/imageSlider.vue";
 export default {
+  name:"infoEstadio",
   created() {
     this.verEstadio();
     this.listarImagenesSecundarias();

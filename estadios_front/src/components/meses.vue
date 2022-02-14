@@ -1,5 +1,8 @@
 <template>
   <div class="row calendario">
+    <label for="">{{meses[0]}}</label>
+    <label for="">{{meses[1]}}</label>
+    <label for="">{{meses[2]}}</label>
     <div
       v-for="(mes, index) in meses"
       :key="`mes-${index}`"
@@ -9,6 +12,7 @@
         dayjs(dayjs().month(index).locale("es")).format("MMMM YYYY") ||
         "Sin titulo"
       }}</label>
+      
       <ol>
         <li class="dia-nombre" v-for="(nom, index) in nomDias"  :key="`nombrDia-${index}`">
           {{ dayjs(dayjs().day(index).locale("es")).format("dd") }}
