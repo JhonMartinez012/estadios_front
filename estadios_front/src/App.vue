@@ -127,4 +127,82 @@ body .tooltip .arrow::before {
   margin-bottom: 0;
   margin-top: 8px;
 }
+
+/* Estilos para el calendario */
+.calendario {
+  text-align: center;
+  width: 100%;
+}
+.control {
+  color: white;
+  font-weight: bold;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 5px;
+}
+.meses {
+  background: #7358fa;
+  padding: auto;
+  width: 100%;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+}
+
+.mes-nombre {
+  font-family: Arial;
+  font-size: 27px;
+  margin: 0em;
+  color: #ebebeb;
+}
+.grid__header,
+.grid__body {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 100%;
+  height: 50px;
+
+  justify-content: center;
+  align-items: center;
+  font-family: Arial;
+
+  font-size: 18px;
+}
+.grid__header {
+  background: #ebebeb;
+  font-weight: bold;
+}
+
+.grid__cell,
+.grid__cell--disabled {
+  width: 100%;
+  height: 50px;
+  background: #f2f2f2;
+  font-family: Arial;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.grid__cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.grid__cell--disabled {
+  color: #aaaaaa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: not-allowed;
+}
+.grid__cell--selected {
+    color: white;
+    background-color: #7358fa;
+    border-radius: 50%;
+    border: 2px solid #7358fa;
+    box-shadow: 0 0 0 2px var(--color-bg-calendar) inset;
+}
 </style>

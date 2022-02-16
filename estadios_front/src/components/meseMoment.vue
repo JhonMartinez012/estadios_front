@@ -18,13 +18,7 @@
             <span class="grid__cell grid__cell--gh">S</span>
             <span class="grid__cell grid__cell--gh">D</span>
           </div>
-          <div class="grid__body col-md-4 col-sm-6 p-0">
-            <!-- <span
-              class="grid__cell grid__cell--gh"
-              v-for="(dia, index) in dias"
-              :key="index"
-              >{{ dia }}</span            > -->
-          </div>
+          <div class="grid__body col-md-4 col-sm-6 p-0"></div>
         </div>
       </div>
     </div>
@@ -32,31 +26,126 @@
     <!--  <div class="calendar" id="calendar2">
 
         </div> -->
+
+    <!-- Modal para motivos de inactividad de un estadio -->
+    <div class="modal" :class="{ show: modal }">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              {{ tituloModal }}
+            </h5>
+            <button
+              v-if="tituloModal != true"
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              @click="closeModal"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="container col-md-12">
+              <div class="row justify-content-center">
+                <div class="col-12">
+                  <div class="row justify-content-center">
+                    <!-- <label class="fechaSeleccionada"> {{ mostrarFecha }} </label> -->
+                    <input
+                      type="text"
+                      class="fechaSeleccionada text-center"
+                      v-model="mostrarFecha"
+                      disabled
+                    />
+                  </div>
+                  <div class="row w-100 justify-content-center">
+                    <div class="col-10">
+                      <p for="" class="p-motivo">Motivo inactividad</p>
+                      <select
+                        v-model="motivoInactividadId"
+                        class="select-motivo"
+                      >
+                        <option value="0">seleccionar</option>
+                        <option
+                          v-for="motivo in motivosInactividad"
+                          :key="motivo.id"
+                          :value="motivo.id"
+                        >
+                          {{ motivo.nombre_motivo }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button
+              v-if="tituloModal != true"
+              type="button"
+              class="btn btn-cerrar"
+              data-dismiss="modal"
+              @click="closeModal()"
+            >
+              Cerrar
+            </button>
+            <button
+              v-if="tituloModal != true"
+              type="button"
+              class="btn btn-inactivar"
+              data-dismiss="modal"
+              @click="inactivarDia()"
+            >
+              Inactivar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ******* FIN DE LA MODAL PARA LOS MOTIVOS DE INACTIVIDAD ******** -->
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import axios from "axios";
+const ENDPOINT_PATH = "http://127.0.0.1:8000/api/motivo_inactividad/";
+const ENDPOINT_PATH1 = "http://127.0.0.1:8000/api/estadio/";
 export default {
+  name: "calendarioMoment",
   mounted() {
     //this.diasMes();
     //this.generateDates(moment());
-    this.init(); 
-    
-    
+    this.init();
+  },
+  computed: {
+    idEstadio() {
+      return this.$route.params.id;
+    },
   },
   data() {
     return {
       dias: [],
       cells: [],
-      currentMonth: moment(),
-      elGridBody:"",
-      elMonthDay:"",
-      fechaSeleccionada:null,
+      currentMonth: moment(), // para agregar  un mes .add(1,'month')
+      elGridBody: "",
+      elMonthDay: "",
+      fechaSeleccionada: null,
+
+      // variables para la modal
+      modal: 0,
+      show: true,
+      tituloModal: "",
+      mostrarFecha: "",
+      motivoInactividadId: 0,
+      motivosInactividad: [],
     };
   },
+  
   methods: {
-    async init(){
+    async init() {
       await this.gridBody();
       await this.addEventListenerToControls();
       await this.monthDay();
@@ -72,11 +161,11 @@ export default {
       console.log(this.dias);
     }, */
 
-    async gridBody(){
-      this.elGridBody= await document.querySelector(".grid__body")
+    async gridBody() {
+      this.elGridBody = await document.querySelector(".grid__body");
     },
-    async monthDay(){
-      this.elMonthDay = document.querySelector(".mes-nombre")
+    async monthDay() {
+      this.elMonthDay = document.querySelector(".mes-nombre");
     },
 
     //funcion para cambiar los meses del calendario
@@ -127,7 +216,9 @@ export default {
           ${this.cells[index].date.date()}
         </span>`;
       }
-      this.elMonthDay.innerHTML = this.currentMonth.locale('es').format('MMMM YYYY');
+      this.elMonthDay.innerHTML = this.currentMonth
+        .locale("es")
+        .format("MMMM YYYY");
       this.elGridBody.innerHTML = templateCells;
       this.addEventListenerToCells();
     },
@@ -143,7 +234,7 @@ export default {
       while (dateStart.day() !== 1) {
         dateStart.subtract(1, "days");
       }
-      //encintrar ultima fecha que se mostrara en el calaendario
+      //encontrar ultima fecha que se mostrara en el calaendario
       while (dateEnd.day() !== 0) {
         dateEnd.add(1, "days");
       }
@@ -163,13 +254,27 @@ export default {
     },
 
     addEventListenerToCells() {
-       let elCells = document.getElementById('calendario').querySelectorAll('.grid__cell--gh');
-        elCells.forEach(elCell => {
-            elCell.addEventListener('click', e => {
-                let elTarget = e.target;
-                if (elTarget.classList.contains('grid__cell--disabled') || elTarget.classList.contains('grid__cell--selected')) {
-                    return;
-                }
+      let elCells = document
+        .getElementById("calendario")
+        .querySelectorAll(".grid__cell--gh");
+      elCells.forEach((elCell) => {
+        elCell.addEventListener("click", (e) => {
+          let elTarget = e.target;
+
+          if (
+            elTarget.classList.contains("grid__cell--disabled") ||
+            elTarget.classList.contains("grid__cell--selected")
+          ) {
+            return;
+          }
+
+          if (elTarget) {
+            this.fechaSeleccionada =
+              this.cells[parseInt(elTarget.dataset.cellId)].date;
+
+            this.openModal();
+          }
+          /* 
                 // Deselecionar la celda anterior
                 let selectedCell = this.elGridBody.querySelector('.grid__cell--selected');
                 if (selectedCell) {
@@ -179,94 +284,114 @@ export default {
                 // Selecionar la nueva celda
                 elTarget.classList.add('grid__cell--selected');
                 this.fechaSeleccionada = this.cells[parseInt(elTarget.dataset.cellId)].date;
-                console.log(this.fechaSeleccionada.format('LLL'));
+                console.log(this.fechaSeleccionada.locale('es').format('LLL'));
                 // Lanzar evento change
-                //this.elCalendar.dispatchEvent(new Event('change'));
-            });
+                //this.elCalendar.dispatchEvent(new Event('change')); */
         });
+      });
     },
-    value(){
+    value() {
       return this.fechaSeleccionada;
-    }
-  },
+    },
+    async listarMotivos() {
+      try {
+        const { data } = await axios.get(ENDPOINT_PATH + "motivos_inactividad");
+        this.motivosInactividad = data.motivos_inactividad;
+        if (!this.motivosInactividad) {
+          console.log("no hay motivos de inactividad que mostrar");
+        }
+        console.log(this.motivosInactividad);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async inactivarDia(){
+      if (this.motivoInactividadId == 0) {
+        this.fechaSeleccionada;
+        console.log('Debe seleccionar un motivo', this.fechaSeleccionada._d);
+       }else{
+         let payload = {
+          estadio_id : this.idEstadio,
+          motivo_inactividad_id:this.motivoInactividadId,
+          fecha:this.fechaSeleccionada.locale('es').format('YYYY-MM-DD')
+         }
+         const {data}= await axios.post(ENDPOINT_PATH1+"inactivar-dia-estadio", payload);
+         this.motivoInactividadEstadio=data;
+
+         console.log(this.fechaSeleccionada.locale('es').format('YYYY-MM-DD'), this.idEstadio, this.motivoInactividadId);
+         this.closeModal(); 
+         this.motivoInactividadId=0;
+       }
+    },
+
+
+    async openModal() {
+      this.modal = 1;
+      this.tituloModal = "Inactivar día";
+      this.mostrarFecha = this.fechaSeleccionada.locale("es").format("DD-MMMM-YYYY");
+      await this.listarMotivos();
+    },
+    closeModal() {
+      this.modal = 0;
+    },
+  }
 };
 </script>
 
-<style>
-.calendario {
-  text-align: center;
-  width: 100%;
+<style scoped>
+.show {
+  /* estilo modal */
+  display: list-item;
+  opacity: 1;
+  background: rgba(168, 167, 172, 0.6);
 }
-.control {
-  color: white;
+.fechaSeleccionada:disabled {
+  font-family: "Gilroy";
   font-weight: bold;
-  background-color: transparent;
+  font-size: 25px;
+  color: #000000;
   border: none;
-  cursor: pointer;
-  padding: 0 5px;
+  outline: none;
 }
-.meses {
-  background: #7358fa;
-  padding: auto;
+
+.p-motivo {
   width: 100%;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  text-transform: uppercase;
+  height: 15px;
+  margin-top: 22px;
+  margin-bottom: 3px;
+  margin-left: 10px;
+  font-family: "Rubik";
+  font-size: 13px;
+  letter-spacing: 0px;
+  color: #637381;
 }
-
-.mes-nombre {
-  font-family: Arial;
-  font-size: 27px;
-  margin: 0em;
-  color: #ebebeb;
-}
-.grid__header,
-.grid__body {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
+.select-motivo {
   width: 100%;
-  height: 50px;
-
-  justify-content: center;
-  align-items: center;
-  font-family: Arial;
-
-  font-size: 18px;
+  height: 40px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #dfe4e8;
+  border-radius: 8px;
+  opacity: 1;
 }
-.grid__header {
-  background: #ebebeb;
+
+.btn-cerrar,
+.btn-inactivar {
+  width: 6em;
+  height: 40px;
+  font-family: "Gilroy";
+  font-size: 15px;
+  border-radius: 12px;
+}
+
+.btn-cerrar {
+  background: #f0f1ff 0% 0% no-repeat padding-box;
+  color: #3c2ea8;
+}
+
+.btn-inactivar {
   font-weight: bold;
-}
-
-.grid__cell,
-.grid__cell--disabled {
-  width: 100%;
-  height: 50px;
-  background: #f2f2f2;
-  font-family: Arial;
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.grid__cell {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-.grid__cell--disabled {
-  color: #aaaaaa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: not-allowed;
-}
-.grid__cell--selected {
-    color: white;
-    background-color: #7358fa;
-    border-radius: 50%;
-    border: 2px solid #7358fa;
-    box-shadow: 0 0 0 2px var(--color-bg-calendar) inset;
+  background: transparent linear-gradient(90deg, #7358FA 0%, #866FF7 100%) 0% 0% no-repeat padding-box;
+  color: #FFFFFF;
 }
 </style>
