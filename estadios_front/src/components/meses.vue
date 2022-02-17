@@ -1,15 +1,13 @@
 <template>
   <div class="row calendario">
-    <label for="">{{meses[0]}}</label>
-    <label for="">{{meses[1]}}</label>
-    <label for="">{{meses[2]}}</label>
+   
     <div
       v-for="(mes, index) in meses"
       :key="`mes-${index}`"
       class="meses col-md-4 col-sm-6"
     >
       <label class="mes-nombre">{{
-        dayjs(dayjs().month(index).locale("es")).format("MMMM YYYY") ||
+        dayjs(numeroMeses[index]).locale('es').format("MMMM YYYY") ||
         "Sin titulo"
       }}</label>
       
@@ -39,6 +37,7 @@ export default {
       nomDias: [],
       dayjs,
       mesAnterior: 0,
+      numeroMeses: new Array(3)
      
     };
   },
@@ -58,13 +57,25 @@ export default {
         this.nomDias.push(index);
       }
       //console.log(this.nomDias);
-
       for (let i = 0; i < 3; i++) {
-        
-        this.cantDias[i] = dayjs("2022-0" + (i + 1)).daysInMonth();
+        let yearMonth = dayjs().add(i, 'month').format("YYYY-MM")
+        this.numeroMeses[i] = yearMonth
+        this.cantDias[i] = dayjs(yearMonth).daysInMonth();
        
         let dias = [];
         for (let j = 1; j <= this.cantDias[i]; j++) {
+          if (j==1) {
+            const fecha = dayjs(`${this.numeroMeses[i]}-${j>9?j:'0'+j}`)
+            let numeroDia=fecha.day()
+            if(numeroDia>0){
+              let diasPre = []
+              for (let index = numeroDia; index > 0; index--) {
+                diasPre.push(fecha.subtract(index, 'day').format('D'))
+              }
+              console.log({diasPre});
+              dias = [...diasPre, ...dias]
+            }
+          }
           dias.push(j);
         
         }

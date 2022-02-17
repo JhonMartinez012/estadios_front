@@ -233,7 +233,7 @@ export default {
       this.addEventListenerToCells();
     },
 
-    generateDates(monthToShow = moment()) {
+    generateDates(monthToShow = moment()) { // funcion para generar las fechas
       if (!moment.isMoment(monthToShow)) {
         return null;
       }
@@ -290,12 +290,13 @@ export default {
                     selectedCell.classList.remove('grid__cell--selected');
                 }
                 
-                // Selecionar la nueva celda
-                elTarget.classList.add('grid__cell--selected');
-                this.fechaSeleccionada = this.cells[parseInt(elTarget.dataset.cellId)].date;
-                console.log(this.fechaSeleccionada.locale('es').format('LLL'));
-                // Lanzar evento change
-                //this.elCalendar.dispatchEvent(new Event('change')); */
+                */
+               // Selecionar la nueva celda
+               elTarget.classList.add('grid__cell--selected');
+               this.fechaSeleccionada = this.cells[parseInt(elTarget.dataset.cellId)].date;
+               console.log(this.fechaSeleccionada.locale('es').format('LLL'));
+               // Lanzar evento change
+               //this.elCalendar.dispatchEvent(new Event('change')); 
         });
       });
     },

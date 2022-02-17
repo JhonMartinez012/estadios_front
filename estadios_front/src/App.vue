@@ -129,7 +129,7 @@ body .tooltip .arrow::before {
 }
 
 /* Estilos para el calendario */
-.calendario {
+/* .calendario {
   text-align: center;
   width: 100%;
 }
@@ -204,5 +204,5 @@ body .tooltip .arrow::before {
     border-radius: 50%;
     border: 2px solid #7358fa;
     box-shadow: 0 0 0 2px var(--color-bg-calendar) inset;
-}
+} */
 </style>
