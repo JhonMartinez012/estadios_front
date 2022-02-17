@@ -240,7 +240,7 @@ export default {
 
     async crearMotivoInactividad() {
       try {
-        if (this.nombre_motivo.length > 6) {
+        if (this.nombre_motivo.length >= 6) {
           let payload = {
             nombre_motivo: this.nombre_motivo,
           };

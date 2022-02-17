@@ -75,6 +75,12 @@
                           {{ motivo.nombre_motivo }}
                         </option>
                       </select>
+                      <span
+                        for="inputState"
+                        class="msg_error"
+                        v-if="mensaje"
+                        >{{ mensaje }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -133,6 +139,7 @@ export default {
       elGridBody: "",
       elMonthDay: "",
       fechaSeleccionada: null,
+      fechasInactivas:[],
 
       // variables para la modal
       modal: 0,
@@ -141,14 +148,17 @@ export default {
       mostrarFecha: "",
       motivoInactividadId: 0,
       motivosInactividad: [],
+      errores: [],
+      mensaje: "",
     };
   },
-  
+
   methods: {
     async init() {
       await this.gridBody();
       await this.addEventListenerToControls();
       await this.monthDay();
+      await this.DiasInactivos();
       await this.showCells();
     },
     /* currentDateTime() {
@@ -271,7 +281,6 @@ export default {
           if (elTarget) {
             this.fechaSeleccionada =
               this.cells[parseInt(elTarget.dataset.cellId)].date;
-
             this.openModal();
           }
           /* 
@@ -306,36 +315,56 @@ export default {
       }
     },
 
-    async inactivarDia(){
+    async inactivarDia() {
       if (this.motivoInactividadId == 0) {
-        this.fechaSeleccionada;
-        console.log('Debe seleccionar un motivo', this.fechaSeleccionada._d);
-       }else{
-         let payload = {
-          estadio_id : this.idEstadio,
-          motivo_inactividad_id:this.motivoInactividadId,
-          fecha:this.fechaSeleccionada.locale('es').format('YYYY-MM-DD')
-         }
-         const {data}= await axios.post(ENDPOINT_PATH1+"inactivar-dia-estadio", payload);
-         this.motivoInactividadEstadio=data;
-
-         console.log(this.fechaSeleccionada.locale('es').format('YYYY-MM-DD'), this.idEstadio, this.motivoInactividadId);
-         this.closeModal(); 
-         this.motivoInactividadId=0;
-       }
+        //this.fechaSeleccionada;
+        this.mensaje =
+          "Debe seleccionar un motivo para poder inactivar este día";
+        //console.log('Debe seleccionar un motivo');
+      } else {
+        let payload = {
+          estadio_id: this.idEstadio,
+          motivo_inactividad_id: this.motivoInactividadId,
+          fecha: this.fechaSeleccionada.locale("es").format("YYYY-MM-DD"),
+        };
+        const { data } = await axios.post(
+          ENDPOINT_PATH1 + "inactivar-dia-estadio",
+          payload
+        );
+        this.motivoInactividadEstadio = data;
+        if (this.motivoInactividadEstadio.success == true) {
+          //console.log(this.motivoInactividadEstadio.inactividad);
+          //console.log(this.fechaSeleccionada.locale('es').format('YYYY-MM-DD'), this.idEstadio, this.motivoInactividadId);
+          
+          this.closeModal();
+          this.motivoInactividadId = 0;
+        } else {
+          console.log(this.motivoInactividadEstadio.error);
+        }
+      }
     },
-
+    async DiasInactivos(){
+      try {
+        const {data} = await axios.get(ENDPOINT_PATH1 + 'listar-dias-inactivos/'+this.idEstadio);
+        this.fechasInactivas= data;
+        console.log("Dias inactivos: " , this.fechasInactivas);
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     async openModal() {
       this.modal = 1;
       this.tituloModal = "Inactivar día";
-      this.mostrarFecha = this.fechaSeleccionada.locale("es").format("DD-MMMM-YYYY");
+      this.mostrarFecha = this.fechaSeleccionada
+        .locale("es")
+        .format("DD-MMMM-YYYY");
       await this.listarMotivos();
     },
     closeModal() {
       this.modal = 0;
     },
-  }
+  },
 };
 </script>
 
@@ -391,7 +420,8 @@ export default {
 
 .btn-inactivar {
   font-weight: bold;
-  background: transparent linear-gradient(90deg, #7358FA 0%, #866FF7 100%) 0% 0% no-repeat padding-box;
-  color: #FFFFFF;
+  background: transparent linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  color: #ffffff;
 }
 </style>
