@@ -187,7 +187,7 @@
                   class="images-editar"
                 />
                 <div class="boton_accion">
-                  <button class="btn_accion_eliminar">
+                  <!-- <button class="btn_accion_eliminar">
                     <img
                       src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
                       width="cover"
@@ -195,7 +195,7 @@
                       alt=""
                       srcset=""
                     />
-                  </button>
+                  </button> -->
                   <button class="btn_accion_editar">
                     <img
                       src="/assets/1. Estadios/Iconos/icon - editar.svg"
@@ -220,7 +220,7 @@
                   class="images-editar"
                 />
                 <div class="boton_accion">
-                  <button class="btn_accion_eliminar">
+                  <button class="btn_accion_eliminar" @click="eliminarImgSecundaria(imgSecundaria.id)">
                     <img
                       src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
                       width="cover"

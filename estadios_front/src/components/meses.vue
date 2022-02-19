@@ -27,8 +27,9 @@
                     <!-- <label class="fechaSeleccionada"> {{ mostrarFecha }} </label> -->
                     <input
                       type="text"
-                      class="fechaSeleccionada "
-                      v-model="mostrarFecha"                      
+                      class="fechaSeleccionada"
+                      v-model="mostrarFecha"
+                      disabled
                     />
                   </div>
                   <div class="row justify-content-center">
@@ -49,6 +50,9 @@
                       </select>
                       <span for="inputState" class="msg_error" v-if="mensaje">{{
                         mensaje
+                      }}</span>
+                      <span for="inputState" class="msg_error" v-if="existe">{{
+                        existe
                       }}</span>
                     </div>
                   </div>
@@ -100,12 +104,22 @@
           >
             {{ dayjs(dayjs().day(index1).locale("es")).format("dd") }}
           </li>
-          <li            
+          <li
             v-for="(dia, index2) in mes"
             :key="`dias-${index2}`"
-            :class="{'dias': dayjs(dia).format('MM') == dayjs(numeroMeses[index]).format('MM')  , 'otro-mes': dayjs(dia).format('MM') != dayjs(numeroMeses[index]).format('MM')} "
+            :class="{
+              'dias':
+                dayjs(dia).format('MM') ==
+                dayjs(numeroMeses[index]).format('MM'),
+              'otro-mes':
+                dayjs(dia).format('MM') !=
+                dayjs(numeroMeses[index]).format('MM'),
+
+                'dia--selected': dayjs(dia).format('YYYY-MM-DD') ==
+                dayjs(fechasInactivas[5].fecha).format('YYYY-MM-DD') && dayjs(dia).format('MM') ==
+                dayjs(numeroMeses[index]).format('MM') ,
+            }"
             @click="openModal(dia)"
-            
           >
             {{ dayjs(dia).format("D") }}
           </li>
@@ -133,7 +147,7 @@ export default {
       dayjs,
       mesAnterior: 0,
       numeroMeses: new Array(3),
-      fechaGuardar:"",
+      fechaGuardar: "",
 
       // variables para la modal
       modal: 0,
@@ -144,10 +158,11 @@ export default {
       motivosInactividad: [],
       errores: [],
       mensaje: "",
+      existe: "",
     };
   },
   created() {
-    this.day();
+    this.iniciar();
     
   },
   computed: {
@@ -157,7 +172,10 @@ export default {
   },
 
   methods: {
-   
+    async iniciar() {
+      await this.day();
+      await this.DiasInactivos();
+    },
     day() {
       //this.dias=dayjs('2022-01').daysInMonth();// devuelve cuantos dias tiene el mes actual
       //this.dias=dayjs().date(31) // obtiene o establece el dia del mes
@@ -206,16 +224,15 @@ export default {
             const fecha = dayjs(
               `${this.numeroMeses[i]}-${j > 9 ? j : "0" + j}`
             ); // saber que dia cae el último dia del mes
-           
+
             let numeroDia = fecha.day(); // saber en que posición esta el ultimo dia del mes
-           
+
             if (numeroDia < 6) {
               let diasPost = [];
               let iteraciones = 6 - numeroDia;
               //console.log(iteraciones);
               for (let k = 1; k <= iteraciones; k++) {
                 diasPost.push(fecha.add(k, "day").format("YYYY-MM-DD"));
-                
               }
               //console.log({ diasPost });
               dias = [...dias, ...diasPost];
@@ -233,11 +250,11 @@ export default {
       this.mostrarFecha = dayjs(dia).locale("es").format("DD MMMM YYYY");
       this.fechaGuardar = dayjs(dia).format("YYYY-MM-DD");
       await this.listarMotivos();
-
     },
     closeModal() {
       this.modal = 0;
-      this.motivoInactividadId=0;
+      this.motivoInactividadId = 0; 
+      this.existe= "";
     },
     async listarMotivos() {
       try {
@@ -246,38 +263,49 @@ export default {
         if (!this.motivosInactividad) {
           console.log("no hay motivos de inactividad que mostrar");
         }
-        //console.log(this.motivosInactividad);
       } catch (error) {
         console.log(error);
       }
     },
     async inactivarDia() {
       if (this.motivoInactividadId == 0) {
-        //this.fechaSeleccionada;
         this.mensaje =
           "Debe seleccionar un motivo para poder inactivar este día";
-        //console.log('Debe seleccionar un motivo');
       } else {
         let payload = {
           estadio_id: this.idEstadio,
           motivo_inactividad_id: this.motivoInactividadId,
-          fecha:this.fechaGuardar ,
-          
+          fecha: this.fechaGuardar,
         };
-        console.log(payload);
+        //console.log(payload);
         const { data } = await axios.post(
           ENDPOINT_PATH1 + "inactivar-dia-estadio",
           payload
         );
         this.motivoInactividadEstadio = data;
-        if (this.motivoInactividadEstadio.success == true) {
-          //console.log(this.motivoInactividadEstadio.inactividad);
-          //console.log(this.fechaSeleccionada.locale('es').format('YYYY-MM-DD'), this.idEstadio, this.motivoInactividadId);          
-          this.closeModal();
-          this.motivoInactividadId = 0;
+        console.log(this.motivoInactividadEstadio);
+        if (this.motivoInactividadEstadio.exist == true) {
+          this.existe = this.motivoInactividadEstadio.message;
         } else {
-          console.log(this.motivoInactividadEstadio.error);
+          if (this.motivoInactividadEstadio.success == true) {
+            this.closeModal();
+            this.motivoInactividadId = 0;
+            this.DiasInactivos();
+          } else {
+            this.motivoInactividadEstadio.error;
+          }
         }
+      }
+    },
+    async DiasInactivos() {
+      try {
+        const { data } = await axios.get(
+          ENDPOINT_PATH1 + "listar-dias-inactivos/" + this.idEstadio
+        );
+        this.fechasInactivas = data;
+        console.log("Dias inactivos: ", this.fechasInactivas);
+      } catch (error) {
+        console.log(error);
       }
     },
   },
@@ -291,7 +319,7 @@ export default {
   opacity: 1;
   background: rgba(168, 167, 172, 0.6);
 }
-.fechaSeleccionada{  
+.fechaSeleccionada {
   font-family: "Gilroy";
   font-weight: bold;
   font-size: 25px;
@@ -383,7 +411,14 @@ li {
   justify-content: center;
   align-items: center;
   cursor: not-allowed;
-  pointer-events:none;  
+  pointer-events: none;
+}
+.dia--selected {
+    color: white;
+    background-color: #7358fa;
+    border-radius: 50%;
+    border: 2px solid #7358fa;
+    box-shadow: 0 0 0 2px var(--color-bg-calendar) inset;
 }
 .mes-nombre {
   background: #7358fa;
