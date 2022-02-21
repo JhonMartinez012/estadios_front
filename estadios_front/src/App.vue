@@ -99,7 +99,7 @@ body .tooltip .arrow::before {
 }
 
 @font-face {
-  font-family: "Gilroy";
+  font-family: "GilroyB";
   src: local("Gilroy"), url("./fonts/Gilroy-FREE/Gilroy-ExtraBold.otf");
   font-weight: bold;
   font-style: normal;
