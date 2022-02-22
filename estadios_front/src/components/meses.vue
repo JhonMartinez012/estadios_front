@@ -54,10 +54,11 @@
                       <span for="inputState" class="msg_error" v-if="existe">{{
                         existe
                       }}</span>
-
                     </div>
                     <div class="col-10" v-if="inactive">
-                      <label for="" class="inactive-motive ">{{inactiveMotive}}</label>
+                      <label for="" class="inactive-motive">{{
+                        inactiveMotive
+                      }}</label>
                     </div>
                   </div>
                 </div>
@@ -71,7 +72,6 @@
               class="btn btn-cerrar"
               data-dismiss="modal"
               @click="closeModal()"
-              
             >
               Cerrar
             </button>
@@ -123,18 +123,25 @@
             :key="`dias-${index2}`"
             :class="{
               dias:
-                dayjs(typeof dia === 'object' ? dia.daySelect : dia).format('MM') ==
-                dayjs(numeroMeses[index]).format('MM'),
+                dayjs(typeof dia === 'object' ? dia.daySelect : dia).format(
+                  'MM'
+                ) == dayjs(numeroMeses[index]).format('MM'),
               'otro-mes':
-                dayjs(typeof dia === 'object' ? dia.daySelect : dia).format('MM') !=
-                dayjs(numeroMeses[index]).format('MM'),
-
-              'dia--selected': typeof dia === 'object' ? dia.isSelect : false
-                
+                dayjs(typeof dia === 'object' ? dia.daySelect : dia).format(
+                  'MM'
+                ) != dayjs(numeroMeses[index]).format('MM'),
             }"
             @click="openModal(dia)"
           >
-            {{ dayjs(typeof dia === 'object' ? dia.daySelect : dia).format("D") }}
+            <div
+              :class="{
+                'dia--selected': typeof dia === 'object' ? dia.isSelect : false,
+              }"
+            >
+              {{
+                dayjs(typeof dia === "object" ? dia.daySelect : dia).format("D")
+              }}
+            </div>
           </li>
         </ol>
       </div>
@@ -155,7 +162,7 @@ export default {
       //meses: [],
 
       cantDias: [], // Array para almacenar la cantidad de dias que tiene cada mes
-      meses: [], 
+      meses: [],
       nomDias: [], // array para el nombre de los dias de la semana
       dayjs,
       mesAnterior: 0,
@@ -170,12 +177,12 @@ export default {
       mostrarFecha: "", // mostrar fecha del dia a inactivar
       motivoInactividadId: 0, // para guardar el id del motivo de inactividad
       motivosInactividad: [], // listar los motivos de inactividad
-      inactiveMotive:"", //Mostrar el motivo de inactividad 
+      inactiveMotive: "", //Mostrar el motivo de inactividad
       errores: [], // errores del back
       mensaje: "", // var para guardar y mostrar el mensaje de seleccionar un motivo de inactividad
       existe: "", // Var para mostrar mensaje si existe ya un motivo con una fecha especifica
-      inactive: false, 
-      fechaEliminar:"",
+      inactive: false,
+      fechaEliminar: "",
     };
   },
   async created() {
@@ -186,8 +193,8 @@ export default {
       return this.$route.params.id;
     },
     countMonth() {
-      return this.numeroMeses.length
-    }
+      return this.numeroMeses.length;
+    },
   },
 
   methods: {
@@ -196,12 +203,12 @@ export default {
       this.day();
     },
 
-    diaSeleccionado(dia) {  
-      const indice = this.fechasInactivas.findIndex(o => o.fecha == dia)
-      return indice > -1
+    diaSeleccionado(dia) {
+      const indice = this.fechasInactivas.findIndex((o) => o.fecha == dia);
+      return indice > -1;
     },
     day() {
-      const that = this
+      const that = this;
       //this.dias=dayjs('2022-01').daysInMonth();// devuelve cuantos dias tiene el mes actual
       //this.dias=dayjs().date(31) // obtiene o establece el dia del mes
       //console.log(this.dias);
@@ -237,11 +244,13 @@ export default {
               dias = [...diasPre, ...dias];
             }
           }
-          const daySelect =  dayjs(yearMonth).add(j - 1, "day").format("YYYY-MM-DD")
-          const isSelect = that.diaSeleccionado(daySelect)
+          const daySelect = dayjs(yearMonth)
+            .add(j - 1, "day")
+            .format("YYYY-MM-DD");
+          const isSelect = that.diaSeleccionado(daySelect);
           dias.push({
             daySelect,
-            isSelect
+            isSelect,
           });
 
           // Condicional para agregar los primeros dias del mes siguiente
@@ -270,29 +279,33 @@ export default {
       //console.log(this.dias);
     },
     async openModal(dia) {
-      let day = null
-      let isSelect = false
-      if (typeof dia === 'object') {
-        day = dia.daySelect
-        isSelect = dia.isSelect
+      let day = null;
+      let isSelect = false;
+      if (typeof dia === "object") {
+        day = dia.daySelect;
+        isSelect = dia.isSelect;
       } else {
-        day = dia
+        day = dia;
       }
-      this.modal = 1
+      this.modal = 1;
       if (isSelect) {
-        const dateInactive = this.fechasInactivas.find(o => o.fecha == day)
-        console.log('hola', dateInactive);
-        this.tituloModal="Dia inactivo";
-        this.mostrarFecha= dayjs(dateInactive.fecha).locale("es").format("DD MMMM YYYY");
+        const dateInactive = this.fechasInactivas.find((o) => o.fecha == day);
+        console.log("hola", dateInactive);
+        this.tituloModal = "Dia inactivo";
+        this.mostrarFecha = dayjs(dateInactive.fecha)
+          .locale("es")
+          .format("DD MMMM YYYY");
         //this.fechaEliminar=dateInactive.fecha;
-        this.motivoInactividadId=dateInactive.id;        
-        this.inactiveMotive= dateInactive.nombre_motivo;
-        this.inactive=true;
-      }else{
+        this.motivoInactividadId = dateInactive.id;
+        this.inactiveMotive = dateInactive.nombre_motivo;
+        this.inactive = true;
+      } else {
         //console.log(dia);
-        this.inactive=false;
+        this.inactive = false;
         this.tituloModal = "Inactivar día";
-        this.mostrarFecha = dayjs(dia.daySelect).locale("es").format("DD MMMM YYYY");
+        this.mostrarFecha = dayjs(dia.daySelect)
+          .locale("es")
+          .format("DD MMMM YYYY");
         this.fechaGuardar = dayjs(dia.daySelect).format("YYYY-MM-DD");
         await this.listarMotivos();
       }
@@ -346,36 +359,36 @@ export default {
         } else {
           if (this.motivoInactividadEstadio.success == true) {
             this.closeModal();
-            this.motivoInactividadId = 0;   
-            this.nomDias=[];         
+            this.motivoInactividadId = 0;
+            this.nomDias = [];
             this.iniciar();
-            
           } else {
             this.motivoInactividadEstadio.error;
           }
         }
       }
     },
-    async activarDia(){
+    async activarDia() {
       /* let payload={
         estadioId:this.idEstadio,
         motivoInactividad_id:this.motivoInactividadId,
         fechaEliminar:this.fechaEliminar
       }; */
       //console.log(payload);
-      const {data}  = await axios.delete(ENDPOINT_PATH1+'habilitar-dia-inactivo/'+ this.motivoInactividadId)
+      const { data } = await axios.delete(
+        ENDPOINT_PATH1 + "habilitar-dia-inactivo/" + this.motivoInactividadId
+      );
       this.motivoInactividadEstadio = data.delete;
 
-      if (this.motivoInactividadEstadio==true) {
-            this.closeModal();
-            this.motivoInactividadId = 0; 
-            this.nomDias=[];         
-            this.iniciar();
-      }else{
-        console.log('paiman');
+      if (this.motivoInactividadEstadio == true) {
+        this.closeModal();
+        this.motivoInactividadId = 0;
+        this.nomDias = [];
+        this.iniciar();
+      } else {
+        console.log("paiman");
       }
-
-    }
+    },
   },
 };
 </script>
@@ -421,7 +434,7 @@ export default {
   font-size: 15px;
   border-radius: 12px;
 }
-.btn-activar{
+.btn-activar {
   width: 28%;
   height: 40px;
   font-family: "Gilroy";
@@ -432,16 +445,17 @@ export default {
   background: #f0f1ff 0% 0% no-repeat padding-box;
   color: #3c2ea8;
 }
-.btn-inactivar, .btn-activar {
+.btn-inactivar,
+.btn-activar {
   font-weight: bold;
   background: transparent linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
     no-repeat padding-box;
   color: #ffffff;
 }
-.inactive-motive{
+.inactive-motive {
   font-family: "GilroyB";
   font-size: 28px;
-  color: #7358FA;
+  color: #7358fa;
 }
 /* Estilos para calendario */
 .calendario {
@@ -494,11 +508,16 @@ li {
   pointer-events: none;
 }
 .dia--selected {
+  width: 45px;
+  height: 45px;
   color: white;
   background-color: #7358fa;
   border-radius: 50%;
   border: 2px solid #7358fa;
   box-shadow: 0 0 0 2px var(--color-bg-calendar) inset;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 .mes-nombre {
   background: #7358fa;

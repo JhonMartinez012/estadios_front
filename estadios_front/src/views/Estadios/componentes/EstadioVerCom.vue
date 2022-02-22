@@ -1,8 +1,9 @@
-<template >
+<template>
   <div class="container-fluid">
     <!-- INICIO DE LA MODAL -->
     <div
-      class="modal fade"
+      class="modal"
+      :class="{show: modal}"
       id="exampleModal"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
@@ -17,6 +18,7 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
+              @click="closeModal()"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -29,10 +31,15 @@
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
+              @click="closeModal()"
             >
               Cerrar
             </button>
-            <button type="button" class="btn boton-eliminar-estadio">
+            <button
+              type="button"
+              class="btn boton-eliminar-estadio"
+              @click="eliminarEstadio(estadio.idEstadio)"
+            >
               Eliminar
             </button>
           </div>
@@ -40,7 +47,7 @@
       </div>
     </div>
     <!--  FIN DEL MODAL PARA ELIMINAR -->
-   
+
     <div class="container-fluid ml-0 mt-5 d-flex align-items-center">
       <div class="container-fluid">
         <label class="titulo_estadio w-100">{{ estadio.nombre_estadio }}</label>
@@ -69,13 +76,12 @@
           data-toggle="tooltip"
           title="Eliminar"
           data-placement="bottom"
+          @click="openModal()"
         >
           <img
             src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
             alt=""
-            srcset=""
-            data-toggle="modal"
-            data-target="#exampleModal"
+            srcset=""            
           />
         </button>
       </div>
@@ -84,7 +90,6 @@
       <div class="row">
         <div class="col-md-6">
           <div class="col-md-12">
-            
             <image-slider
               class="h-100"
               :propimagenPrincipal="estadio.img_principal"
@@ -122,7 +127,7 @@ const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 import "vueperslides/dist/vueperslides.css";
 import ImageSlider from "../../../components/imageSlider.vue";
 export default {
-  name:"infoEstadio",
+  name: "infoEstadio",
   created() {
     this.verEstadio();
     this.listarImagenesSecundarias();
@@ -131,12 +136,14 @@ export default {
     nombre_estadio: String,
   },
   components: {
-    
     ImageSlider,
   },
   data: () => ({
     estadio: [],
     fotosSecundarias: [],
+    estadioEliminado:[],
+    modal:0,
+    show:true
   }),
   computed: {
     idEstadio() {
@@ -156,11 +163,13 @@ export default {
           ENDPOINT_PATH + "ver_estadio/" + this.idEstadio
         );
         this.estadio = data;
-        if (this.estadio.success==true) {
-          this.estadio=data.estadio
+        //console.log(this.estadio.estadio);
+
+        if (this.estadio.success == true) {
+          this.estadio = data.estadio;
           this.$emit("resultado", this.estadio);
-        }else if(this.estadio.success==false){
-          this.estadio=data
+        } else if (this.estadio.success == false) {
+          this.estadio = data;
           this.$emit("resultado", this.estadio);
         }
         //console.log(this.estadio);
@@ -174,21 +183,41 @@ export default {
           ENDPOINT_PATH + "imagenes-secundarias/" + this.idEstadio
         );
         this.fotosSecundarias = data;
-        if (this.fotosSecundarias.success==false) {
-          console.log('no existen imagenes relacionadas');
-        }else{
-          this.fotosSecundarias=data.imagenesSecundarias;
+        if (this.fotosSecundarias.success == false) {
+          console.log("no existen imagenes relacionadas");
+        } else {
+          this.fotosSecundarias = data.imagenesSecundarias;
         }
         //console.log(this.fotosSecundarias);
       } catch (error) {
         console.log(error);
       }
     },
+    async eliminarEstadio(idEstadio) {
+      const {data} = await axios.delete(ENDPOINT_PATH+"eliminar-estadio/"+idEstadio);
+      this.estadioEliminado=data.delete;
+      if (this.estadioEliminado==true) {
+        this.closeModal()
+        this.$router.push({name:'Estadios'})
+      }
+      
+    },
+    openModal() {
+      this.modal = 1;
+    },
+    closeModal(){
+      this.modal = 0;
+    }
   },
 };
 </script>
 
 <style scoped>
+.show {
+  display: list-item;
+  opacity: 1;
+  background: rgba(168, 167, 172, 0.6);
+}
 /* Estilos para el slider de imagenes */
 .slider1 {
   height: 30rem;
