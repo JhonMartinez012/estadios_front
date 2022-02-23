@@ -42,7 +42,7 @@ export default {
         },
         set_image(path = ''){
             this.instanciaCrop.load(`${path}?v=${+new Date()}`);
-            console.log("pase por aca");
+            //console.log("pase por aca");
         }
     }
 }

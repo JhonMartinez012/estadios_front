@@ -38,16 +38,26 @@
               class="nav-item active efecto"
               data-toggle="tooltip"
               data-placement="bottom"
-              title="Estadios"
+              :title="menu.label"
+              v-for="(menu, index) in menus"
+              :key="menu.id"
+
+               v-on:click="markIconEvent($event, index)"
+                v-bind:class="
+                  $route.path.includes(menu.name) ? 'Iconactive' : ' '
+                "
             >
-              <router-link class="nav-link" :to="{ name: 'Estadios' }">
+              <router-link
+                class="nav-link"
+                :to="menu.ruta"               
+              >
                 <img
-                  class="iconos-estilos"
-                  src="../assets/iconos/icon-estadio.svg"
-                />
+                v-bind:class="
+                  $route.path.includes(menu.name) ? 'svgfilter' : ' '
+                " class="iconos-estilos" :src="menu.image" />
               </router-link>
             </li>
-            <li
+            <!-- <li
               class="nav-item efecto"
               data-toggle="tooltip"
               title="Administradores"
@@ -74,7 +84,7 @@
                   title=""
                 />
               </router-link>
-            </li>
+            </li> -->
           </ul>
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
@@ -114,7 +124,6 @@
     <!-- Aca se muestran las paginas -->
     <div class="about" id="about">
       <router-view />
-        
     </div>
   </div>
 </template>
@@ -134,7 +143,7 @@ export default {
       trigger: "hover",
     });
   },
-  
+
   data() {
     return {
       userLog: [],
@@ -146,6 +155,32 @@ export default {
         },
       ],
       title: "Principal Layout",
+      menus: [
+        {
+          id: 1,
+          image: require("../assets/iconos/icon-estadio.svg"),
+          label: "Estadios",
+          Iconmark: true,
+          ruta: "/estadios/",
+          name: "estadios",
+        },
+        {
+          id: 2,
+          image: require("../assets/iconos/icon-user.svg"),
+          label: "Administradores",
+          Iconmark: false,
+          ruta: "/administradores/",
+          name: "administradores",
+        },
+        {
+          id: 3,
+          image: require("../assets/iconos/cog-solid.svg"),
+          label: "Configuracion",
+          Iconmark: false,
+          ruta: "/configuraciones/",
+          name: "configuraciones",
+        },
+      ],
     };
   },
 
@@ -158,6 +193,10 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    markIconEvent($event, index) {
+      this.menus.forEach(menu => menu.Iconmark = false);
+      this.menus[index].Iconmark = !this.menus[index].Iconmark;
     },
   },
 };
@@ -218,6 +257,13 @@ img {
   background-color: rgba(115, 88, 250, 0.2);
   border-radius: 12px;
 }
+.Iconactive {
+  background-color: #7358FA;
+  border-radius: 12px;  
+}
+.svgfilter{
+filter:  brightness(1000%)
+}
 
 .efecto :active {
   background-color: rgba(115, 88, 250, 0.2);
@@ -238,10 +284,6 @@ img {
   background-size: 40px 40px;
   background-repeat: no-repeat;
   background-position: center center;
-}
-.iconos-estilos {
-  font-size: 22px;
-  color: #7358fa;
 }
 
 #nav {

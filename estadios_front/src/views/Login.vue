@@ -20,7 +20,7 @@
 
         <!------------ LOGIN ----------------->
         <form action="" method="post">
-          <h2 class="fw-bold text-center pt-5 mb-2 gilroy">Iniciar sesión</h2>
+          <h2 class="fw-bold text-center pt-5 mb-2">Iniciar sesión</h2>
           <div class="input-container mb-3">
             <img src="/assets/1. Estadios/Iconos/icon - usuario.svg" alt="" />
             <input
@@ -220,7 +220,7 @@ export default {
 <style scoped>
 h2 {
   text-align: center;
-  font: normal normal bold 30px "Gilroy";
+  font: normal normal bold 30px "GilroyB";
   letter-spacing: 0px;
   color: #637381;
 }

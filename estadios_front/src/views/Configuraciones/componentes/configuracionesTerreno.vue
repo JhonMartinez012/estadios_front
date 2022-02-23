@@ -352,7 +352,7 @@ export default {
           this.closeModal();
           this.listarTerrenos();
           this.nombre_terreno = "";
-          this.$refs.img_terrenoE.set_image("");
+          this.$refs.img_terreno.set_image();
         } else if (this.terrenoNuevo.success == false) {
           this.errores = this.terrenoNuevo.errores;
         }
