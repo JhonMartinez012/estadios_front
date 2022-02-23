@@ -403,6 +403,7 @@ h1 {
   color: #7358fa;
 }
 .parrafo {
+  font-family: "GilroyB";
   margin-top: 30px;
   text-align: left;
   margin-inline-end: 30px;
@@ -414,6 +415,7 @@ h1 {
 
 /* ESTILOS PARA LOS FORMULARIOS */
 .titulo {
+  font-family: "GilroyB";
   height: 35px;
   text-align: left;
   font-weight: bold;

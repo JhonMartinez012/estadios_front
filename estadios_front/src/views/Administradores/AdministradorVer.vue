@@ -14,7 +14,7 @@
           </div>
           <div class="modal-body text-center">
             <p v-if="userLog.id != administrador.id">¿Desea eliminar este administrador?</p>
-            <p v-else>No se puede eliminar porque es el usuario que esta con la sesión iniciada</p>
+            <p v-else>No se puede eliminar ya que la sesión esta iniciada</p>
           </div>
           <div class="modal-footer d-flex justify-content-center" v-if="userLog.id != administrador.id">
             <button type="button" class="btn btn-secondary" @click="closeModal">

@@ -80,12 +80,13 @@
                   >
                     *{{ error }}</label
                   >
-                  
                 </div>
               </div>
+              <span class="msg_error" v-if="msj != null">{{msj}}</span>
             </div>
           </div>
-          <div class="modal-footer justify-content-center">
+           
+          <div class="modal-footer justify-content-center align-items-center text-center">
             <button
               type="button"
               class="btn btn-cerrar"
@@ -103,6 +104,7 @@
             >
               añadir
             </button>
+           
           </div>
         </div>
       </div>
@@ -137,7 +139,6 @@
                     type="text"
                     class="form-control input-tribuna"
                   />
-                  
                 </div>
               </div>
               <div class="form-row">
@@ -149,9 +150,7 @@
                     type="text"
                     class="form-control input-tribuna"
                   />
-                  
                 </div>
-                
               </div>
 
               <div class="form-row">
@@ -163,7 +162,6 @@
                     v-model="tribuna.valorBoleta"
                     class="form-control input-tribuna"
                   />
-                  
                 </div>
               </div>
             </div>
@@ -302,7 +300,7 @@
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 import axios from "axios";
 export default {
-  name:"tribunasEstadio",
+  name: "tribunasEstadio",
   created: function () {
     this.listarTribunas();
   },
@@ -329,7 +327,7 @@ export default {
 
     id: 0, // id de la tribuna para eliminar o editar
     errores: [],
-    msj:"",
+    msj: "",
   }),
   computed: {
     idEstadio() {
@@ -385,18 +383,23 @@ export default {
           payload
         );
         this.tribunaCreate = data;
-        if (this.tribunaCreate.success == true) {          
-          this.closeModal();
-          this.listarTribunas();
-          this.msj=this.tribunaCreate.message;
-          this.nombreTribuna = "";
-          this.capacidad = "";
-          this.valorBoleta = 0;
-          document.getElementById("btnCrearTribuna").disabled = true;
-        } else if(this.tribunaCreate.success == false){
-          this.errores = this.tribunaCreate.errores;
-          console.log(this.errores);
-          document.getElementById("btnCrearTribuna").disabled = false;
+        if (this.tribunaCreate.capacidad == false) {
+          this.msj = this.tribunaCreate.message;
+          console.log(this.msj);
+        } else {
+          if (this.tribunaCreate.success == true) {
+            this.closeModal();
+            this.listarTribunas();
+            this.msj = this.tribunaCreate.message;
+            this.nombreTribuna = "";
+            this.capacidad = "";
+            this.valorBoleta = 0;
+            document.getElementById("btnCrearTribuna").disabled = true;
+          } else if (this.tribunaCreate.success == false) {
+            this.errores = this.tribunaCreate.errores;
+            console.log(this.errores);
+            document.getElementById("btnCrearTribuna").disabled = false;
+          }
         }
       } catch (error) {
         console.log(error);

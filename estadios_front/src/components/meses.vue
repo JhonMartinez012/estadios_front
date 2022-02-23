@@ -353,7 +353,7 @@ export default {
           payload
         );
         this.motivoInactividadEstadio = data;
-        console.log(this.motivoInactividadEstadio);
+        //console.log(this.motivoInactividadEstadio);
         if (this.motivoInactividadEstadio.exist == true) {
           this.existe = this.motivoInactividadEstadio.message;
         } else {

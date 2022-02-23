@@ -457,6 +457,7 @@ body .tooltip .arrow::before {
 }
 
 .parrafo {
+  font-family: "GilroyB";
   margin-top: 30px;
   text-align: left;
   margin-inline-end: 30px;

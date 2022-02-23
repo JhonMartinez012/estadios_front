@@ -178,7 +178,7 @@ const routes = [
     redirect: { name: "ConfiguracionTerrenos" },
     children: [
       {
-        path: "/Configuraciones",
+        path: "/configuraciones",
         name: "ConfiguracionTerrenos",
         component: () =>
           import(
@@ -189,7 +189,7 @@ const routes = [
         },
       },
       {
-        path: "/Configuraciones",
+        path: "/configuraciones",
         name: "ConfiguracionInactividad",
         component: () =>
           import(

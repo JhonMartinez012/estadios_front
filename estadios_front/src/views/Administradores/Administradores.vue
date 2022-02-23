@@ -213,6 +213,7 @@ h1 {
   color: #7358fa;
 }
 .parrafo {
+  font-family: "GilroyB";
   text-align: left;
   margin-inline-end: 30px;
   font-weight: bold;

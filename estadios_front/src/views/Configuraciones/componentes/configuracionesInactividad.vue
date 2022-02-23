@@ -359,6 +359,7 @@ body .tooltip .arrow::before {
   background-color: rgba(204, 204, 204, 0.527);
 }
 .parrafo {
+  font-family: "GilroyB";
   margin-top: 30px;
   text-align: left;
   margin-inline-end: 30px;
