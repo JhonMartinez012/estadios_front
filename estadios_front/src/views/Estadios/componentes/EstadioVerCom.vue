@@ -64,6 +64,7 @@
           data-toggle="tooltip"
           title="Editar"
           data-placement="bottom"
+          id="boton"
         >
           <img
             src="/assets/1. Estadios/Iconos/icon - editar.svg"
@@ -134,6 +135,14 @@ export default {
   },
   props: {
     nombre_estadio: String,
+  },
+   updated() {
+    $('[data-toggle="tooltip"]').tooltip({
+      trigger: "hover",
+    });
+    $("#boton").click(function () {
+      $('[data-toggle="tooltip"], .tooltip').tooltip("hide");
+    });
   },
   components: {
     ImageSlider,

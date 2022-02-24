@@ -87,6 +87,7 @@
               data-toggle="tooltip"
               title="Editar"
               data-placement="bottom"
+              id="boton"
             >
             
               <img
@@ -146,6 +147,9 @@ export default {
   updated() {
     $('[data-toggle="tooltip"]').tooltip({
       trigger: "hover",
+    });
+    $("#boton").click(function () {
+      $('[data-toggle="tooltip"], .tooltip').tooltip("hide");
     });
   },
   data() {

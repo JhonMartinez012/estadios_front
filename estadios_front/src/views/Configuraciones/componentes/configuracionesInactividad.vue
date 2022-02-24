@@ -111,6 +111,7 @@
           data-original-title="Guardar"
           data-toggle="tooltip"
           data-placement="bottom"
+          id="boton"
         >
           <!-- Boton para actualizar el usuario -->
           <svg
@@ -147,6 +148,7 @@
           data-placement="bottom"
           v-if="motivo.disabled == true"
           @click="openModal(motivo)"
+          id="boton"
         >
           <img src="/assets/1. Estadios/Iconos/icon - Eliminar.svg" />
         </button>
@@ -158,6 +160,7 @@
           data-placement="bottom"
           v-if="motivo.disabled == true"
           @click="habilitarInput(motivo)"
+          id="boton"
         >
           <img src="/assets/1. Estadios/Iconos/icon - editar.svg" />
         </button>
@@ -186,6 +189,9 @@ export default {
   updated() {
     $('[data-toggle="tooltip"]').tooltip({
       trigger: "hover",
+    });
+     $("#boton").click(function () {
+      $('[data-toggle="tooltip"], .tooltip').tooltip("hide");
     });
   },
   computed: {

@@ -99,7 +99,7 @@
               type="button"
               id="btnCrearTribuna"
               class="btn btn-guardar"
-              @click="crearTribuna"
+              @click="crearTribuna()"
               disabled
             >
               añadir
@@ -376,8 +376,9 @@ export default {
         valorBoleta: this.valorBoleta,
         estadioId: this.idEstadio,
       };
+      //console.log(payload);
       try {
-        console.log(payload);
+        //console.log(payload);
         const { data } = await axios.post(
           ENDPOINT_PATH + "crear_tribuna",
           payload
@@ -390,7 +391,7 @@ export default {
           if (this.tribunaCreate.success == true) {
             this.closeModal();
             this.listarTribunas();
-            this.msj = this.tribunaCreate.message;
+            this.msj = "";
             this.nombreTribuna = "";
             this.capacidad = "";
             this.valorBoleta = 0;

@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-     <sinAdmins v-if="filtrarAdmins == ''" />
+    <sinAdmins v-if="filtrarAdmins == ''" />
   </div>
 </template>
 
@@ -56,7 +56,11 @@ export default {
     $('[data-toggle="tooltip"]').tooltip({
       trigger: "hover",
     });
+    $("img").click(function () {
+      $('[data-toggle="tooltip"], .tooltip').tooltip("hide");
+    });
   },
+
   data: () => ({
     administradores: [],
   }),
@@ -80,6 +84,14 @@ export default {
   methods: {
     async funcIniciales() {
       await this.listarAdministradores();
+    },
+
+    cerrarTooltip() {
+      console.log($('[data-toggle="tooltip"]'));
+      $('[data-toggle="tooltip"]').tooltip({
+        trigger: "hide",
+      });
+      //$('[data-toggle="tooltip"], .tooltip').tooltip("hide");
     },
 
     async listarAdministradores() {
