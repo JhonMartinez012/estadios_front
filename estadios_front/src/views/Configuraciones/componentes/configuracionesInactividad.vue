@@ -320,7 +320,7 @@ export default {
       this.modal = 1;
       this.cantEstadios = data.estadios_count;
       this.id = data.id;
-      console.log(this.id);
+      //console.log(this.id);
     },
     closeModal() {
       this.modal = 0;

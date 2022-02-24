@@ -52,8 +52,17 @@
               type="button"
               @click="agregarImagenSecundaria"
               class="btn boton-agregar-img-estadio"
+              v-if="btnCrear == true"
             >
               Agregar
+            </button>
+            <button
+              type="button"
+              @click="editarImgSecundaria(idImg)"
+              class="btn boton-agregar-img-estadio"
+              v-if="btnEditar == true"
+            >
+              Editar
             </button>
           </div>
         </div>
@@ -63,7 +72,13 @@
 
     <div class="container-fluid ml-0">
       <label class="parrafo font-weight-bold ml-0">Editar Estadio </label>
-      <a type="button" class="btn btn-guardar pr-2">Guardar</a>
+      <button
+        type="button"
+        class="btn btn-guardar pr-2"
+        @click="editarEstadio()"
+      >
+        Guardar
+      </button>
     </div>
 
     <div class="container-fluid mt-4 ml-0">
@@ -72,68 +87,89 @@
           <label class="titulo">Informacion general</label>
           <div class="form-row mt-2 contenido">
             <div class="form-group col-md-6 col-sm-12 inner">
-              <p for="inputEmail4" class="p-titulo">Nombre del estadio</p>
-              <input
-                type="text"
-                v-model="estadio.nombre_estadio"
-                class="form-control texto-nombre"
-                id=""
-                placeholder="Nombre"
-              />
-              <p for="inputEmail4" class="p-titulo">Acerca del estadio</p>
-              <textarea
-                v-model="estadio.acerca_estadio"
-                cols="30"
-                rows="10"
-                placeholder="Acerca"
-                class="acercaEstadio"
-              ></textarea>
+              <div class="" style="height: 25%">
+                <p for="inputEmail4" class="p-titulo">Nombre del estadio</p>
+                <input
+                  type="text"
+                  v-model="estadio.nombre_estadio"
+                  class="form-control texto-nombre"
+                  id=""
+                  placeholder="Nombre"
+                />
+                <label
+                  for="inputState"
+                  class="msg_error"
+                  v-if="errorsEdit.nombreEstadio"
+                  >{{ errorsEdit.nombreEstadio[0] }}</label
+                >
+              </div>
+              <div class="" style="height: 75%">
+                <p for="inputEmail4" class="p-titulo">Acerca del estadio</p>
+                <textarea
+                  v-model="estadio.acerca_estadio"
+                  cols="30"
+                  rows="10"
+                  placeholder="Acerca"
+                  class="acercaEstadio"
+                ></textarea>
+              </div>
             </div>
             <div class="form-group col-md-6 inner">
-              <p for="inputPassword4" class="p-titulo">pais</p>
-              <select
-                v-model="estadio.pais_id"
-                @change="listarCiudades()"
-                class="texto-select"
-              >
-                
-                <!-- <option :value="estadio.pais_id">{{ estadio.nom_pais }}</option> -->
-                <option v-for="data in paises" :key="data.id" :value="data.id">
-                  {{ data.nombre }}
-                </option>
-              </select>
-              <p for="" class="p-titulo">ciudad</p>
-              <select v-model="estadio.ciudad_id" class="texto-select">
-                <!-- <option :value="estadio.ciudad_id">{{ estadio.nombre }}</option> -->
-                <option
-                  v-for="data in ciudades"
-                  :key="data.id"
-                  :value="data.id"
+              <div class="" style="height: 25%">
+                <p for="inputPassword4" class="p-titulo">pais</p>
+                <select
+                  v-model="estadio.pais_id"
+                  @change="listarCiudades()"
+                  class="texto-select"
                 >
-                  {{ data.nombre }}
-                </option>
-              </select>
-              <p for="" class="p-titulo">Tipo de terreno</p>
-              <select v-model="estadio.terreno_id" class="texto-select">
-                <option :value="estadio.terreno_id">
-                  {{ estadio.nombre_terreno }}
-                </option>
-                <option
-                  v-for="terreno in terrenos"
-                  :key="terreno.id"
-                  :value="terreno.id"
-                >
-                  {{ terreno.nombre_terreno }}
-                </option>
-              </select>
-              <p for="inputEmail4" class="p-titulo">Capacidad</p>
-              <input
-                type="Number"
-                v-model="estadio.capacidad_estadio"
-                class="form-control texto-select"
-                id="evt"
-                placeholder="Capacidad de espectadores"
-              />
+                  <!-- <option :value="estadio.pais_id">{{ estadio.nom_pais }}</option> -->
+                  <option
+                    v-for="data in paises"
+                    :key="data.id"
+                    :value="data.id"
+                  >
+                    {{ data.nombre }}
+                  </option>
+                </select>
+              </div>
+              <div class="" style="height: 25%">
+                <p for="" class="p-titulo">ciudad</p>
+                <select v-model="estadio.ciudad_id" class="texto-select">
+                  <!-- <option :value="estadio.ciudad_id">{{ estadio.nombre }}</option> -->
+                  <option
+                    v-for="data in ciudades"
+                    :key="data.id"
+                    :value="data.id"
+                  >
+                    {{ data.nombre }}
+                  </option>
+                </select>
+              </div>
+              <div class="" style="height: 25%">
+                <p for="" class="p-titulo">Tipo de terreno</p>
+                <select v-model="estadio.terreno_id" class="texto-select">
+                  <option :value="estadio.terreno_id">
+                    {{ estadio.nombre_terreno }}
+                  </option>
+                  <option
+                    v-for="terreno in terrenos"
+                    :key="terreno.id"
+                    :value="terreno.id"
+                  >
+                    {{ terreno.nombre_terreno }}
+                  </option>
+                </select>
+              </div>
+              <div class="" style="height: 25%">
+                <p for="inputEmail4" class="p-titulo">Capacidad</p>
+                <input
+                  type="Number"
+                  v-model="estadio.capacidad_estadio"
+                  class="form-control texto-select"
+                  id="evt"
+                  placeholder="Capacidad de espectadores"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -142,7 +178,7 @@
           <div class="agregar-imagen">
             <label class="titulo w-100"
               >Imagenes
-              <button class="btn bton-agregar-img mx-5" @click="openModal">
+              <button class="btn bton-agregar-img mx-5" @click="openModal(0)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="17.5"
@@ -179,8 +215,6 @@
           <div class="container mt-4 inner">
             <div class="row">
               <div class="col-md-6 col-lg-4 mt-0 styles_img_pre">
-                <!-- v-for="(estadio, index) in estadios"
-                :key="index" -->
                 <img
                   :src="estadio.img_principal"
                   alt=""
@@ -220,7 +254,10 @@
                   class="images-editar"
                 />
                 <div class="boton_accion">
-                  <button class="btn_accion_eliminar" @click="eliminarImgSecundaria(imgSecundaria.id)">
+                  <button
+                    class="btn_accion_eliminar"
+                    @click="eliminarImgSecundaria(imgSecundaria.id)"
+                  >
                     <img
                       src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
                       width="cover"
@@ -229,7 +266,10 @@
                       srcset=""
                     />
                   </button>
-                  <button class="btn_accion_editar">
+                  <button
+                    class="btn_accion_editar"
+                    @click="openModal(imgSecundaria.id)"
+                  >
                     <img
                       src="/assets/1. Estadios/Iconos/icon - editar.svg"
                       width="cover"
@@ -252,17 +292,15 @@ import axios from "axios";
 const ENDPOINT_PATH = "http://127.0.0.1:8000/api/estadio/";
 const ENDPOINT_PATH1 = "http://127.0.0.1:8000/api/terreno/";
 export default {
-   name:"editarEstadio",
+  name: "editarEstadio",
   created() {
-    this.init()
+    this.init();
   },
   data() {
     return {
       slimOptions: {
         label: "Subir imagen",
       },
-      show: true,
-      modal: 0,
       estadio: {},
       id: 0,
       pais: 0,
@@ -271,6 +309,21 @@ export default {
       ciudades: [],
       terrenos: [],
       imagenesSecundarias: [],
+
+      //variables para la modal
+      btnCrear: false,
+      btnEditar: false,
+      show: true,
+      modal: 0,
+      idImg: 0,
+
+      // Variables para editar el estadio
+      estadioEdit: [],
+      errorsEdit: [],
+
+      //Variables para eliminar y editar imagenes secundarias
+      imgSecundariaDelete: [],
+      msgImgSecundariaDelete: [],
     };
   },
   computed: {
@@ -281,7 +334,7 @@ export default {
 
   components: {},
   methods: {
-    async init(){
+    async init() {
       this.$store.commit("SET_LAYOUT", "principal-layout");
       await this.listarEstadio();
       await this.listarPaises();
@@ -310,7 +363,6 @@ export default {
         console.log(error);
       }
     },
-
     async listarCiudades() {
       try {
         const { data } = await axios.get(ENDPOINT_PATH + "ciudades", {
@@ -331,7 +383,6 @@ export default {
         console.log(error);
       }
     },
-
     async agregarImagenSecundaria() {
       let payload = {
         imagenSecundaria:
@@ -347,8 +398,8 @@ export default {
         this.imagen = data;
         if (this.imagen) {
           this.closeModal();
-          this.listarEstadio();          
-          this.listarImagenesSecundarias()
+          this.listarEstadio();
+          this.listarImagenesSecundarias();
         }
       } catch (error) {
         console.log(error);
@@ -363,7 +414,75 @@ export default {
       //console.log(this.imagenesSecundarias);
     },
 
-    openModal() {
+    async editarEstadio() {
+      try {
+        let payload = {
+          nombreEstadio: this.estadio.nombre_estadio,
+          acercaEstadio: this.estadio.acerca_estadio,
+          ciudadId: this.estadio.ciudad_id,
+          terrenoId: this.estadio.terreno_id,
+          capacidadEstadio: this.estadio.capacidad_estadio,
+        };
+        const { data } = await axios.put(
+          ENDPOINT_PATH + "editar-estadio/" + this.idEstadio,
+          payload
+        );
+        this.estadioEdit = data;
+        if (this.estadioEdit.success == true) {
+          this.$router.push({ name: "Estadios" });
+        } else {
+          this.errorsEdit = this.estadioEdit.errores;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async eliminarImgSecundaria(id) {
+      try {
+        const { data } = await axios.delete(
+          ENDPOINT_PATH + "eliminar-imagen-secundaria/" + id
+        );
+        this.imgSecundariaDelete = data;
+        if (this.imgSecundariaDelete.success == true) {
+          this.listarImagenesSecundarias();
+        }
+      } catch (error) {
+        console.log();
+      }
+    },
+    async editarImgSecundaria(id) {
+      try {
+        let payload = {
+          imgSecEdit:
+            this.$refs.imgSecundaria.instanciaCrop.dataBase64.output.image,
+          estadioId: this.idEstadio,
+        };
+        const { data } = await axios.put(
+          ENDPOINT_PATH + "editar-imagenes-secundarias/" + id,
+          payload
+        );
+        this.imagen=data;
+        if (this.imagen.success==true) {
+          this.closeModal();
+          this.listarImagenesSecundarias();
+          
+        }
+
+      } catch (error) {
+        console.log(error);
+      }
+      
+    },
+
+    openModal(id) {
+      if (id == 0) {
+        this.btnCrear = true;
+        this.btnEditar = false;
+      } else if (id != 0) {
+        this.btnEditar = true;
+        this.btnCrear = false;
+        this.idImg = id;
+      }
       this.modal = 1;
     },
     closeModal() {
@@ -457,7 +576,7 @@ h1 {
 .p-titulo {
   width: 117px;
   height: 15px;
-  margin-top: 22px;
+  margin-top: 5px;
   margin-bottom: 3px;
   margin-left: 12px;
   font-family: "Rubik";
