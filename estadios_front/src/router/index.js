@@ -33,7 +33,7 @@ const guardEstadio = async (to, from, next) => {
   var exist = false;
 
   const  data  = await axios.get(
-    ENDPOINT_PATH1 + "ver_estadio/" + to.params.id
+    ENDPOINT_PATH1 + "ver-estadio/" + to.params.id
   );
   let estadio = data.data;
 

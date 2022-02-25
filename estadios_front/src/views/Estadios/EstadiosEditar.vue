@@ -345,7 +345,7 @@ export default {
     async listarEstadio() {
       try {
         const data = await axios.get(
-          ENDPOINT_PATH + "ver_estadio/" + this.idEstadio
+          ENDPOINT_PATH + "ver-estadio/" + this.idEstadio
         );
         if (data?.data) {
           this.estadio = data.data.estadio;

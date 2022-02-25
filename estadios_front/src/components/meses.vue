@@ -290,7 +290,7 @@ export default {
       this.modal = 1;
       if (isSelect) {
         const dateInactive = this.fechasInactivas.find((o) => o.fecha == day);
-        console.log("hola", dateInactive);
+        //console.log("hola", dateInactive);
         this.tituloModal = "Dia inactivo";
         this.mostrarFecha = dayjs(dateInactive.fecha)
           .locale("es")
@@ -317,7 +317,7 @@ export default {
     },
     async listarMotivos() {
       try {
-        const { data } = await axios.get(ENDPOINT_PATH + "motivos_inactividad");
+        const { data } = await axios.get(ENDPOINT_PATH + "motivos-inactividad");
         this.motivosInactividad = data.motivos_inactividad;
         if (!this.motivosInactividad) {
           console.log("no hay motivos de inactividad que mostrar");
