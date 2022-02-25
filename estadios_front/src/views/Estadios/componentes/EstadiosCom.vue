@@ -64,7 +64,7 @@ export default {
   methods: {
     async listarEstadios() {
       try {
-        const { data } = await axios.get(ENDPOINT_PATH + "listar_estadios");
+        const { data } = await axios.get(ENDPOINT_PATH + "listar-estadios");
         this.estadios = data.estadios;
       } catch (error) {
         console.log(error);

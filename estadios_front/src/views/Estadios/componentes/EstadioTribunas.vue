@@ -338,7 +338,7 @@ export default {
     async listarTribunas() {
       try {
         const { data } = await axios.get(
-          ENDPOINT_PATH + "listar_tribunas/" + this.idEstadio
+          ENDPOINT_PATH + "listar-tribunas/" + this.idEstadio
         );
         this.tribunas = data.tribunas;
         //console.log(this.tribunas);
@@ -380,7 +380,7 @@ export default {
       try {
         //console.log(payload);
         const { data } = await axios.post(
-          ENDPOINT_PATH + "crear_tribuna",
+          ENDPOINT_PATH + "crear-tribuna",
           payload
         );
         this.tribunaCreate = data;
@@ -415,7 +415,7 @@ export default {
       try {
         console.log(payload);
         const { data } = await axios.put(
-          ENDPOINT_PATH + "editar_tribuna/" + id,
+          ENDPOINT_PATH + "editar-tribuna/" + id,
           payload
         );
         this.data = data.actualizado;
@@ -434,7 +434,7 @@ export default {
     async eliminarTribuna(id) {
       try {
         const res = await axios.delete(
-          ENDPOINT_PATH + "eliminar_tribuna/" + id
+          ENDPOINT_PATH + "eliminar-tribuna/" + id
         );
         this.tribunaEliminada = res.status;
         if (this.tribunaEliminada == 200) {

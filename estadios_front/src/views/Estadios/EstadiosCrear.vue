@@ -290,7 +290,7 @@ export default {
       try {
         /* console.log(payload); */
         const { data } = await axios.post(
-          ENDPOINT_PATH + "crear_estadio",
+          ENDPOINT_PATH + "crear-estadio",
           payload
         );
         this.estadio = data;

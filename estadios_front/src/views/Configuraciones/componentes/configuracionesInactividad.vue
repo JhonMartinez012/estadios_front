@@ -236,7 +236,7 @@ export default {
 
     async listarMotivosInactividad() {
       try {
-        const { data } = await axios.get(ENDPOINT_PATH + "motivos_inactividad");
+        const { data } = await axios.get(ENDPOINT_PATH + "motivos-inactividad");
         this.motivos = data.motivos_inactividad;
         
       } catch (error) {
@@ -251,7 +251,7 @@ export default {
             nombre_motivo: this.nombre_motivo,
           };
           const data = await axios.post(
-            ENDPOINT_PATH + "crear_motivo",
+            ENDPOINT_PATH + "crear-motivo",
             payload
           );
           this.motivo = data.data;
@@ -281,7 +281,7 @@ export default {
 
       try {
         const { data } = await axios.put(
-          ENDPOINT_PATH + "editar_motivo/" + motivo.id,
+          ENDPOINT_PATH + "editar-motivo/" + motivo.id,
           payload
         );
         this.data = data;
@@ -297,7 +297,7 @@ export default {
     },
     async eliminarMotivoInactividad(id) {
       try {        
-        const res = await axios.delete(ENDPOINT_PATH + "eliminarMotivo/" + id);
+        const res = await axios.delete(ENDPOINT_PATH + "eliminar-motivo/" + id);
         this.motivoDelete = res;
         if (this.motivoDelete.status == 200) {
           this.closeModal();

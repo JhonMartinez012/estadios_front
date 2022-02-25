@@ -147,7 +147,7 @@
             <div class="container">
               <div class="row">
                 <div class="col-md-12 d-flex justify-content-center">
-                  <!-- <slim-cropper
+                  <slim-cropper
                     :options="slimOptions"
                     ref="img_terrenoE"
                     class="estilo-slim"
@@ -158,29 +158,42 @@
                       name="slim"
                       accept="image/*"
                     />
-                  </slim-cropper> -->
+                  </slim-cropper>
 
-                  <cropper
+                  <!--  <cropper
                     class="cropper"
                     :src="terreno.img"
                     :stencil-props="{
                       aspectRatio: 10/12
                     }"                    
-                  />
+                  /> -->
                 </div>
               </div>
 
               <div class="form-row">
-                <p for="" class="p-terreno">Nombre terreno</p>
                 <div class="form-group col-md-12 text-center">
+                  <p for="" class="p-terreno">Nombre terreno</p>
                   <input
+                    id="nombreTerreno"
                     placeholder="Nombre"
                     type="text"
                     class="inputt"
+                    :maxlength="longName"
                     v-model="terreno.nombre_terreno"
+                    @keyup="habilitarBtnE()"
                   />
+                  <span class="cont-caracteres"
+                    >{{ contCaracteresE }}/{{ longName }}</span
+                  >                  
                 </div>
+                 <span
+                  class="msg_error text-center mt-0"
+                  v-if="errores.nombre_terreno != null"
+                  >{{ errores.nombre_terreno[0] }}</span
+                >
+                
               </div>
+             
             </div>
           </div>
           <div class="modal-footer justify-content-center">
@@ -194,8 +207,10 @@
             </button>
             <button
               type="button"
+              id="btnEdit"
               class="btn btn-guardar"
               @click="editarTerreno"
+              :disabled="false"
             >
               añadir
             </button>
@@ -280,6 +295,9 @@ export default {
     contCaracteres() {
       return this.nombre_terreno.length;
     },
+    contCaracteresE() {
+      return this.terreno.nombre_terreno.length;
+    },
   },
   data: () => ({
     nombre_terreno: "",
@@ -304,13 +322,14 @@ export default {
     },
     terrenoDelete: [],
     errores: [],
+    image: "", // variable para recibir validar si el cropper va vacio o no
+    terrenoEdit:[], // array para el terreno editado
   }),
   methods: {
     async habilitarBtn() {
       try {
         let nombreTerreno = this.nombre_terreno;
         let v = 0;
-
         if (nombreTerreno.length < 5) {
           v = v + 1;
         }
@@ -318,6 +337,22 @@ export default {
           document.getElementById("btnGuardar").disabled = false;
         } else {
           document.getElementById("btnGuardar").disabled = true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async habilitarBtnE() {
+      try {
+        let nombreTerrenoE = this.terreno.nombre_terreno;
+        let v = 0;
+        if (nombreTerrenoE.length < 5) {
+          v = v + 1;
+        }
+        if (v == 0) {
+          document.getElementById("btnEdit").disabled = false;
+        } else {
+          document.getElementById("btnEdit").disabled = true;
         }
       } catch (error) {
         console.log(error);
@@ -343,7 +378,7 @@ export default {
         document.getElementById("btnGuardar").disabled = true;
 
         const { data } = await axios.post(
-          ENDPOINT_PATH + "crear_terreno",
+          ENDPOINT_PATH + "crear-terreno",
           payload
         );
         this.terrenoNuevo = data;
@@ -362,12 +397,39 @@ export default {
       }
     },
 
-    async editarTerreno() {},
+    async editarTerreno() {
+      try {
+        this.image = this.$refs.img_terrenoE.get_image();
+        
+        //if (this.image == null) {
+          let payload = {
+            nombre_terreno: this.terreno.nombre_terreno,
+            img:this.image
+          };
+          //console.log(payload);
+          const { data } = await axios.put(
+            ENDPOINT_PATH + "editar-terreno/" + this.id,
+            payload
+          );
+          this.terrenoEdit = data;
+          if (this.terrenoEdit.existe==false) {
+            console.log('terreno no existe');
+          }
+          if (this.terrenoEdit.success==true) {
+            this.closeModal();
+            this.listarTerrenos();
+          }else{
+            this.errores=this.terrenoEdit.errores;
+          }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     async eliminarTerreno(id) {
       try {
         const res = await axios.delete(
-          ENDPOINT_PATH + "eliminar_terreno/" + id
+          ENDPOINT_PATH + "eliminar-terreno/" + id
         );
         this.terrenoDelete = res.status;
         if (this.terrenoDelete == 200) {
@@ -386,14 +448,14 @@ export default {
     },
     openModalE(data = {}) {
       // console.log(data.img);
-      const self = this
+      const self = this;
       this.modalE = 1;
       setTimeout(() => {
         self.terreno.nombre_terreno = data.nombre_terreno;
-        self.terreno.img = data.img;  
-      }, 1000);
-     
-      
+        self.id = data.id;
+        self.terreno.img = data.img;
+      }, 500);
+
       /* console.log(this.terreno.img);
       this.$refs.img_terrenoE.set_image(`${this.terreno.img}`);       
       */
@@ -408,6 +470,9 @@ export default {
       this.modal = 0;
       this.modalE = 0;
       this.modalD = 0;
+      this.nombre_terreno = "";
+      this.terreno.nombre_terreno = "";
+      this.errores=[]
     },
   },
 };

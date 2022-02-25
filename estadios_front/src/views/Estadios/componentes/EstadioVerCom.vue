@@ -169,7 +169,7 @@ export default {
     async verEstadio() {
       try {
         const { data } = await axios.get(
-          ENDPOINT_PATH + "ver_estadio/" + this.idEstadio
+          ENDPOINT_PATH + "ver-estadio/" + this.idEstadio
         );
         this.estadio = data;
         //console.log(this.estadio.estadio);

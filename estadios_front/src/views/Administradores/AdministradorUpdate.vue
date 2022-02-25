@@ -25,6 +25,14 @@
                 {{ mensaje }}
               </div>
             </div>
+            <slim-cropper
+              :options="slimOptions"
+              ref="imgAdmin"
+              id="estilo_subir_img"
+              v-if="showCropper != false"
+            >
+              <input type="file" name="slim" id="estilo_subir_img" />
+            </slim-cropper>
           </div>
           <div class="modal-footer justify-content-center">
             <button
@@ -35,6 +43,14 @@
               @click="closeModal()"
             >
               Cerrar
+            </button>
+            <button
+              type="button"
+              @click="editImgAdmin()"
+              class="btn boton-edit-img"
+              v-if="showCropper == true"
+            >
+              Agregar
             </button>
           </div>
         </div>
@@ -64,10 +80,40 @@
     </div>
     <div class="container contenido_formulario mt-4">
       <div class="row ml-0">
-        <div class="form-group col-sm-12 col-md-2 anadir_img">
+        <!-- <div class="form-group col-sm-12 col-md-2 anadir_img mb-5">
+          <img :src="administrador.img" id="estilo_subir_img" alt="">
           <slim-cropper :options="slimOptions" id="estilo_subir_img">
             <input type="file" name="slim" id="estilo_subir_img" />
           </slim-cropper>
+        </div> -->
+        <div class="form-group col-md-2 col-sm-7 anadir_img">
+          <img :src="administrador.img" alt="" class="estilo_subir_img" />
+          <div class="boton_accion">
+            <button
+              class="btn_accion_eliminar mr-2"
+              @click="deleteImgAdmin(administrador.id)"
+            >
+              <img
+                src="/assets/1. Estadios/Iconos/icon - Eliminar.svg"
+                width="cover"
+                height="20px"
+                alt=""
+                srcset=""
+              />
+            </button>
+            <button
+              class="btn_accion_editar"
+              @click="openModalI(administrador.id)"
+            >
+              <img
+                src="/assets/1. Estadios/Iconos/icon - editar.svg"
+                width="cover"
+                height="20px"
+                alt=""
+                srcset=""
+              />
+            </button>
+          </div>
         </div>
         <div class="form-group col-sm-8 col-md-4">
           <div class="" style="height: 25%">
@@ -181,8 +227,11 @@ export default {
       contraDist: false,
       contraMin: false,
       userUpdate: false,
+      showCropper: false,
       mensaje: "",
       message: "",
+      fotoAdminEdit: [],
+      imageEdit:null,
     };
   },
   computed: {
@@ -221,7 +270,7 @@ export default {
                 repassword: this.repassword,
               };
               const { data } = await axios.put(
-                ENDPOINT_PATH + "editar_administrador/" + this.idAdministrador,
+                ENDPOINT_PATH + "editar-administrador/" + this.idAdministrador,
                 payload
               );
               this.adminActualizado = data;
@@ -240,22 +289,57 @@ export default {
                 //console.log(this.adminActualizado.errores);
               }
             } else {
-              this.contraDist = true, 
-              this.openModal();
+              (this.contraDist = true), this.openModal();
               //alert("contraseñas no coinciden");
             }
           } else {
-            (this.contraMin = true), 
-            this.openModal();
+            (this.contraMin = true), this.openModal();
             //alert("La contraseña debe tener minimo 6 caracteres")
           }
         } else {
-          (this.contraNull = true), 
-          this.openModal();
+          (this.contraNull = true), this.openModal();
           //alert("ingrese una contraseña");
         }
       } catch (error) {
         console.log(error);
+      }
+    },
+    async editImgAdmin() {
+      this.imageEdit=this.$refs.imgAdmin.instanciaCrop.dataBase64.output.image
+      //console.log(this.imageEdit);
+      let payload = {
+        imgEdit: this.imageEdit
+      };
+
+      const { data } = await axios.put(
+        ENDPOINT_PATH + "editar-img-administrador/" + this.id,
+        payload
+      );
+      this.fotoAdminEdit = data;
+      if (this.fotoAdminEdit.existe == false) {
+        console.log(this.fotoAdminEdit.msg);
+      }
+      if (this.fotoAdminEdit.success == true) {
+        this.closeModal();        
+        this.listarAdministrador();
+        
+      }
+    },
+    async deleteImgAdmin(id) {
+      let payload = {
+        imgEdit: this.imageEdit
+      };
+
+      const { data } = await axios.put(
+        ENDPOINT_PATH + "editar-img-administrador/" + id,
+        payload
+      );
+      this.fotoAdminEdit = data;
+      if (this.fotoAdminEdit.existe == false) {
+        console.log(this.fotoAdminEdit.msg);
+      }
+      if (this.fotoAdminEdit.success == true) {
+        this.listarAdministrador();
       }
     },
 
@@ -276,12 +360,23 @@ export default {
         this.tiempoEspera();
       }
     },
+
+    openModalI(id) {
+      this.modal = 1;
+      this.id = id;
+      this.tituloModal = "Seleccione una imagen";
+      this.showCropper=true;
+      
+    },
     closeModal() {
       this.modal = 0;
-      this.contraNull = false,
+      this.contraNull = false;
       this.contraDist = false;
       this.contraMin = false;
       this.userUpdate = false;
+      this.showCropper=false;
+      
+      
     },
     tiempoEspera() {
       setTimeout(this.pasar, 2000);
@@ -375,15 +470,35 @@ body .tooltip .arrow::before {
   text-decoration-line: none;
 }
 .anadir_img {
+  position: relative;
   width: 170px;
-  height: 120px;
+  height: 170px;
   margin-top: 55px;
   margin-bottom: 30px;
 }
-#estilo_subir_img {
+.estilo_subir_img {
   background: #dfe4e8 0% 0% no-repeat padding-box;
   border-radius: 45px;
-  width: 150px;
+  width: 100%;
+  height: 100%;
+}
+.boton_accion {
+  display: flex;
+  /* position: absolute; */
+  justify-content: center;
+  align-content: center;
+  z-index: 2;
+  margin-top: -40px;
+  margin-left:-15px ;
+}
+.btn_accion_editar, .btn_accion_eliminar {
+  width: 36px;
+  height: 36px;
+  background-color: black;
+  border-radius: 40px;
+  opacity: 0.4;
+  padding: 0;
+
 }
 
 .titulo_form {
@@ -419,5 +534,16 @@ body .tooltip .arrow::before {
 }
 .cuadros_txtArea {
   height: 135px;
+}
+.boton-edit-img {
+  height: 40px;
+  font-weight: normal;
+  font-size: 16px;
+  background: #7358fa linear-gradient(90deg, #7358fa 0%, #866ff7 100%) 0% 0%
+    no-repeat padding-box;
+  border-radius: 10px;
+  color: #ffff;
+  align-content: flex-end;
+  align-items: flex-end;
 }
 </style>

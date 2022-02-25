@@ -200,7 +200,7 @@ export default {
   methods: {
     async listMotivosInactividad() {
       try {
-        const motivo = await axios.get(END_POINT + "motivos_inactividad");
+        const motivo = await axios.get(END_POINT + "motivos-inactividad");
         this.motivosInactividad = motivo.data.motivos_inactividad;
         //console.log(this.motivosInactividad);
       } catch (error) {

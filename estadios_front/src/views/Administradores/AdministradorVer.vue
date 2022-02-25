@@ -191,7 +191,7 @@ export default {
     async eliminarAdministrador(administrador) {
       try {
         const { data } = await axios.delete(
-          ENDPOINT_PATH + "eliminar_administrador/" + administrador.id
+          ENDPOINT_PATH + "eliminar-administrador/" + administrador.id
         );
         if (data) {
           this.closeModal();
